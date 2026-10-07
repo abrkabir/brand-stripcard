@@ -4,5 +4,5 @@
  * from the banner into the detail below.
  */
 export const statement = {
-  text: "StripCard: virtual credit cards for the way the world pays online. Create a card in seconds, set its limits and follow every payment in real time — all from one secure place.",
+  text: "StripCard: virtual credit cards for the way the world pays online. Create a card in seconds, set its limits and follow every payment in real time, all from one secure place.",
 };

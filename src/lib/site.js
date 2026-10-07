@@ -10,7 +10,7 @@ export const siteConfig = {
   /** The full page title — browser tab, search results and link previews. */
   title: "StripCard - Virtual Credit Card Solution",
   description:
-    "Issue, manage and control virtual credit cards in seconds — secure, instant and built for how you pay online.",
+    "Issue, manage and control virtual credit cards in seconds. Secure, instant and built for how you pay online.",
   url: "https://adestate.com",
   founded: 2014,
 

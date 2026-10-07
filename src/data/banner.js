@@ -10,7 +10,7 @@ export const banner = {
   headline: ["Powering", "Next-Gen", "Virtual Cards."],
 
   description:
-    "With StripCard, create virtual credit cards in seconds — set spending limits, track every payment in real time, and pay securely online, anywhere in the world.",
+    "With StripCard, create virtual credit cards in seconds. Set spending limits, track every payment in real time, and pay securely online, anywhere in the world.",
 
   cta: { label: "Explore Products", href: "/products" },
 
