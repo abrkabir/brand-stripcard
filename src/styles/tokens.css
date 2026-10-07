@@ -33,9 +33,10 @@
   --animate-ken-pan-right: ken-pan-right 9s linear both;
   --animate-ring-fill: ring-fill 7s linear forwards;
 
-  /* Height of the fixed header. The hero sits underneath it; every other page
-     starts with the `pt-header` utility. */
-  --header-h: 6rem;
+  /* Clearance under the fixed header: the floating pill plus the gap above
+     and below it. The hero sits underneath it; every other page starts with
+     the `pt-header` utility. */
+  --header-h: 5.5rem;
   --header-h-lg: 7rem;
 }
 

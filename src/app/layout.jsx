@@ -1,11 +1,11 @@
-import { Merriweather_Sans, Questrial } from "next/font/google";
+import { Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import "@/styles/globals.css";
 import { ThemeProvider, THEME_COOKIE } from "@/lib/theme";
 import { siteConfig } from "@/lib/site";
 
 /**
- * Both faces are self-hosted by next/font at build time — no request ever
+ * All three faces are self-hosted by next/font at build time — no request ever
  * reaches Google, and there is no layout shift.
  *
  * Each one only exposes a raw CSS variable named after the family. The
@@ -21,10 +21,16 @@ const headingFont = Merriweather_Sans({
   display: "swap",
 });
 
-/** Body copy. Questrial is single-weight, so 400 has to be named. */
-const bodyFont = Questrial({
-  variable: "--font-questrial",
-  weight: "400",
+/** Display — the banner headline. Variable, so 400–700 ships in one file. */
+const displayFont = Arimo({
+  variable: "--font-arimo",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/** Body copy. Variable, so the whole 100–900 axis ships in one file. */
+const bodyFont = Inter_Tight({
+  variable: "--font-inter-tight",
   subsets: ["latin"],
   display: "swap",
 });
@@ -32,20 +38,20 @@ const bodyFont = Questrial({
 export const metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: `${siteConfig.name} — ${siteConfig.tagline}`,
+    default: siteConfig.title,
     template: `%s · ${siteConfig.name}`,
   },
   description: siteConfig.description,
   openGraph: {
     type: "website",
     siteName: siteConfig.name,
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: siteConfig.title,
     description: siteConfig.description,
     url: siteConfig.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${siteConfig.name} — ${siteConfig.tagline}`,
+    title: siteConfig.title,
     description: siteConfig.description,
   },
 };
@@ -68,7 +74,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${headingFont.variable} ${bodyFont.variable} h-full antialiased${theme ? ` ${theme}` : ""}`}
+      className={`${headingFont.variable} ${displayFont.variable} ${bodyFont.variable} h-full antialiased${theme ? ` ${theme}` : ""}`}
       style={{ colorScheme: theme ?? "light dark" }}
       suppressHydrationWarning
     >

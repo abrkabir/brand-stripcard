@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ChevronDownIcon, ChevronRightIcon, CloseIcon, MailIcon, PhoneIcon } from "@/components/icons";
 import { Logo } from "@/components/layout/Logo";
-import { mainNav } from "@/data/navigation";
+import { Button } from "@/components/ui/Button";
+import { headerCta, mainNav } from "@/data/navigation";
 import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { cn } from "@/lib/cn";
 import { siteConfig } from "@/lib/site";
@@ -66,7 +67,7 @@ export function MobileNav({ open, onClose }) {
                     href={item.href}
                     onClick={onClose}
                     tabIndex={open ? undefined : -1}
-                    className="block py-5 text-[13px] font-semibold tracking-[0.12em] text-headline uppercase transition-colors hover:text-brand"
+                    className="block py-5 font-heading text-lg font-semibold text-headline transition-colors hover:text-brand"
                   >
                     {item.label}
                   </Link>
@@ -81,7 +82,7 @@ export function MobileNav({ open, onClose }) {
                   onClick={() => setExpanded(isOpen ? null : item.label)}
                   aria-expanded={isOpen}
                   tabIndex={open ? undefined : -1}
-                  className="flex w-full items-center justify-between py-5 text-[13px] font-semibold tracking-[0.12em] text-headline uppercase"
+                  className="flex w-full items-center justify-between py-5 font-heading text-lg font-semibold text-headline"
                 >
                   {item.label}
                   <ChevronDownIcon
@@ -108,7 +109,7 @@ export function MobileNav({ open, onClose }) {
                             tabIndex={isOpen && open ? undefined : -1}
                             className="group block"
                           >
-                            <span className="flex items-center gap-2 text-[13px] font-semibold tracking-[0.1em] text-headline uppercase">
+                            <span className="flex items-center gap-2 font-heading text-[15px] font-semibold text-headline transition-colors group-hover:text-brand">
                               {entry.label}
                               <ChevronRightIcon className="size-3.5 transition-transform group-hover:translate-x-1" />
                             </span>
@@ -126,24 +127,15 @@ export function MobileNav({ open, onClose }) {
           })}
         </ul>
 
-        <div className="mt-8 grid grid-cols-2 gap-3">
-          <Link
-            href="/login"
-            onClick={onClose}
-            tabIndex={open ? undefined : -1}
-            className="rounded-full border border-brand py-3.5 text-center text-[12px] font-semibold tracking-[0.12em] text-brand uppercase transition-colors hover:bg-brand hover:text-white"
-          >
-            Log in
-          </Link>
-          <Link
-            href="/register"
-            onClick={onClose}
-            tabIndex={open ? undefined : -1}
-            className="rounded-full bg-brand py-3.5 text-center text-[12px] font-semibold tracking-[0.12em] text-white uppercase transition-colors hover:bg-brand-700"
-          >
-            Register
-          </Link>
-        </div>
+        <Button
+          href={headerCta.href}
+          onClick={onClose}
+          tabIndex={open ? undefined : -1}
+          block
+          className="mt-8"
+        >
+          {headerCta.label}
+        </Button>
 
         <div className="mt-8 space-y-3 text-sm">
           <a

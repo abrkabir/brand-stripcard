@@ -62,3 +62,31 @@
     linear-gradient(to right, rgb(0 0 0 / 0.86) 0%, rgb(0 0 0 / 0.70) 28%, rgb(0 0 0 / 0.34) 58%, rgb(0 0 0 / 0.08) 84%, transparent 100%),
     linear-gradient(to bottom, rgb(0 0 0 / 0.52) 0%, transparent 26%, transparent 64%, rgb(0 0 0 / 0.44) 100%);
 }
+
+/* Homepage banner ground. A dark card lit from the top-left by the brand, with
+   a second, lower ember in the bottom-right so the copy column there sits on
+   warmth rather than flat black. Same in both themes — the banner is a dark
+   brand block either way. */
+@utility bg-hero-glow {
+  background-color: var(--color-hero-ink);
+  background-image:
+    radial-gradient(ellipse 75% 65% at 22% 0%, var(--color-brand-400) 0%, var(--color-brand-500) 22%, color-mix(in srgb, var(--color-brand-600) 70%, transparent) 46%, transparent 78%),
+    radial-gradient(ellipse 55% 45% at 100% 100%, color-mix(in srgb, var(--color-brand-700) 85%, transparent) 0%, transparent 72%),
+    linear-gradient(165deg, var(--color-brand-700) 0%, var(--color-brand-900) 34%, var(--color-hero-ink) 66%);
+}
+
+/* Scrim between the banner photograph and its copy. Pulls the floor down to
+   near-black so white type at the bottom survives, and washes the left in
+   brand so the hands read as lit by the same orange as the card. */
+@utility hero-glow-scrim {
+  background-image:
+    linear-gradient(to top, color-mix(in srgb, var(--color-hero-ink) 78%, transparent) 0%, transparent 42%),
+    linear-gradient(to right, color-mix(in srgb, var(--color-brand-600) 38%, transparent) 0%, transparent 48%);
+}
+
+/* Film grain. An SVG turbulence tile, blended over gradients to break up
+   banding and give flat colour a printed, photographic texture. */
+@utility bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}

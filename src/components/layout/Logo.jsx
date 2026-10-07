@@ -2,16 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/cn";
 import { siteConfig } from "@/lib/site";
+import logoDark from "../../../public/images/logo/web_logo_dark.png";
+import logoLight from "../../../public/images/logo/web_logo_light.png";
 
-/** Intrinsic size of the source files — both artworks share it. */
-const LOGO_W = 1753;
-const LOGO_H = 448;
-
+/**
+ * Both are cut from `web_logo.png`, the master artwork, trimmed to the ink and
+ * recoloured from the brand scale in styles/variables.css. "Strip" is always
+ * the signature orange; "Card" carries the contrast — deep rust on light
+ * ground, pale peach on dark — so the two-tone split survives either way.
+ * After a rebrand, regenerate these from the master rather than editing them.
+ *
+ * Imported rather than referenced by path: the build names each file by a hash
+ * of its contents, so replacing the artwork under the same file name can never
+ * be served stale from the image cache. Width and height come with the import.
+ */
 const SRC = {
-  /** Dark ink. For light surfaces. */
-  dark: "/images/logo/web_logo_dark.png",
-  /** White ink. For dark surfaces and photography. */
-  light: "/images/logo/web_logo_light.png",
+  /** Strip brand-500 #F26A1B + Card brand-800 #913613. For light surfaces. */
+  dark: logoDark,
+  /** Strip dark-brand #F7782C + Card brand-200 #FFCDAB. For dark surfaces. */
+  light: logoLight,
 };
 
 /**
@@ -19,31 +28,28 @@ const SRC = {
  *
  * Two artworks, picked by surface rather than by theme:
  *
- * - `tone="inverse"` — always the white artwork. For the header while it is
- *   transparent over the banner, and for the footer, which is a dark brand
- *   block in *both* themes.
+ * - `tone="inverse"` — always the light artwork. For the footer, which is a
+ *   dark block in *both* themes, and anything else sitting on photography.
  * - `tone="default"` — follows the theme. Both files are rendered and swapped
  *   with a `dark:` variant rather than read from `useTheme`, so this stays a
  *   Server Component (the footer depends on that) and there is no flash on
  *   first paint.
  *
  * `next/image` serves each one as a WebP at the size it is actually drawn, so
- * shipping both costs a few KB, not the 38KB of the source PNGs.
+ * shipping both costs a few KB, not the 12KB of each source PNG.
  */
 export function Logo({
   className,
   tone = "default",
   /** Height in Tailwind units. Width follows the aspect ratio. */
-  size = "h-9",
+  size = "h-8",
 }) {
   // `alt` is set on each <Image> rather than here: inside a spread, the
   // a11y lint rule cannot see it and flags every usage.
   const shared = {
-    width: LOGO_W,
-    height: LOGO_H,
-    priority: true,
-    // Drawn at ~200px wide at most; this stops the optimiser shipping more.
-    sizes: "220px",
+    preload: true,
+    // Drawn at ~150px wide at most; this stops the optimiser shipping more.
+    sizes: "160px",
   };
 
   return (

@@ -36,7 +36,12 @@
      in and out rather than squashed — only `width` animates.
 
      `--btn-h` drives height, both compartment widths and the label padding, so
-     a size modifier only has to set that one number.                        */
+     a size modifier only has to set that one number.
+
+     Fully rounded. The end caps are semicircles of radius `--btn-h / 2`, so an
+     arrow compartment — exactly `--btn-h` wide — becomes a D-shaped cap with
+     the arrow centred in it, and the divider meets the curve's tangent point.
+     `overflow: hidden` clips the compartments to the curve.                 */
 
   .btn {
     --btn-h: 3.25rem;
@@ -48,6 +53,7 @@
     height: var(--btn-h);
     overflow: hidden;
     border: 1px solid transparent;
+    border-radius: 999px;
     font-family: var(--font-heading);
     font-size: 0.9375rem;
     font-weight: 600;
@@ -87,7 +93,7 @@
     width: 100%;
   }
 
-  /* Icon-only. The label compartment collapses and the button goes square, so
+  /* Icon-only. The label compartment collapses and the button goes round, so
      it lines up on the same baseline and at the same height as a labelled one
      beside it. Pair it with `arrow={false}` — there is no room for both. */
   .btn--icon {
@@ -251,9 +257,8 @@
      the control. Made for the underlined variants below: with no box drawn
      around the field, the label is what carries the structure.
 
-     Heading face on purpose. Questrial is weight 400 only, so a 600 here would
-     be a synthesised bold — obvious at this size. Merriweather Sans has a real
-     one. */
+     Heading face on purpose, so the eyebrow matches the other labels set in
+     the heading family rather than reading as body copy. */
   .field--eyebrow {
     gap: 0.5rem;
   }

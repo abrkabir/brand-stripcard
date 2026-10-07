@@ -6,11 +6,12 @@ import { Gallery } from "@/components/home/Gallery";
 import { Properties } from "@/components/home/Properties";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
+import { siteConfig } from "@/lib/site";
 
 export const metadata = {
   // Root-relative title, so the layout template is skipped for the homepage.
   title: {
-    absolute: "Adestate — Homes for sale and rent, verified before they list",
+    absolute: siteConfig.title,
   },
 };
 

@@ -26,25 +26,27 @@
   }
 }
 
-/* ── Brand · #234DD4 ──────────────────────────────────────────────────────── */
-/* The base colour is 600; the rest of the scale is that hue (226°) walked up
-   and down in lightness. Use as bg-brand · text-brand · border-brand, or the
-   full 50–950 scale. This is the one place to edit for a rebrand.            */
+/* ── Brand · #F26A1B ──────────────────────────────────────────────────────── */
+/* Signal orange. The base colour is 500; the rest of the scale is that hue
+   (~22°) walked up and down in lightness, warming toward rust at the deep end
+   so 900–950 can carry white type and act as dark brand grounds. Use as
+   bg-brand · text-brand · border-brand, or the full 50–950 scale. This is the
+   one place to edit for a rebrand.                                          */
 @theme {
-  --color-brand-50:  #f0f3ff;
-  --color-brand-100: #e1e8fe;
-  --color-brand-200: #bfcefc;
-  --color-brand-300: #96adf8;
-  --color-brand-400: #6485f2;
-  --color-brand-500: #3e65e5;
-  --color-brand-600: #234dd4;
-  --color-brand-700: #1f40ad;
-  --color-brand-800: #1d378c;
-  --color-brand-900: #1c2f6e;
-  --color-brand-950: #141d43;
+  --color-brand-50:  #fff5ee;
+  --color-brand-100: #ffe8d6;
+  --color-brand-200: #ffcdab;
+  --color-brand-300: #ffaa75;
+  --color-brand-400: #fd8645;
+  --color-brand-500: #f26a1b;
+  --color-brand-600: #dc5510;
+  --color-brand-700: #b6420f;
+  --color-brand-800: #913613;
+  --color-brand-900: #752f13;
+  --color-brand-950: #401507;
 
   /* Bare token — the default action colour */
-  --color-brand: #234dd4;
+  --color-brand: #f26a1b;
 
   /* ── Accent · muted gold. Featured badges, ratings, premium marks ───────── */
   --color-gold-100: #f8eed6;
@@ -61,6 +63,12 @@
      to read as cut-outs, not as a second blue.                              */
   --color-shader-ink:  #04060e;
   --color-shader-slat: #01020a;
+
+  /* ── Hero ground ────────────────────────────────────────────────────────
+     The homepage banner is a dark, orange-lit card in *both* themes. This is
+     the warm near-black its glow fades into — pure #000 makes the orange
+     edge band, a brown-black keeps the falloff smooth.                     */
+  --color-hero-ink: #0c0503;
 }
 
 /* ── Semantic text ────────────────────────────────────────────────────────── */
@@ -115,10 +123,10 @@
      legible against both --dark-page (#000) and --dark-surface (#0f0f0f). */
   --dark-line:     #2f2f2f;
 
-  /* Brand lifts in the dark: #234DD4 itself is too deep to read as a link on
-     a near-black ground. This sits between 500 and 600 so it still carries
+  /* Brand lifts slightly in the dark: on a black ground #F26A1B reads a touch
+     muddy at text sizes. This sits between 400 and 500 so it still carries
      white button text. */
-  --dark-brand:    #4a6be8;
+  --dark-brand:    #f7782c;
   --dark-danger:   #f87171;
   --dark-success:  #4ade80;
 }
@@ -166,17 +174,21 @@
 }
 
 /* ── Fonts ────────────────────────────────────────────────────────────────── */
-/* `--font-merriweather-sans` and `--font-questrial` are injected on <html> by
-   next/font (see app/layout.jsx); the tokens below wrap them with a fallback
-   stack and are what the app actually uses.
+/* `--font-merriweather-sans`, `--font-arimo` and `--font-inter-tight` are
+   injected on <html> by next/font (see app/layout.jsx); the tokens below wrap
+   them with a fallback stack and are what the app actually uses.
 
-   Utilities: font-heading · font-body. `font-sans` aliases body so Tailwind's
-   default sans matches the page. Swapping a family is two lines — the import
-   in layout.jsx and the variable name here. No component names a font. */
+   Utilities: font-heading · font-body · font-display. `font-sans` aliases
+   body so Tailwind's default sans matches the page. Swapping a family is two
+   lines — the import in layout.jsx and the variable name here. No component
+   names a font. */
 @theme {
   --font-heading: var(--font-merriweather-sans), ui-sans-serif, system-ui,
     sans-serif;
-  --font-body: var(--font-questrial), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  /* Display: big statements only — the banner headline and its eyebrow.
+     Arimo is metric-compatible with Arial, so Arial is a shift-free fallback. */
+  --font-display: var(--font-arimo), Arial, ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }

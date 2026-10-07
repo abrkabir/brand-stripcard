@@ -4,11 +4,13 @@
  * schema.org) reads from here so it can never drift.
  */
 export const siteConfig = {
-  name: "Adestate",
-  legalName: "Adestate Properties Ltd.",
-  tagline: "Real estate, without the runaround",
+  name: "StripCard",
+  legalName: "StripCard Ltd.",
+  tagline: "Virtual Credit Card Solution",
+  /** The full page title — browser tab, search results and link previews. */
+  title: "StripCard - Virtual Credit Card Solution",
   description:
-    "Browse verified homes for sale and rent, compare neighbourhoods with real data, and work with agents who answer.",
+    "Issue, manage and control virtual credit cards in seconds — secure, instant and built for how you pay online.",
   url: "https://adestate.com",
   founded: 2014,
 

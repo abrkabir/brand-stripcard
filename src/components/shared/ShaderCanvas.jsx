@@ -40,11 +40,11 @@ import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 function readPalette() {
   const fallback = {
     ink: "#04060e",
-    deep: "#141d43",
-    brand: "#234dd4",
-    lift: "#3e65e5",
-    high: "#6485f2",
-    pale: "#96adf8",
+    deep: "#401507",
+    brand: "#f26a1b",
+    lift: "#f26a1b",
+    high: "#fd8645",
+    pale: "#ffaa75",
   };
 
   if (typeof document === "undefined") return fallback;

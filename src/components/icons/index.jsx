@@ -85,6 +85,15 @@ export const MoonIcon = (p) => (
   </Svg>
 );
 
+export const HeadsetIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 14v-2a8 8 0 0 1 16 0v2" />
+    <path d="M4 14a2 2 0 0 1 2-2h1v6H6a2 2 0 0 1-2-2Z" />
+    <path d="M20 14a2 2 0 0 0-2-2h-1v6h1a2 2 0 0 0 2-2Z" />
+    <path d="M17 18c0 1.7-1.8 3-5 3" />
+  </Svg>
+);
+
 export const PhoneIcon = (p) => (
   <Svg {...p}>
     <path d="M6.5 3h3l1.5 4-2 1.4a12.5 12.5 0 0 0 6.6 6.6l1.4-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z" />
@@ -328,6 +337,7 @@ export const icons = {
   close: CloseIcon,
   sun: SunIcon,
   moon: MoonIcon,
+  headset: HeadsetIcon,
   phone: PhoneIcon,
   mail: MailIcon,
   building: BuildingIcon,
