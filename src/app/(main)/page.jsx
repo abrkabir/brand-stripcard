@@ -1,10 +1,10 @@
+import { About } from "@/components/home/About";
 import { Agents } from "@/components/home/Agents";
 import { Banner } from "@/components/home/Banner";
 import { ContactSection } from "@/components/home/ContactSection";
 import { FeaturedItems } from "@/components/home/FeaturedItems";
 import { Gallery } from "@/components/home/Gallery";
 import { Properties } from "@/components/home/Properties";
-import { Statement } from "@/components/home/Statement";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { siteConfig } from "@/lib/site";
@@ -29,7 +29,7 @@ export default function HomePage() {
   return (
     <>
       <Banner />
-      <Statement />
+      <About />
       <WhyChooseUs />
       <Properties />
       <FeaturedItems />
