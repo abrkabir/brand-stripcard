@@ -9,8 +9,16 @@
  *
  * Every page that opens with a full-bleed hero must pad its own content by
  * `--header-h` from the inside (see `Banner`); every other page starts its
- * first section with the `pt-header` utility. The header floats over both.
+ * first section with the `pt-header` utility.
  */
+/**
+ * Routes that open on the orange banner. Here the header starts compact —
+ * white logo, white pills only behind the links and the button — and its
+ * surface grows into the full bar once the page scrolls. Everywhere else it
+ * is the full bar from the start. Matched exactly.
+ */
+export const heroRoutes = ["/"];
+
 export const mainNav = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },

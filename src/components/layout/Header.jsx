@@ -9,7 +9,7 @@ import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { headerCta, mainNav } from "@/data/navigation";
+import { headerCta, heroRoutes, mainNav } from "@/data/navigation";
 import { useScrolled } from "@/hooks/useScrolled";
 import { cn } from "@/lib/cn";
 
@@ -17,17 +17,26 @@ import { cn } from "@/lib/cn";
 const CLOSE_DELAY = 140;
 
 /**
- * Fixed header: a floating pill.
+ * Fixed header with one surface that grows.
  *
- * The bar is one rounded surface inset from the viewport edge, so it reads the
- * same over the homepage banner, over a photograph, or over a plain page — no
- * transparent state, no colour swap on scroll. It is painted from semantic
- * tokens, so it is white with dark type in the light theme and black with
- * light type in the dark one. Scrolling only deepens its shadow, so the pill
- * separates from whatever passes underneath.
+ * **Compact** — over the banner (see `heroRoutes`), before any scroll, with no
+ * panel open. The white surface sits only behind the nav links; the button
+ * and the logo (in its white artwork) stand on the banner by themselves.
  *
- * The outer <header> is click-through: only the pill and the open panel take
- * pointer events, so the strip either side of the pill never blocks the page.
+ * **Full** — once the page scrolls, a panel opens, or the route has no banner.
+ * The nav's surface widens from the centre out to both edges and becomes the
+ * whole bar. Nothing else moves: the logo and button stay put, the surface
+ * slides in underneath them and the logo crossfades to the theme artwork.
+ *
+ * The surface is a single layer animating its width, so the grow reads as one
+ * continuous object. Its compact width is the nav's measured width; below lg
+ * there is no nav, so it is zero and the surface fades in as it grows. The
+ * transition is only switched on a frame after the first measurement, so the
+ * page never animates on load.
+ *
+ * The outer <header> is click-through: only the controls and the full bar
+ * take pointer events, so empty space beside the compact pills never blocks
+ * the banner.
  */
 export function Header() {
   const pathname = usePathname();
@@ -35,8 +44,11 @@ export function Header() {
 
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [navWidth, setNavWidth] = useState(0);
+  const [ready, setReady] = useState(false);
   const closeTimer = useRef(null);
   const headerRef = useRef(null);
+  const navRef = useRef(null);
 
   const cancelClose = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -79,6 +91,30 @@ export function Header() {
 
   useEffect(() => cancelClose, [cancelClose]);
 
+  // The compact surface hugs the nav, so it needs the nav's real width. It is
+  // 0 below lg, where the nav is hidden — the surface then has nothing to sit
+  // behind and simply fades out.
+  useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
+
+    const measure = () => setNavWidth(nav.offsetWidth);
+    const observer = new ResizeObserver(measure);
+    observer.observe(nav);
+
+    let frame = requestAnimationFrame(() => {
+      measure();
+      frame = requestAnimationFrame(() => setReady(true));
+    });
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  const compact = heroRoutes.includes(pathname) && !scrolled && !openMenu;
+
   const isActive = (href) =>
     href === "/"
       ? pathname === "/"
@@ -97,20 +133,39 @@ export function Header() {
         className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4 lg:pt-6"
       >
         <Container className="relative">
-          <div
-            className={cn(
-              "pointer-events-auto relative flex h-14 items-center justify-between gap-4 rounded-full border border-line bg-elevated pr-2 pl-5 transition-shadow duration-500 lg:h-15 lg:pl-7",
-              scrolled || openMenu ? "shadow-lift" : "shadow-soft",
-            )}
-          >
-            <Logo className="shrink-0" size="h-4 lg:h-5" />
+          <div className="relative flex h-12 items-center justify-between gap-4 pr-1.5 pl-5 lg:h-13 lg:pr-[7px] lg:pl-7">
+            {/* The surface. Centred, and only its width animates — from the
+                nav's width out to the full bar. */}
+            <span
+              aria-hidden="true"
+              style={{ width: compact ? navWidth : "100%" }}
+              className={cn(
+                "absolute inset-y-0 left-1/2 -translate-x-1/2 rounded-full border border-line bg-elevated",
+                ready &&
+                  "transition-[width,opacity,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                compact
+                  ? "shadow-soft"
+                  : cn(
+                      "pointer-events-auto",
+                      scrolled || openMenu ? "shadow-lift" : "shadow-soft",
+                    ),
+                compact && navWidth === 0 && "opacity-0",
+              )}
+            />
 
-            {/* Centred on the pill rather than in the space left between logo
+            <Logo
+              white={compact}
+              className="pointer-events-auto relative shrink-0"
+              size="h-4 lg:h-5"
+            />
+
+            {/* Centred on the bar rather than in the space left between logo
                 and button, so it sits on the page's axis whatever their
                 widths. */}
             <nav
+              ref={navRef}
               aria-label="Main"
-              className="absolute left-1/2 hidden -translate-x-1/2 lg:block"
+              className="pointer-events-auto absolute left-1/2 hidden -translate-x-1/2 px-2 lg:block"
             >
               <ul className="flex items-center gap-1 xl:gap-2">
                 {mainNav.map((item) => {
@@ -134,7 +189,7 @@ export function Header() {
                           aria-controls={`panel-${item.label.toLowerCase()}`}
                           onClick={() => setOpenMenu(open ? null : item.label)}
                           className={cn(
-                            "flex items-center gap-1 rounded-full px-4 py-2 text-[15px] font-medium whitespace-nowrap transition-colors",
+                            "flex items-center gap-1 rounded-full px-4 py-1.5 text-[15px] font-medium whitespace-nowrap transition-colors",
                             navTone(open),
                           )}
                         >
@@ -151,7 +206,7 @@ export function Header() {
                           href={item.href}
                           aria-current={active ? "page" : undefined}
                           className={cn(
-                            "block rounded-full px-4 py-2 text-[15px] font-medium whitespace-nowrap transition-colors",
+                            "block rounded-full px-4 py-1.5 text-[15px] font-medium whitespace-nowrap transition-colors",
                             navTone(false),
                           )}
                         >
@@ -164,11 +219,14 @@ export function Header() {
               </ul>
             </nav>
 
-            <div className="flex shrink-0 items-center gap-2">
+            {/* Stands on the banner by itself while compact; the surface
+                arrives underneath it on scroll. The bar's side padding equals
+                its vertical gap, so the button sits evenly inset either way. */}
+            <div className="pointer-events-auto relative flex shrink-0 items-center gap-2">
               <Button
                 href={headerCta.href}
                 size="sm"
-                className="hidden sm:inline-flex lg:[--btn-h:2.75rem]"
+                className="hidden [--btn-h:2.25rem] sm:inline-flex lg:[--btn-h:2.375rem]"
               >
                 {headerCta.label}
               </Button>
@@ -178,19 +236,24 @@ export function Header() {
                 onClick={() => setMobileOpen(true)}
                 aria-label="Open menu"
                 aria-expanded={mobileOpen}
-                className="grid size-10 place-items-center rounded-full text-headline transition-colors hover:bg-surface lg:hidden"
+                className={cn(
+                  "grid size-9 place-items-center rounded-full transition-colors duration-500 lg:hidden",
+                  compact
+                    ? "text-white hover:bg-white/15"
+                    : "text-headline hover:bg-surface",
+                )}
               >
                 <MenuIcon className="size-6" />
               </button>
             </div>
           </div>
 
-          {/* Panel layer. Hangs under the pill, inside the same container, so
+          {/* Panel layer. Hangs under the bar, inside the same container, so
               every panel opens to the same frame. Zero height of its own — the
               panels inside are absolutely positioned and carry their own top
               gap, so the pointer never crosses dead space on the way down. */}
           <div
-            className="absolute inset-x-0 top-full hidden lg:block"
+            className="pointer-events-auto absolute inset-x-0 top-full hidden lg:block"
             onMouseEnter={cancelClose}
             onMouseLeave={scheduleClose}
           >
