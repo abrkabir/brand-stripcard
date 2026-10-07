@@ -1,0 +1,29 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Adestate · stylesheet entry
+   The only CSS file imported by the app (see src/app/layout.jsx). Everything
+   else is reached from here, in this order:
+
+     variables.css  every colour and font  ·  edit the brand here
+     tokens.css     radii, shadows, sizes, animation timings + keyframes
+     base.css       container + element defaults + scrollbar
+     components.css buttons, form controls, badges  ·  edit the UI kit here
+     utilities.css  custom @utility classes
+
+   Import order matters: variables and tokens must be defined before base,
+   components and utilities consume them. Add a new partial by dropping it in this folder and adding
+   one @import line below — @import rules must stay above every other rule.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@import "tailwindcss" source(none);
+
+@import "./variables.css";
+@import "./tokens.css";
+@import "./base.css";
+@import "./components.css";
+@import "./utilities.css";
+
+/* Scan this app only. Tailwind's automatic detection starts from the project
+   root, which would also walk `demo/` — a separate project vendored in this
+   repo — and generate thousands of utilities nothing here uses. Path is
+   relative to this file, so "../" is src/. */
+@source "../";

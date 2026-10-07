@@ -1,0 +1,797 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Adestate · UI components
+   The single source of truth for how buttons, form controls and badges look.
+   Change a rule here and every instance in the app follows.
+
+   These live in the `components` cascade layer, which sits *below* Tailwind's
+   utilities. So a utility always wins at the call site — `class="btn mt-6"`
+   works, and `class="btn w-full"` overrides the component's own width — while
+   the component keeps the look.
+
+   Everything is painted from the colours in variables.css, so all of it follows
+   the theme with no dark-mode rules of its own. The one exception is the
+   `.on-dark` context at the bottom, for controls sitting on photography.
+
+   ── Usage ──────────────────────────────────────────────────────────────────
+     <a class="btn btn--outline">…</a>          see components/ui/Button.jsx
+     <span class="badge badge--brand">…</span>  see components/ui/Badge.jsx
+
+     <label class="field">
+       <span class="field-label">Email</span>
+       <input class="input" type="email" />
+       <span class="field-hint">We never share it.</span>
+     </label>
+
+     <span class="select-field"><select class="select">…</select></span>
+     <input class="checkbox" type="checkbox" />
+     <input class="radio" type="radio" />
+   ────────────────────────────────────────────────────────────────────────── */
+
+@layer components {
+  /* ══ Buttons ══════════════════════════════════════════════════════════════
+     Split button: a label beside an arrow in its own compartment. At rest the
+     arrow sits right; on hover the right compartment closes and an identical
+     one opens on the left, pushing the label across. Each compartment holds a
+     fixed-width child inside an overflow-hidden wrapper, so the arrow is wiped
+     in and out rather than squashed — only `width` animates.
+
+     `--btn-h` drives height, both compartment widths and the label padding, so
+     a size modifier only has to set that one number.                        */
+
+  .btn {
+    --btn-h: 3.25rem;
+    --btn-pad: 1.75rem;
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    height: var(--btn-h);
+    overflow: hidden;
+    border: 1px solid transparent;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    transition:
+      background-color 0.3s,
+      border-color 0.3s,
+      color 0.3s;
+  }
+
+  .btn:active {
+    scale: 0.99;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .btn--sm {
+    --btn-h: 2.5rem;
+    --btn-pad: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .btn--lg {
+    --btn-h: 3.75rem;
+    --btn-pad: 2rem;
+    font-size: 1rem;
+  }
+
+  .btn--block {
+    width: 100%;
+  }
+
+  /* Icon-only. The label compartment collapses and the button goes square, so
+     it lines up on the same baseline and at the same height as a labelled one
+     beside it. Pair it with `arrow={false}` — there is no room for both. */
+  .btn--icon {
+    width: var(--btn-h);
+    justify-content: center;
+  }
+
+  /* Grid rather than the inherited text-align: an SVG is inline content, so
+     it sits on the label's baseline and lands a few pixels low. This centres
+     it on both axes instead. */
+  .btn--icon .btn__label {
+    display: grid;
+    place-items: center;
+    padding-inline: 0;
+  }
+
+  /* Flex, not a plain block. Tailwind's preflight sets `svg { display: block }`,
+     so an icon dropped in beside the label would take a line of its own and
+     push the text underneath it. A centred row keeps them side by side and is
+     indistinguishable for a label with no icon. */
+  .btn__label {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-inline: var(--btn-pad);
+    text-align: center;
+  }
+
+  /* Compartments. The wrapper animates its width; the child keeps a fixed
+     square so the icon never distorts. */
+  .btn__slot {
+    display: flex;
+    flex-shrink: 0;
+    height: 100%;
+    overflow: hidden;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn__slot > * {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: var(--btn-h);
+    height: 100%;
+  }
+
+  /* The rule beside the arrow tracks the label colour, so it needs no variant
+     of its own — it just transitions with everything else. */
+  .btn__slot--left > * {
+    border-right: 1px solid currentColor;
+  }
+
+  .btn__slot--right > * {
+    border-left: 1px solid currentColor;
+  }
+
+  .btn__slot--left {
+    width: 0;
+  }
+
+  .btn__slot--right {
+    width: var(--btn-h);
+  }
+
+  .btn:hover .btn__slot--left,
+  .btn:focus-visible .btn__slot--left {
+    width: var(--btn-h);
+  }
+
+  .btn:hover .btn__slot--right,
+  .btn:focus-visible .btn__slot--right {
+    width: 0;
+  }
+
+  .btn__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Leading arrow points out of the button, not along it. */
+  .btn__slot--left .btn__icon {
+    rotate: -45deg;
+  }
+
+  /* ── Variants ─────────────────────────────────────────────────────────── */
+  /* A filled variant borders in its own background, so its frame disappears
+     while the divider — currentColor — stays visible. */
+
+  .btn--base {
+    border-color: var(--color-brand);
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  .btn--base:hover {
+    border-color: var(--color-brand-700);
+    background-color: var(--color-brand-700);
+  }
+
+  /* The rule is quieter than the label on purpose — at full strength it read
+     as a box drawn around the words rather than as the edge of a control.
+     50% is the floor, not a taste call: below it the border falls under 3:1
+     against the surface in the light theme, which is what WCAG asks of a
+     control's boundary. The label stays at full strength either way. */
+  .btn--outline {
+    border-color: color-mix(in srgb, var(--color-headline) 50%, transparent);
+    background-color: transparent;
+    color: var(--color-headline);
+  }
+
+  .btn--outline:hover {
+    border-color: var(--color-brand);
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  /* The end state, held. For the current item in a set — not a hover style. */
+  .btn--active,
+  .btn--active:hover {
+    border-color: var(--color-brand-900);
+    background-color: var(--color-brand-900);
+    color: #fff;
+  }
+
+  .btn--active .btn__slot--left {
+    width: var(--btn-h);
+  }
+
+  .btn--active .btn__slot--right {
+    width: 0;
+  }
+
+  /* ══ Form ═════════════════════════════════════════════════════════════════ */
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-headline);
+  }
+
+  .field-hint {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+  }
+
+  .field-error {
+    font-size: 0.8125rem;
+    color: var(--color-danger);
+  }
+
+  /* Label as an eyebrow — small, uppercase, letter-spaced, and set further off
+     the control. Made for the underlined variants below: with no box drawn
+     around the field, the label is what carries the structure.
+
+     Heading face on purpose. Questrial is weight 400 only, so a 600 here would
+     be a synthesised bold — obvious at this size. Merriweather Sans has a real
+     one. */
+  .field--eyebrow {
+    gap: 0.5rem;
+  }
+
+  .field--eyebrow > .field-label {
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .input,
+  .textarea,
+  .select {
+    width: 100%;
+    height: 3.25rem;
+    padding-inline: 1rem;
+    border: 1px solid var(--color-line);
+    background-color: var(--color-elevated);
+    color: var(--color-headline);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .input::placeholder,
+  .textarea::placeholder {
+    color: var(--color-subtle);
+  }
+
+  .input:focus,
+  .textarea:focus,
+  .select:focus {
+    outline: none;
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 18%, transparent);
+  }
+
+  .input:disabled,
+  .textarea:disabled,
+  .select:disabled {
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+    cursor: not-allowed;
+  }
+
+  .input--invalid,
+  .input[aria-invalid="true"],
+  .textarea[aria-invalid="true"],
+  .select[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+
+  /* Icon addons. The wrapper positions them; the control just gets the room. */
+  .input-wrap {
+    position: relative;
+    display: block;
+  }
+
+  .input-wrap__icon {
+    position: absolute;
+    top: 50%;
+    display: flex;
+    color: var(--color-muted);
+    translate: 0 -50%;
+    pointer-events: none;
+  }
+
+  .input-wrap__icon--leading {
+    left: 1rem;
+  }
+
+  .input-wrap__icon--trailing {
+    right: 1rem;
+  }
+
+  .input--leading {
+    padding-left: 2.85rem;
+  }
+
+  .input--trailing {
+    padding-right: 2.85rem;
+  }
+
+  .input--sm {
+    height: 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .textarea {
+    height: auto;
+    min-height: 8rem;
+    padding-block: 0.875rem;
+    line-height: 1.6;
+    resize: vertical;
+  }
+
+  /* Underlined variant. No box, just a rule — for forms that sit inside a
+     larger composition where a bordered field would read as a second card. */
+  .input--line,
+  .textarea--line,
+  .select--line {
+    padding-inline: 0;
+    border: 0;
+    border-bottom: 1px solid var(--color-line);
+    background-color: transparent;
+  }
+
+  .input--line:focus,
+  .textarea--line:focus,
+  .select--line:focus {
+    border-bottom-color: var(--color-brand);
+    box-shadow: none;
+  }
+
+  .input--line:disabled,
+  .textarea--line:disabled {
+    background-color: transparent;
+  }
+
+  /* Select. The chevron is drawn with borders on the wrapper rather than an
+     SVG background, so it takes a theme token and needs no light/dark pair. */
+  .select {
+    appearance: none;
+    padding-right: 2.75rem;
+    cursor: pointer;
+  }
+
+  .select-field {
+    position: relative;
+    display: block;
+  }
+
+  .select-field::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 1.15rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 1.5px solid var(--color-muted);
+    border-bottom: 1.5px solid var(--color-muted);
+    rotate: 45deg;
+    translate: 0 -70%;
+    pointer-events: none;
+  }
+
+  /* No box on the underlined variant, so the chevron lines up with the end of
+     the rule rather than sitting inside a frame. */
+  .select-field:has(.select--line)::after {
+    right: 0.35rem;
+  }
+
+  /* ══ Nice select ══════════════════════════════════════════════════════════
+     A styled dropdown, for the places a native `<select>` will not do: its
+     panel is drawn by the operating system, in the operating system's colours,
+     and cannot be themed or hold a search field.
+
+     `Select` in the kit stays the default. This one costs JavaScript and gives
+     up the platform's own picker on a phone, so reach for it only where the
+     panel itself has to be designed or the list is long enough to need
+     filtering.                                                              */
+
+  .nice-select {
+    position: relative;
+  }
+
+  .nice-select__button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    background-color: transparent;
+    color: var(--color-headline);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .nice-select__chevron {
+    flex-shrink: 0;
+    color: var(--color-muted);
+    transition: rotate 0.2s;
+  }
+
+  .nice-select__button[aria-expanded="true"] .nice-select__chevron {
+    rotate: 180deg;
+  }
+
+  /* Hangs off the trigger and is pulled out to the segment's own padding, so
+     the panel lines up with the label above it rather than with the text. */
+  .nice-select__panel {
+    position: absolute;
+    z-index: 50;
+    top: calc(100% + 0.85rem);
+    left: -0.75rem;
+    width: max-content;
+    min-width: calc(100% + 1.5rem);
+    max-width: 20rem;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 1rem;
+    background-color: var(--color-elevated);
+    box-shadow: 0 18px 40px -12px rgb(0 0 0 / 0.35);
+  }
+
+  /* For the last segment in a row, where a left-anchored panel would run off
+     the edge of the card. */
+  .nice-select__panel--end {
+    right: -0.75rem;
+    left: auto;
+  }
+
+  .nice-select__search {
+    display: block;
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: 0;
+    border-bottom: 1px solid var(--color-line);
+    background-color: transparent;
+    color: var(--color-headline);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+  }
+
+  .nice-select__search::placeholder {
+    color: var(--color-subtle);
+  }
+
+  .nice-select__search:focus {
+    outline: none;
+  }
+
+  .nice-select__list {
+    max-height: 14rem;
+    overflow-y: auto;
+    padding: 0.375rem;
+  }
+
+  .nice-select__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+    color: var(--color-content);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  /* `data-active` is the keyboard cursor, `aria-selected` is the chosen value.
+     They are different things and both need to be visible at once. */
+  .nice-select__option[data-active="true"] {
+    background-color: var(--color-surface);
+    color: var(--color-headline);
+  }
+
+  .nice-select__option[aria-selected="true"] {
+    color: var(--color-brand);
+    font-weight: 600;
+  }
+
+  .nice-select__empty {
+    padding: 0.85rem;
+    color: var(--color-muted);
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  /* Checkbox and radio share a body; only the shape and the mark differ. */
+  .checkbox,
+  .radio {
+    display: inline-grid;
+    place-content: center;
+    flex-shrink: 0;
+    width: 1.15rem;
+    height: 1.15rem;
+    appearance: none;
+    border: 1px solid var(--color-line);
+    background-color: var(--color-elevated);
+    cursor: pointer;
+    transition:
+      background-color 0.15s,
+      border-color 0.15s;
+  }
+
+  .radio {
+    border-radius: 999px;
+  }
+
+  .checkbox::before,
+  .radio::before {
+    content: "";
+    transition: scale 0.15s ease-out;
+    scale: 0;
+  }
+
+  .checkbox::before {
+    width: 0.55rem;
+    height: 0.3rem;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    rotate: -45deg;
+    translate: 0 -15%;
+  }
+
+  .radio::before {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 999px;
+    background-color: #fff;
+  }
+
+  .checkbox:checked,
+  .radio:checked {
+    border-color: var(--color-brand);
+    background-color: var(--color-brand);
+  }
+
+  .checkbox:checked::before,
+  .radio:checked::before {
+    scale: 1;
+  }
+
+  .checkbox:disabled,
+  .radio:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Pair a control with its label. */
+  .check-row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+    color: var(--color-content);
+    cursor: pointer;
+  }
+
+  /* ══ Badges ═══════════════════════════════════════════════════════════════
+     Tints are mixed from the same token as the text, so each one stays legible
+     on either ground without a dark-mode rule.                              */
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge--brand {
+    background-color: color-mix(in srgb, var(--color-brand) 12%, transparent);
+    color: var(--color-brand);
+  }
+
+  .badge--gold {
+    background-color: color-mix(in srgb, var(--color-gold) 16%, transparent);
+    color: var(--color-gold-600);
+  }
+
+  .badge--success {
+    background-color: color-mix(in srgb, var(--color-success) 14%, transparent);
+    color: var(--color-success);
+  }
+
+  .badge--danger {
+    background-color: color-mix(in srgb, var(--color-danger) 14%, transparent);
+    color: var(--color-danger);
+  }
+
+  .badge--neutral {
+    background-color: var(--color-surface);
+    color: var(--color-muted);
+  }
+
+  .badge--outline {
+    border-color: var(--color-line);
+    color: var(--color-content);
+  }
+
+  /* ══ Step grid ════════════════════════════════════════════════════════════
+     A row of items whose content descends like a staircase, each one behind a
+     full-height rule. Everything animates in when the surrounding `Reveal`
+     sets data-visible, staggered off each item's own --step-delay.
+
+     Transitions rather than @keyframes on purpose: Tailwind only emits a
+     keyframes block when a matching --animate-* token is used in scanned
+     markup, and these are driven by a descendant selector, not a class.     */
+
+  .step__body {
+    opacity: 0;
+    translate: 0 22px;
+    transition:
+      opacity 0.7s ease,
+      translate 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--step-delay, 0ms);
+  }
+
+  [data-visible] .step__body {
+    opacity: 1;
+    translate: none;
+  }
+
+  /* The line icons draw themselves. 140 comfortably exceeds the longest path
+     in a 24-unit viewBox, so a shorter path is simply hidden then revealed
+     rather than left with a gap. */
+  .step__icon :is(path, circle, rect, line, polyline) {
+    stroke-dasharray: 140;
+    stroke-dashoffset: 140;
+    transition: stroke-dashoffset 1s cubic-bezier(0.65, 0, 0.35, 1);
+    transition-delay: calc(var(--step-delay, 0ms) + 120ms);
+  }
+
+  [data-visible] .step__icon :is(path, circle, rect, line, polyline) {
+    stroke-dashoffset: 0;
+  }
+
+  .step__bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-line);
+  }
+
+  .step__bar::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 100%;
+    background-color: var(--color-headline);
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--step-delay, 0ms) + 200ms);
+  }
+
+  [data-visible] .step__bar::after {
+    width: var(--step-fill, 100%);
+  }
+
+  /* Nothing should stay hidden for someone who has asked for less motion. */
+  @media (prefers-reduced-motion: reduce) {
+    .step__body {
+      opacity: 1;
+      translate: none;
+    }
+
+    .step__icon :is(path, circle, rect, line, polyline) {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+    }
+
+    .step__bar::after {
+      width: var(--step-fill, 100%);
+    }
+  }
+
+  /* ══ On-dark context ══════════════════════════════════════════════════════
+     Put `on-dark` on any section that sits on photography or a brand block.
+     Controls inside it stop reading the theme and commit to white, because the
+     ground underneath is dark in both themes.                               */
+
+  .on-dark .btn--outline {
+    border-color: rgb(255 255 255 / 0.45);
+    color: #fff;
+  }
+
+  .on-dark .btn--outline:hover {
+    border-color: #fff;
+    background-color: #fff;
+    color: var(--color-brand-950);
+  }
+
+  .on-dark .badge--outline {
+    border-color: rgb(255 255 255 / 0.3);
+    color: #fff;
+  }
+
+  /* A 12% tint vanishes on a photograph. Over one the tones go solid, so a
+     status badge reads whatever the image behind it happens to be doing. */
+  .on-dark .badge--brand {
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
+  .on-dark .badge--gold {
+    background-color: var(--color-gold);
+    color: var(--color-brand-950);
+  }
+
+  .on-dark .badge--neutral {
+    background-color: #fff;
+    color: var(--color-brand-950);
+  }
+
+  .on-dark .field-label {
+    color: #fff;
+  }
+
+  .on-dark .field-hint {
+    color: rgb(255 255 255 / 0.6);
+  }
+
+  .on-dark .input,
+  .on-dark .textarea,
+  .on-dark .select {
+    border-color: rgb(255 255 255 / 0.25);
+    background-color: rgb(255 255 255 / 0.08);
+    color: #fff;
+  }
+
+  .on-dark .input::placeholder,
+  .on-dark .textarea::placeholder {
+    color: rgb(255 255 255 / 0.45);
+  }
+
+  .on-dark .input:focus,
+  .on-dark .textarea:focus,
+  .on-dark .select:focus {
+    border-color: rgb(255 255 255 / 0.6);
+    box-shadow: none;
+  }
+
+  .on-dark .select-field::after {
+    border-color: rgb(255 255 255 / 0.6);
+  }
+}

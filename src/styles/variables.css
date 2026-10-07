@@ -1,0 +1,182 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Adestate · variables
+   Every colour and font in the product, in one file. This is the rebrand
+   surface: change a value here and it lands everywhere, in both themes.
+
+   Nothing in here selects an element or lays anything out — see tokens.css for
+   shape and motion, base.css for element defaults, components.css for the UI
+   kit. Colours declared in `@theme` become Tailwind utilities automatically
+   (`bg-brand-500`, `text-headline`, `border-line`).
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Dark mode ────────────────────────────────────────────────────────────── */
+/* Two paths, so the first paint is always right:
+   1. An explicit choice — the theme provider stamps .dark (or .light) on <html>,
+      and on later visits the server does it from the cookie.
+   2. No choice yet — follow the OS. `.light` is what opts out of this.
+   The token block near the bottom of this file mirrors the same two selectors. */
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:not(.light, .light *)) {
+      @slot;
+    }
+  }
+}
+
+/* ── Brand · #234DD4 ──────────────────────────────────────────────────────── */
+/* The base colour is 600; the rest of the scale is that hue (226°) walked up
+   and down in lightness. Use as bg-brand · text-brand · border-brand, or the
+   full 50–950 scale. This is the one place to edit for a rebrand.            */
+@theme {
+  --color-brand-50:  #f0f3ff;
+  --color-brand-100: #e1e8fe;
+  --color-brand-200: #bfcefc;
+  --color-brand-300: #96adf8;
+  --color-brand-400: #6485f2;
+  --color-brand-500: #3e65e5;
+  --color-brand-600: #234dd4;
+  --color-brand-700: #1f40ad;
+  --color-brand-800: #1d378c;
+  --color-brand-900: #1c2f6e;
+  --color-brand-950: #141d43;
+
+  /* Bare token — the default action colour */
+  --color-brand: #234dd4;
+
+  /* ── Accent · muted gold. Featured badges, ratings, premium marks ───────── */
+  --color-gold-100: #f8eed6;
+  --color-gold-300: #e7cf92;
+  --color-gold-400: #d9b65e;
+  --color-gold-500: #c8a24a;
+  --color-gold-600: #a48235;
+  --color-gold: #c8a24a;
+
+  /* ── Shader backdrop ────────────────────────────────────────────────────
+     The footer is a dark block in *both* themes, so these have no counterpart
+     in the dark palette below. Near-black rather than brand-950: the ripple's
+     glow needs something almost lightless to bloom against, and the slats have
+     to read as cut-outs, not as a second blue.                              */
+  --color-shader-ink:  #04060e;
+  --color-shader-slat: #01020a;
+}
+
+/* ── Semantic text ────────────────────────────────────────────────────────── */
+/* text-headline · text-content · text-muted · text-subtle                     */
+/*   headline → headings, strong values                                        */
+/*   content  → body copy                                                      */
+/*   muted    → secondary text, labels                                         */
+/*   subtle   → faint hints, meta                                              */
+/* Dark values live in the .dark block below, so one class adapts on its own —  */
+/* no dark: variant needed for text colour.                                    */
+@theme {
+  --color-headline: #0b1020;
+  --color-content:  #3c4457;
+  --color-muted:    #6b7385;
+  --color-subtle:   #98a0b1;
+
+  /* ── Semantic surfaces ─────────────────────────────────────────────────── */
+  /*   page     → the page background                                          */
+  /*   surface  → cards, panels sitting on the page                            */
+  /*   elevated → menus, popovers, sticky bars                                 */
+  /*   line     → borders and dividers                                         */
+  --color-page:     #ffffff;
+  --color-surface:  #f5f6fa;
+  --color-elevated: #ffffff;
+  --color-line:     #e4e7ef;
+
+  /* ── Status ────────────────────────────────────────────────────────────── */
+  /*   danger  → form errors, destructive actions                             */
+  /*   success → confirmations                                                */
+  --color-danger:  #dc2626;
+  --color-success: #16a34a;
+}
+
+/* ── Dark palette ─────────────────────────────────────────────────────────── */
+/* Values live here once; the two blocks below only assign them, mirroring the
+   two paths in the @custom-variant above. Change a colour in one place.       */
+:root {
+  --dark-headline: #f5f5f5;
+  --dark-content:  #cacaca;
+  --dark-muted:    #8a8a8a;
+  --dark-subtle:   #666666;
+
+  /* Neutral black, deliberately untinted: the brand is the only colour on a
+     dark ground, so the surfaces underneath stay out of its way. `elevated`
+     matches `page` — the header and its dropdown read as one black block, and
+     popovers separate with a border instead of a lighter fill. */
+  --dark-page:     #000000;
+  --dark-surface:  #0f0f0f;
+  --dark-elevated: #000000;
+  /* Bumped from #212121: on a pure-black page that sat at roughly 1.3:1 and a
+     1px rule simply disappeared. #2f2f2f keeps the border quiet while staying
+     legible against both --dark-page (#000) and --dark-surface (#0f0f0f). */
+  --dark-line:     #2f2f2f;
+
+  /* Brand lifts in the dark: #234DD4 itself is too deep to read as a link on
+     a near-black ground. This sits between 500 and 600 so it still carries
+     white button text. */
+  --dark-brand:    #4a6be8;
+  --dark-danger:   #f87171;
+  --dark-success:  #4ade80;
+}
+
+/* 1 · Explicit choice. Unlayered, so it beats the :root tokens from @theme. */
+.dark {
+  --color-headline: var(--dark-headline);
+  --color-content:  var(--dark-content);
+  --color-muted:    var(--dark-muted);
+  --color-subtle:   var(--dark-subtle);
+  --color-page:     var(--dark-page);
+  --color-surface:  var(--dark-surface);
+  --color-elevated: var(--dark-elevated);
+  --color-line:     var(--dark-line);
+  --color-brand:    var(--dark-brand);
+  --color-danger:   var(--dark-danger);
+  --color-success:  var(--dark-success);
+}
+
+/* 2 · No choice yet — follow the OS until the visitor picks a side. */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-headline: var(--dark-headline);
+    --color-content:  var(--dark-content);
+    --color-muted:    var(--dark-muted);
+    --color-subtle:   var(--dark-subtle);
+    --color-page:     var(--dark-page);
+    --color-surface:  var(--dark-surface);
+    --color-elevated: var(--dark-elevated);
+    --color-line:     var(--dark-line);
+    --color-brand:    var(--dark-brand);
+    --color-danger:   var(--dark-danger);
+    --color-success:  var(--dark-success);
+  }
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+/* Deliberately identical in both themes. The bar is browser chrome at the edge
+   of the page rather than part of it, and a black rail reads the same whichever
+   way the page is painted. Consumed by base.css. */
+:root {
+  --scrollbar-thumb: #111111;
+  --scrollbar-thumb-hover: #000000;
+  --scrollbar-track: #e8e8e8;
+}
+
+/* ── Fonts ────────────────────────────────────────────────────────────────── */
+/* `--font-merriweather-sans` and `--font-questrial` are injected on <html> by
+   next/font (see app/layout.jsx); the tokens below wrap them with a fallback
+   stack and are what the app actually uses.
+
+   Utilities: font-heading · font-body. `font-sans` aliases body so Tailwind's
+   default sans matches the page. Swapping a family is two lines — the import
+   in layout.jsx and the variable name here. No component names a font. */
+@theme {
+  --font-heading: var(--font-merriweather-sans), ui-sans-serif, system-ui,
+    sans-serif;
+  --font-body: var(--font-questrial), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-body);
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}

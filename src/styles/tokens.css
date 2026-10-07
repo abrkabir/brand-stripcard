@@ -1,0 +1,101 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   Adestate · tokens
+   Shape and motion: radii, shadows, layout sizes, animation timings and the
+   keyframes behind them. Colour and type live in variables.css.
+   ────────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Tailwind stops at 2xl (1536px). Very wide screens give columns enough
+     room for controls to sit side by side instead of stacking. */
+  --breakpoint-3xl: 1600px;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  --shadow-soft: 0 1px 2px rgb(11 16 32 / 0.05), 0 8px 24px -12px rgb(11 16 32 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(11 16 32 / 0.05), 0 24px 48px -20px rgb(11 16 32 / 0.24);
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-rise: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
+
+  /* Hero motion. Tailwind only emits a @keyframes block when a matching
+     --animate-* token is actually used in the markup, so these must be
+     declared as tokens — a bare @keyframes here would be pruned from the
+     build and the animation would silently do nothing.
+     The durations below are fallbacks: HeroSlider overrides them inline from
+     SLIDE_MS, which is the real source of truth. */
+  --animate-ken-zoom-in: ken-zoom-in 9s linear both;
+  --animate-ken-zoom-out: ken-zoom-out 9s linear both;
+  --animate-ken-pan-left: ken-pan-left 9s linear both;
+  --animate-ken-pan-right: ken-pan-right 9s linear both;
+  --animate-ring-fill: ring-fill 7s linear forwards;
+
+  /* Height of the fixed header. The hero sits underneath it; every other page
+     starts with the `pt-header` utility. */
+  --header-h: 6rem;
+  --header-h-lg: 7rem;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes scroll-cue {
+  0%       { transform: translateY(-100%); opacity: 0; }
+  35%, 65% { opacity: 1; }
+  100%     { transform: translateY(100%); opacity: 0; }
+}
+
+/* ── Hero motion ──────────────────────────────────────────────────────────── */
+/* Four slow drifts applied to the slide photography. Stills read as footage
+   because the frame never stops moving, and alternating the direction per
+   slide keeps the loop from feeling mechanical. Duration is set inline from
+   SLIDE_MS so the motion and the progress ring can never fall out of sync. */
+
+@keyframes ken-zoom-in {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to   { transform: scale(1.18) translate3d(-1.5%, -1.2%, 0); }
+}
+
+@keyframes ken-zoom-out {
+  from { transform: scale(1.18) translate3d(1.2%, 1%, 0); }
+  to   { transform: scale(1.02) translate3d(0, 0, 0); }
+}
+
+@keyframes ken-pan-left {
+  from { transform: scale(1.14) translate3d(3%, -0.6%, 0); }
+  to   { transform: scale(1.14) translate3d(-3%, 0.6%, 0); }
+}
+
+@keyframes ken-pan-right {
+  from { transform: scale(1.14) translate3d(-3%, 0.6%, 0); }
+  to   { transform: scale(1.14) translate3d(3%, -0.6%, 0); }
+}
+
+/* Progress ring on the active slider dot: the dash offset walks to zero over
+   exactly one slide, so the ring reads as a countdown to the next frame.
+   The circle carries pathLength="100", which normalises its geometry to 100
+   user units — so these numbers hold whatever radius the dot is drawn at. */
+@keyframes ring-fill {
+  from { stroke-dashoffset: 100; }
+  to   { stroke-dashoffset: 0; }
+}
