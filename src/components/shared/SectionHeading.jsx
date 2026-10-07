@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { cn } from "@/lib/cn";
 
 /**
@@ -34,7 +34,7 @@ export function SectionHeading({
       {/* Only the paragraph is width-constrained. A heading that has to wrap at
           576px is a heading fighting its own layout. */}
       <div className={cn(centered && "max-w-3xl")}>
-        {eyebrow && <Badge>{eyebrow}</Badge>}
+        {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
 
         {/* Normal weight, not semibold: at display size the heading carries by
             scale, and the lighter cut keeps a section from shouting over the

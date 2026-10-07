@@ -2,6 +2,7 @@ import Image from "next/image";
 import { StarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { banner } from "@/data/banner";
 import { cn } from "@/lib/cn";
 
@@ -47,11 +48,9 @@ export function Banner() {
               geometric one, and the lift keeps the headline clear of the card
               in the photograph. */}
           <div className="lg:col-span-7 lg:row-span-3 lg:row-start-1 lg:-translate-y-12 lg:self-center">
-            <p className="animate-fade-up font-display text-sm font-semibold tracking-[0.02em] text-white/80 capitalize sm:text-base">
-              {eyebrow}
-            </p>
+            <Eyebrow className="animate-fade-up">{eyebrow}</Eyebrow>
 
-            <h1 className="mt-2 font-display text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-3">
+            <h1 className="mt-4 font-display text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-5">
               {headline.map((line, i) => (
                 <span
                   key={line}

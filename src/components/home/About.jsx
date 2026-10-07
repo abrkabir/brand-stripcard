@@ -1,6 +1,8 @@
 import { getIcon, ShieldIcon } from "@/components/icons";
+import { PulseDot } from "@/components/shared/PulseDot";
 import { Reveal } from "@/components/shared/Reveal";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Odometer } from "@/components/ui/Odometer";
 import { Switch } from "@/components/ui/Switch";
 import { about } from "@/data/about";
@@ -26,10 +28,8 @@ export function About() {
     <section aria-labelledby="about-title" className="bg-page py-20 lg:py-28">
       <Container>
         <Reveal className={cn("grid gap-6 lg:grid-cols-12 lg:gap-8", rise)}>
-          <h2 id="about-title" className="font-body lg:col-span-4">
-            <span className="inline-flex rounded-full border border-line px-3.5 py-1.5 text-xs font-normal tracking-normal text-content">
-              {label}
-            </span>
+          <h2 id="about-title" className="lg:col-span-4">
+            <Eyebrow as="span">{label}</Eyebrow>
           </h2>
           <p className="text-xl leading-[1.45] font-medium tracking-[-0.01em] sm:text-2xl lg:col-span-8 lg:text-[1.75rem]">
             <span className="text-headline">{intro.brand}</span>{" "}
@@ -111,21 +111,6 @@ function IconTiles({ icons }) {
           </span>
         );
       })}
-    </span>
-  );
-}
-
-/**
- * A brand dot with two rings rippling out of it, half a cycle apart, so the
- * pulse never stops. Decorative. With reduced motion the global stylesheet
- * runs each ring once, instantly, and it ends invisible — a still dot.
- */
-function PulseDot() {
-  return (
-    <span aria-hidden="true" className="relative grid size-2.5 shrink-0 place-items-center">
-      <span className="animate-ripple absolute inset-0 rounded-full bg-brand" />
-      <span className="animate-ripple absolute inset-0 rounded-full bg-brand [animation-delay:1.2s]" />
-      <span className="relative size-2.5 rounded-full bg-brand" />
     </span>
   );
 }

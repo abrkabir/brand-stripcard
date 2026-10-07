@@ -2,6 +2,7 @@ import Image from "next/image";
 import { MapPinIcon, SearchIcon } from "@/components/icons";
 import { PropertyFilterBar } from "@/components/property/PropertyFilterBar";
 import { Container } from "@/components/ui/Container";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { NiceSelect } from "@/components/ui/NiceSelect";
 import {
   budgetBands,
@@ -56,9 +57,7 @@ export function PropertySearchBar({ query }) {
             `pb` only the latter — so the visible area below the header stays
             what it was before the image moved up behind it. */}
         <Container className="on-dark relative flex min-h-[34rem] flex-col items-center justify-center pt-[calc(var(--header-h)+3.5rem)] pb-14 text-center lg:min-h-[41rem] lg:pt-[calc(var(--header-h-lg)+3.5rem)]">
-          <p className="text-[12px] tracking-[0.18em] text-white/70 uppercase">
-            {propertiesPageCopy.eyebrow}
-          </p>
+          <Eyebrow>{propertiesPageCopy.eyebrow}</Eyebrow>
 
           <h1 className="mt-5 max-w-3xl font-heading text-[2rem] leading-[1.1] font-medium text-white sm:text-[3rem]">
             {propertiesPageCopy.title}

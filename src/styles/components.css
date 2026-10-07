@@ -655,6 +655,27 @@
     color: var(--color-content);
   }
 
+  /* ══ Eyebrow ════════════════════════════════════════════════════════════
+     The small outlined pill above a section heading. One look everywhere —
+     see components/ui/Eyebrow.jsx. On a dark ground (`.on-dark`) it turns
+     white, like every other control there.                                  */
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.25;
+    text-transform: none;
+    color: var(--color-content);
+  }
+
   /* ══ Step grid ════════════════════════════════════════════════════════════
      A row of items whose content descends like a staircase, each one behind a
      full-height rule. Everything animates in when the surrounding `Reveal`
@@ -744,6 +765,11 @@
     border-color: #fff;
     background-color: #fff;
     color: var(--color-brand-950);
+  }
+
+  .on-dark .eyebrow {
+    border-color: rgb(255 255 255 / 0.3);
+    color: rgb(255 255 255 / 0.85);
   }
 
   .on-dark .badge--outline {

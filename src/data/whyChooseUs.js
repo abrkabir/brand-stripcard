@@ -1,40 +1,73 @@
 /**
- * The "why choose us" section on the homepage.
+ * The "why choose us" section on the homepage. `WhyChooseUs` renders straight
+ * from this.
  *
- * Titles are single words on purpose — they sit uppercase at the head of a
- * narrow column, and the sentence underneath carries the detail. Each claim is
- * deliberately checkable: a number, a process, something a reader could hold
- * us to. If a line cannot be verified, it does not belong in this list.
+ * Each item is a card: a white panel (keywords, title, a status line) above
+ * a warm glow holding an illustration. "View details" swaps the illustration
+ * for `description`. `art` picks the illustration — one of
+ * the keys in `ART` inside the component. The status values are placeholder
+ * figures until real ones are supplied.
  */
 export const whyChooseUsHeading = {
-  title: "Why people choose Adestate",
+  eyebrow: "Why choose us",
+  title: "What Makes Us Your Best Choice",
   description:
-    "Moving is the largest transaction most people ever make. We built Adestate so none of it has to be taken on trust — every claim on this site is one you can check.",
+    "Reliable, secure and built around you. Here's why people and teams trust StripCard with every payment.",
 };
 
 export const whyChooseUs = [
   {
-    icon: "shield",
-    title: "Verified",
+    tags: ["create", "customize", "manage"],
+    title: "Virtual Card Issuance",
     description:
-      "Every home is visited, measured and photographed by our own team before it ever lists.",
+      "Instantly create and manage virtual cards for secure online transactions, customized to suit your specific needs.",
+    status: { label: "status", value: "ready in 3s" },
+    action: "new card",
+    art: "cards",
   },
   {
-    icon: "chart",
-    title: "Transparent",
+    tags: ["encryption", "3-D Secure", "tokens"],
+    title: "Secure Online Transactions",
     description:
-      "Each asking price sits beside what comparable homes on the street actually sold for.",
+      "Benefit from advanced encryption and authentication methods, ensuring that your online payments are protected.",
+    status: { label: "protection", value: "always on" },
+    action: "details",
+    art: "shield",
   },
   {
-    icon: "key",
-    title: "Direct",
+    tags: ["monthly", "yearly", "flexible"],
+    title: "Customizable Payment Plans",
     description:
-      "Over 1,200 rentals listed by owners themselves. No brokerage between you and the keys.",
+      "Choose from a variety of flexible payment plans designed to accommodate different budgets and preferences.",
+    status: { label: "plan", value: "saving: 20%" },
+    action: "compare",
+    art: "plans",
   },
   {
-    icon: "users",
-    title: "Accountable",
+    tags: ["alerts", "history", "insights"],
+    title: "Real-Time Monitoring",
     description:
-      "320 licensed agents, named on their listings, with reply times published every month.",
+      "Keep track of your spending with real-time notifications and detailed transaction history.",
+    status: { label: "live", value: "updated 1s ago" },
+    action: "view",
+    art: "monitor",
+  },
+  {
+    tags: ["usd", "eur", "gbp"],
+    title: "Multi-Currency Support",
+    description:
+      "Easily manage transactions in multiple currencies, perfect for international shopping and payments.",
+    status: { label: "rates", value: "live" },
+    action: "convert",
+    art: "currency",
+  },
+  {
+    tags: ["chat", "email", "phone"],
+    title: "24/7 Customer Support",
+    description:
+      "Access round-the-clock customer support to resolve any payment-related issues or inquiries.",
+    status: { label: "support", value: "reply in 2 min" },
+    action: "contact",
+    art: "support",
   },
 ];
