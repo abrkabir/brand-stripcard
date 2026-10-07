@@ -132,17 +132,26 @@ export function Header() {
         ref={headerRef}
         className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4 lg:pt-6"
       >
-        <Container className="relative">
+        {/* Sits lower while compact, clear of the banner's rounded top edge,
+            and rises to its bar position as the surface grows. */}
+        <Container
+          className={cn(
+            "relative transition-[translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+            compact && "translate-y-3 lg:translate-y-5",
+          )}
+        >
           <div className="relative flex h-12 items-center justify-between gap-4 pr-1.5 pl-5 lg:h-13 lg:pr-[7px] lg:pl-7">
-            {/* The surface. Centred, and only its width animates — from the
-                nav's width out to the full bar. */}
+            {/* The surface. Centred; compact it hugs the links — their width
+                and a slimmer height — and on scroll it grows out to the full
+                bar in both directions at once. */}
             <span
               aria-hidden="true"
               style={{ width: compact ? navWidth : "100%" }}
               className={cn(
-                "absolute inset-y-0 left-1/2 -translate-x-1/2 rounded-full border border-line bg-elevated",
+                "absolute left-1/2 -translate-x-1/2 rounded-full border border-line bg-elevated",
+                compact ? "inset-y-1.5" : "inset-y-0",
                 ready &&
-                  "transition-[width,opacity,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                  "transition-[width,top,bottom,opacity,box-shadow] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
                 compact
                   ? "shadow-soft"
                   : cn(
@@ -153,9 +162,15 @@ export function Header() {
               )}
             />
 
+            {/* A touch larger while it stands alone on the banner; it eases
+                back to bar size as the surface arrives. Scaled rather than
+                resized, so nothing around it reflows. */}
             <Logo
               white={compact}
-              className="pointer-events-auto relative shrink-0"
+              className={cn(
+                "pointer-events-auto relative shrink-0 origin-left transition-[opacity,scale] duration-500",
+                compact && "scale-125",
+              )}
               size="h-4 lg:h-5"
             />
 

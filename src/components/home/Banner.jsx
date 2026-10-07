@@ -51,7 +51,7 @@ export function Banner() {
               {eyebrow}
             </p>
 
-            <h1 className="mt-4 font-display text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-5">
+            <h1 className="mt-2 font-display text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-3">
               {headline.map((line, i) => (
                 <span
                   key={line}
@@ -77,7 +77,7 @@ export function Banner() {
 
             <Button
               href={cta.href}
-              variant="base"
+              variant="outline"
               arrow={false}
               className="mt-6 [--btn-h:2.875rem] [--btn-pad:1.375rem] lg:mt-7"
             >
