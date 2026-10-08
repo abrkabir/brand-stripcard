@@ -1,11 +1,11 @@
-import { Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
+import { Anton, Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import "@/styles/globals.css";
 import { ThemeProvider, THEME_COOKIE } from "@/lib/theme";
 import { siteConfig } from "@/lib/site";
 
 /**
- * All three faces are self-hosted by next/font at build time — no request ever
+ * Every face is self-hosted by next/font at build time — no request ever
  * reaches Google, and there is no layout shift.
  *
  * Each one only exposes a raw CSS variable named after the family. The
@@ -24,6 +24,14 @@ const headingFont = Merriweather_Sans({
 /** Display — headlines. Variable, so 400–700 ships in one file. */
 const displayFont = Arimo({
   variable: "--font-arimo",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/** Condensed: poster-style capitals for the odd statement title. One weight. */
+const condensedFont = Anton({
+  variable: "--font-anton",
+  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
@@ -74,7 +82,7 @@ export default async function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${headingFont.variable} ${displayFont.variable} ${bodyFont.variable} h-full antialiased${theme ? ` ${theme}` : ""}`}
+      className={`${headingFont.variable} ${displayFont.variable} ${condensedFont.variable} ${bodyFont.variable} h-full antialiased${theme ? ` ${theme}` : ""}`}
       style={{ colorScheme: theme ?? "light dark" }}
       suppressHydrationWarning
     >

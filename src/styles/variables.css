@@ -178,7 +178,7 @@
    injected on <html> by next/font (see app/layout.jsx); the tokens below wrap
    them with a fallback stack and are what the app actually uses.
 
-   Utilities: font-heading · font-body · font-display. `font-sans` aliases
+   Utilities: font-heading · font-body · font-display · font-condensed. `font-sans` aliases
    body so Tailwind's default sans matches the page. Swapping a family is two
    lines — the import in layout.jsx and the variable name here. No component
    names a font. */
@@ -189,6 +189,9 @@
   /* Display: big statements only — the banner headline and its eyebrow.
      Arimo is metric-compatible with Arial, so Arial is a shift-free fallback. */
   --font-display: var(--font-arimo), Arial, ui-sans-serif, system-ui, sans-serif;
+  /* Condensed: poster capitals for a statement title (the app section).
+     Anton has one weight, so never bold it. */
+  --font-condensed: var(--font-anton), Impact, "Arial Narrow", sans-serif;
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }

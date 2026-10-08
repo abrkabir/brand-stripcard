@@ -1,4 +1,5 @@
 import { About } from "@/components/home/About";
+import { AppSection } from "@/components/home/AppSection";
 import { Agents } from "@/components/home/Agents";
 import { Banner } from "@/components/home/Banner";
 import { ContactSection } from "@/components/home/ContactSection";
@@ -31,6 +32,7 @@ export default function HomePage() {
       <Banner />
       <About />
       <WhyChooseUs />
+      <AppSection />
       <Properties />
       <FeaturedItems />
       <Gallery />

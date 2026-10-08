@@ -136,7 +136,9 @@ export function WhyDeck({ items }) {
                 // two at lg — so the first set always fits exactly.
                 className="lg:motion-safe:w-[calc((100%-2rem)/2)] lg:motion-safe:shrink-0 xl:motion-safe:w-[calc((100%-4rem)/3)]"
               >
-                <WhyCard item={item} index={i} />
+                {/* The first card opens on its description, as an example
+                    of what "View details" does. */}
+                <WhyCard item={item} index={i} defaultOpen={i === 0} />
               </li>
             ))}
           </ul>

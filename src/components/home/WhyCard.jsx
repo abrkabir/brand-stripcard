@@ -25,7 +25,8 @@ function syncLoops(m) {
  * One "why choose us" card: two layers on a warm ground.
  *
  * Up top, a white panel that reads like a settings tile — keywords, a title,
- * a status line. Underneath, on the surface colour, an illustration of the
+ * a status line. Underneath, on a shade a step deeper than the surface
+ * colour (the line token at 60%), an illustration of the
  * idea that lifts on hover.
  *
  * "View details" swaps the illustration for the description in the same
@@ -46,8 +47,8 @@ function syncLoops(m) {
  * trigger: it measures what is really visible, so it stays right when the
  * card is slid sideways inside a clipped, pinned row (see WhyDeck).
  */
-export function WhyCard({ item, index }) {
-  const [open, setOpen] = useState(false);
+export function WhyCard({ item, index, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
   const detailsId = useId();
   const Art = ART[item.art];
   const artRef = useRef(null);
@@ -59,7 +60,7 @@ export function WhyCard({ item, index }) {
     intro: null,
     started: false,
     inView: false,
-    open: false,
+    open: defaultOpen,
   });
 
   useGSAP(
@@ -111,7 +112,7 @@ export function WhyCard({ item, index }) {
 
   return (
     <article
-      className="group relative flex h-full translate-y-8 flex-col overflow-hidden rounded-[2rem] bg-surface p-1 opacity-0 transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100"
+      className="group relative flex h-full translate-y-8 flex-col overflow-hidden rounded-[2rem] bg-line/60 p-1 opacity-0 transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100"
       // Staggered across each row of three, so a whole row lands together.
       style={{ transitionDelay: `${(index % 3) * 140}ms` }}
     >
@@ -151,15 +152,20 @@ export function WhyCard({ item, index }) {
             onClick={toggle}
             aria-expanded={open}
             aria-controls={detailsId}
-            className="shrink-0 gap-1 border-headline/25 text-[0.6875rem] text-headline/55 [--btn-h:1.75rem] [--btn-pad:0.625rem] hover:border-brand hover:text-white"
+            className={cn(
+              "shrink-0 gap-1 text-[0.6875rem] [--btn-h:1.75rem] [--btn-pad:0.625rem] hover:border-brand hover:text-white",
+              // Open reads as active: filled in the brand colour.
+              open
+                ? "border-brand bg-brand text-white"
+                : "border-headline/25 text-headline/55",
+            )}
           >
             {open ? "Hide details" : "View details"}
-            {/* ↗ to open; swings round to ↙ once open, pointing back at the
-                way in. */}
+            {/* Points down at the details below; flips up once they show. */}
             <ArrowRightIcon
               className={cn(
                 "size-3 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                open ? "rotate-[135deg]" : "-rotate-45",
+                open ? "-rotate-90" : "rotate-90",
               )}
             />
           </Button>
