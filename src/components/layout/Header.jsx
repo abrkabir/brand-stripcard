@@ -7,6 +7,7 @@ import { ChevronDownIcon, MenuIcon } from "@/components/icons";
 import { Logo } from "@/components/layout/Logo";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileNav } from "@/components/layout/MobileNav";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { headerCta, heroRoutes, mainNav } from "@/data/navigation";
@@ -238,6 +239,17 @@ export function Header() {
                 arrives underneath it on scroll. The bar's side padding equals
                 its vertical gap, so the button sits evenly inset either way. */}
             <div className="pointer-events-auto relative flex shrink-0 items-center gap-2">
+              {/* Same round footprint as the menu button. White on the banner,
+                  theme ink once the surface is under it, like the logo. */}
+              <ThemeToggle
+                className={cn(
+                  "size-9 rounded-full duration-500",
+                  compact
+                    ? "text-white/85 hover:bg-white/15 hover:text-white"
+                    : "text-content hover:bg-surface hover:text-headline",
+                )}
+              />
+
               <Button
                 href={headerCta.href}
                 size="sm"

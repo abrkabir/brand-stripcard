@@ -1,4 +1,4 @@
-import { WhyCard } from "@/components/home/WhyCard";
+import { WhyDeck } from "@/components/home/WhyDeck";
 import { Reveal } from "@/components/shared/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -6,14 +6,15 @@ import { whyChooseUs, whyChooseUsHeading } from "@/data/whyChooseUs";
 
 /**
  * "Why choose us": a brand label and a title with a highlighted word and a
- * phrase framed in a swipe pill, then a grid of cards.
+ * phrase framed in a swipe pill, then the cards — a pinned, scroll-driven
+ * deck beside a list of their titles on desktop (see `WhyDeck`), a plain
+ * grid elsewhere.
  *
- * Each card (see `WhyCard`) is a settings-style panel over a pale brand
- * ground with an animated illustration, and a "View details" toggle that
+ * Each card (see `WhyCard`) is a settings-style panel over the surface
+ * colour with an animated illustration, and a "View details" toggle that
  * swaps the illustration for the description.
  *
- * The cards rise in row by row the first time the grid scrolls into view,
- * keyed off the `data-visible` that `Reveal` sets. A Server Component.
+ * A Server Component; the deck is the client island.
  */
 export function WhyChooseUs() {
   const { eyebrow, title } = whyChooseUsHeading;
@@ -48,14 +49,7 @@ export function WhyChooseUs() {
           </h2>
         </Reveal>
 
-        <Reveal
-          as="ul"
-          className="mt-12 grid gap-5 md:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-6"
-        >
-          {whyChooseUs.map((item, i) => (
-            <WhyCard key={item.title} item={item} index={i} />
-          ))}
-        </Reveal>
+        <WhyDeck items={whyChooseUs} />
       </Container>
     </section>
   );

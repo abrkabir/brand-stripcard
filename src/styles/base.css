@@ -17,8 +17,11 @@
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
 @layer base {
+  /* No global `scroll-behavior: smooth`: GSAP's ScrollTrigger corrects the
+     scroll position when it pins a section, and a smoothed scroll animates
+     those corrections into a visible jerk. Smooth scrolling is requested per
+     call instead (`scrollTo({ behavior: "smooth" })`). */
   html {
-    scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
 

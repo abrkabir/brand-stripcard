@@ -2,35 +2,49 @@
 
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useId, useRef, useState } from "react";
 import { LOOPS, popIn } from "@/components/home/whyCardMotion";
 import { ArrowRightIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+gsap.registerPlugin(useGSAP);
+
+/** The intro plays once: the first moment the card is actually seen. */
+function startIntro(m) {
+  if (m.intro && m.inView && m.intro.progress() === 0) m.intro.play();
+}
+
+/** The loop runs only while the card is introduced, seen and closed. */
+function syncLoops(m) {
+  const run = m.started && m.inView && !m.open;
+  m.loops.forEach((anim) => anim.paused(!run));
+}
 
 /**
  * One "why choose us" card: two layers on a warm ground.
  *
  * Up top, a white panel that reads like a settings tile — keywords, a title,
- * a status line. Underneath, on a plain, very light brand ground, a line
- * illustration of the idea that lifts on hover.
+ * a status line. Underneath, on the surface colour, an illustration of the
+ * idea that lifts on hover.
  *
  * "View details" swaps the illustration for the description in the same
- * spot: the art shrinks and fades out and the copy rises in a beat later. The button flips to "Hide details"
- * and reverses it. The description stays in the DOM throughout so the swap
+ * spot: the art shrinks and fades out and the copy rises in a beat later.
+ * The button flips to "Hide details" and reverses it. The description stays in the DOM throughout so the swap
  * can animate; `aria-hidden` keeps the hidden side out of the reading order.
  *
  * The card rises in the first time its grid scrolls into view, keyed off the
  * `data-visible` that the surrounding `Reveal` sets.
  *
  * The illustration is animated with GSAP (see whyCardMotion.js): the first
- * time it scrolls into view its shapes pop in, then its own MorphSVG loop
- * takes over. The loop only runs while the card is on screen and its
- * details are closed, and none of it runs for visitors who ask for less
- * motion — they get the still drawing.
+ * time it is seen its shapes pop in, then its own MorphSVG loop takes over.
+ * The loop only runs while the card is on screen and its details are closed,
+ * and none of it runs for visitors who ask for less motion — they get the
+ * still drawing.
+ *
+ * "On screen" comes from an IntersectionObserver rather than a scroll
+ * trigger: it measures what is really visible, so it stays right when the
+ * card is slid sideways inside a clipped, pinned row (see WhyDeck).
  */
 export function WhyCard({ item, index }) {
   const [open, setOpen] = useState(false);
@@ -40,13 +54,13 @@ export function WhyCard({ item, index }) {
 
   // Shared between the GSAP setup and the open/close handler, so either can
   // decide whether the loop should be running right now.
-  const motion = useRef({ loops: [], started: false, inView: false, open: false });
-
-  const sync = () => {
-    const m = motion.current;
-    const run = m.started && m.inView && !m.open;
-    m.loops.forEach((anim) => anim.paused(!run));
-  };
+  const motion = useRef({
+    loops: [],
+    intro: null,
+    started: false,
+    inView: false,
+    open: false,
+  });
 
   useGSAP(
     () => {
@@ -60,25 +74,28 @@ export function WhyCard({ item, index }) {
         m.loops = build(svg);
 
         const intro = popIn(svg);
+        m.intro = intro;
         intro.eventCallback("onComplete", () => {
           m.started = true;
-          sync();
+          syncLoops(m);
         });
 
-        ScrollTrigger.create({
-          trigger: svg,
-          start: "top 85%",
-          end: "bottom top",
-          onToggle: (self) => {
-            m.inView = self.isActive;
-            if (self.isActive && intro.progress() === 0) intro.play();
-            sync();
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            m.inView = entry.isIntersecting;
+            startIntro(m);
+            syncLoops(m);
           },
-        });
+          { threshold: 0.35 },
+        );
+        observer.observe(svg);
 
         return () => {
+          observer.disconnect();
           m.loops = [];
+          m.intro = null;
           m.started = false;
+          m.inView = false;
         };
       });
     },
@@ -89,18 +106,18 @@ export function WhyCard({ item, index }) {
     const next = !open;
     setOpen(next);
     motion.current.open = next;
-    sync();
+    syncLoops(motion.current);
   };
 
   return (
-    <li
-      className="group relative flex translate-y-8 flex-col overflow-hidden rounded-[2rem] bg-brand-50 p-1 opacity-0 transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100 dark:bg-surface"
+    <article
+      className="group relative flex h-full translate-y-8 flex-col overflow-hidden rounded-[2rem] bg-surface p-1 opacity-0 transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100"
       // Staggered across each row of three, so a whole row lands together.
       style={{ transitionDelay: `${(index % 3) * 140}ms` }}
     >
       {/* The panel. Grows to fill, so every card's glow starts at the same
           height whatever the length of its title. */}
-      <div className="relative z-10 flex flex-1 flex-col rounded-[1.75rem] bg-elevated p-6 lg:p-7">
+      <div className="@container relative z-10 flex flex-1 flex-col rounded-[1.75rem] bg-elevated p-6 lg:p-7">
         <p className="flex flex-wrap items-center gap-x-2 text-sm text-muted">
           {item.tags.map((tag, i) => (
             <span key={tag} className="inline-flex items-center gap-2">
@@ -114,15 +131,17 @@ export function WhyCard({ item, index }) {
 
         {/* Pushed to the foot of the panel, so titles of one or two lines all
             sit on the same baseline across a row. */}
-        <h3 className="mt-auto pt-10 font-display text-[1.55rem] leading-tight font-semibold tracking-[-0.025em] text-headline lg:pt-12 lg:text-[1.7rem]">
+        <h3 className="mt-auto pt-10 font-display text-[1.35rem] leading-tight font-semibold tracking-[-0.025em] text-headline lg:pt-12 lg:text-[1.45rem]">
           {item.title}
         </h3>
 
         <div className="mt-3 flex items-center justify-between gap-4 text-sm">
-          <p className="flex items-center gap-2 text-headline">
-            {item.status.label}
-            <span aria-hidden="true" className="size-1.5 rounded-full bg-brand" />
-            <span className="text-content">{item.status.value}</span>
+          {/* In a narrow panel the label word steps aside so the value and
+              the button share the line without truncating. */}
+          <p className="flex min-w-0 items-center gap-2 whitespace-nowrap text-headline">
+            <span className="hidden @xs:inline">{item.status.label}</span>
+            <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-brand" />
+            <span className="truncate text-content">{item.status.value}</span>
           </p>
           <Button
             type="button"
@@ -148,7 +167,7 @@ export function WhyCard({ item, index }) {
       </div>
 
       {/* The illustration, or the description in its place. */}
-      <div className="relative h-44 lg:h-48">
+      <div className="relative h-52 lg:h-60">
         <div className="absolute inset-0 grid place-items-center px-6 lg:px-7">
           {Art && (
             <Art
@@ -178,7 +197,7 @@ export function WhyCard({ item, index }) {
         </div>
 
       </div>
-    </li>
+    </article>
   );
 }
 
