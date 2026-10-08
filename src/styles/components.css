@@ -676,6 +676,13 @@
     color: var(--color-content);
   }
 
+  /* Filled in the brand colour, for a section that wants its label to lead. */
+  .eyebrow--brand {
+    border-color: var(--color-brand);
+    background-color: var(--color-brand);
+    color: #fff;
+  }
+
   /* ══ Step grid ════════════════════════════════════════════════════════════
      A row of items whose content descends like a staircase, each one behind a
      full-height rule. Everything animates in when the surrounding `Reveal`

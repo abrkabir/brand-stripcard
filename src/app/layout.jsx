@@ -21,7 +21,7 @@ const headingFont = Merriweather_Sans({
   display: "swap",
 });
 
-/** Display — the banner headline. Variable, so 400–700 ships in one file. */
+/** Display — headlines. Variable, so 400–700 ships in one file. */
 const displayFont = Arimo({
   variable: "--font-arimo",
   subsets: ["latin"],

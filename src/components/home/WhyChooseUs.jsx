@@ -5,37 +5,47 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { whyChooseUs, whyChooseUsHeading } from "@/data/whyChooseUs";
 
 /**
- * "Why choose us": a split heading (label and title left, description
- * right), then a grid of cards.
+ * "Why choose us": a brand label and a title with a highlighted word and a
+ * phrase framed in a swipe pill, then a grid of cards.
  *
- * Each card (see `WhyCard`) is a settings-style panel over a breathing brand
- * glow with an illustration, and a "View details" toggle that swaps the
- * illustration for the description.
+ * Each card (see `WhyCard`) is a settings-style panel over a pale brand
+ * ground with an animated illustration, and a "View details" toggle that
+ * swaps the illustration for the description.
  *
  * The cards rise in row by row the first time the grid scrolls into view,
  * keyed off the `data-visible` that `Reveal` sets. A Server Component.
  */
 export function WhyChooseUs() {
-  const { eyebrow, title, description } = whyChooseUsHeading;
+  const { eyebrow, title } = whyChooseUsHeading;
 
   return (
     <section aria-labelledby="why-title" className="bg-page py-20 lg:py-28">
       <Container>
-        {/* Split heading: label and title on the left, the description on
-            the right, sitting on the title's baseline. Stacks below lg. */}
-        <Reveal className="grid translate-y-6 gap-5 opacity-0 transition-[opacity,translate] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100 lg:grid-cols-12 lg:items-end lg:gap-8">
-          <div className="lg:col-span-7">
-            <Eyebrow>{eyebrow}</Eyebrow>
-            <h2
-              id="why-title"
-              className="mt-5 font-display text-[clamp(1.75rem,3.2vw,2.5rem)] leading-[1.12] font-medium tracking-[-0.03em] text-balance text-headline"
-            >
-              {title}
-            </h2>
-          </div>
-          <p className="max-w-md text-base leading-relaxed text-muted sm:text-lg lg:col-span-5 lg:justify-self-end">
-            {description}
-          </p>
+        {/* The label, then the title: one word picked out in the brand
+            colour, one phrase framed in a swipe pill. */}
+        <Reveal>
+          <Eyebrow tone="brand">{eyebrow}</Eyebrow>
+
+          <h2
+            id="why-title"
+            className="mt-6 max-w-4xl font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.16] font-medium tracking-[-0.025em] text-headline"
+          >
+            {title.map((line, i) => (
+              <span key={i} className="block">
+                {line.map((piece, j) =>
+                  typeof piece === "string" ? (
+                    piece
+                  ) : piece.highlight ? (
+                    <span key={j} className="text-brand">
+                      {piece.highlight}
+                    </span>
+                  ) : (
+                    <SwipePill key={j}>{piece.pill}</SwipePill>
+                  ),
+                )}
+              </span>
+            ))}
+          </h2>
         </Reveal>
 
         <Reveal
@@ -48,5 +58,24 @@ export function WhyChooseUs() {
         </Reveal>
       </Container>
     </section>
+  );
+}
+
+/**
+ * A phrase framed like a swipe control: an outlined brand pill holding a
+ * solid capsule that keeps stretching from a round knob into a long pill and
+ * back. Everything is sized in `em`, so it scales with the title around it.
+ * The capsule starts moving once the surrounding `Reveal` sets
+ * `data-visible`; with reduced motion it stays a still knob.
+ */
+function SwipePill({ children }) {
+  return (
+    <span className="inline-flex items-center gap-[0.28em] rounded-full border-2 border-brand py-[0.08em] pr-[0.42em] pl-[0.1em] align-middle leading-none whitespace-nowrap">
+      <span
+        aria-hidden="true"
+        className="h-[0.82em] w-[0.82em] shrink-0 rounded-full bg-brand in-data-visible:animate-pill-swipe"
+      />
+      {children}
+    </span>
   );
 }

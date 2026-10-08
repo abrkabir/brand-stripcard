@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useId, useRef, useState } from "react";
-import { drawIn, LOOPS } from "@/components/home/whyCardMotion";
+import { LOOPS, popIn } from "@/components/home/whyCardMotion";
 import { ArrowRightIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
@@ -27,8 +27,8 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * `data-visible` that the surrounding `Reveal` sets.
  *
  * The illustration is animated with GSAP (see whyCardMotion.js): the first
- * time it scrolls into view its lines draw themselves in, then its own small
- * loop takes over. The loop only runs while the card is on screen and its
+ * time it scrolls into view its shapes pop in, then its own MorphSVG loop
+ * takes over. The loop only runs while the card is on screen and its
  * details are closed, and none of it runs for visitors who ask for less
  * motion — they get the still drawing.
  */
@@ -59,7 +59,7 @@ export function WhyCard({ item, index }) {
         const m = motion.current;
         m.loops = build(svg);
 
-        const intro = drawIn(svg);
+        const intro = popIn(svg);
         intro.eventCallback("onComplete", () => {
           m.started = true;
           sync();
@@ -132,14 +132,14 @@ export function WhyCard({ item, index }) {
             onClick={toggle}
             aria-expanded={open}
             aria-controls={detailsId}
-            className="shrink-0 gap-1.5 border-headline/25 text-[0.75rem] text-headline/55 [--btn-h:2.125rem] [--btn-pad:0.875rem] hover:border-brand hover:text-white"
+            className="shrink-0 gap-1 border-headline/25 text-[0.6875rem] text-headline/55 [--btn-h:1.75rem] [--btn-pad:0.625rem] hover:border-brand hover:text-white"
           >
             {open ? "Hide details" : "View details"}
             {/* ↗ to open; swings round to ↙ once open, pointing back at the
                 way in. */}
             <ArrowRightIcon
               className={cn(
-                "size-3.5 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                "size-3 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
                 open ? "rotate-[135deg]" : "-rotate-45",
               )}
             />
@@ -155,7 +155,7 @@ export function WhyCard({ item, index }) {
               ref={artRef}
               aria-hidden="true"
               className={cn(
-                "relative col-start-1 row-start-1 w-44 text-headline/25 transition-[opacity,scale,translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:w-48",
+                "relative col-start-1 row-start-1 w-44 transition-[opacity,scale,translate] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:w-48",
                 open
                   ? "scale-90 opacity-0"
                   : "scale-100 opacity-100 delay-150 group-hover:-translate-y-1.5",
@@ -183,225 +183,236 @@ export function WhyCard({ item, index }) {
 }
 
 /* ── Illustrations ───────────────────────────────────────────────────────────
-   Line art: strokes on the glow in the same ink as the "View details"
-   button's border (headline at 25%), rounded ends, no fills — the same voice
-   as a thin outline icon, drawn larger. Change the two together. The ink
-   follows the theme. Secondary lines drop to a
-   lower opacity for depth. Every piece is 200 × 140 and inherits the stroke
-   from `Line`; the card passes `aria-hidden` and the colour. */
+   Filled shapes in the brand scale on the pale card, white for detail. Every
+   piece is 200 × 140. Parts that move carry a `data-a` mark, and the shapes
+   that change form are single <path>s, so GSAP's MorphSVG can reshape them
+   (see whyCardMotion.js). Each drawing's resting state is the end of its
+   story, so the still picture — reduced motion, or before it starts — reads
+   on its own. The card passes `aria-hidden`. */
 
-function Line({ children, ...props }) {
+function Art({ children, ...props }) {
   return (
-    <svg
-      viewBox="0 0 200 140"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...props}
-    >
+    <svg viewBox="0 0 200 140" {...props}>
       {children}
     </svg>
   );
 }
 
-/** Issuance: a phone with a "+" button, a fresh card sliding out of it. */
+/** Issuance: a card grown out of the phone's screen. */
 function CardsArt(props) {
   return (
-    <Line {...props}>
-      {/* Phone, with a card thumbnail and the create button. */}
-      <rect x="20" y="16" width="58" height="108" rx="12" />
-      <path d="M42 24h14" strokeOpacity="0.5" />
-      <rect x="30" y="40" width="38" height="24" rx="5" strokeOpacity="0.5" />
+    <Art {...props}>
+      {/* Phone. */}
+      <rect x="18" y="14" width="60" height="112" rx="13" className="fill-brand-300" />
+      <rect x="24" y="24" width="48" height="92" rx="8" className="fill-white" />
+      <rect x="40" y="18" width="16" height="3" rx="1.5" className="fill-white/70" />
       <g data-a="plus">
-        <circle cx="49" cy="96" r="10" />
-        <path d="M49 91v10M44 96h10" />
+        <circle cx="48" cy="100" r="9" className="fill-brand-500" />
+        <path d="M48 95.5v9M43.5 100h9" fill="none" strokeWidth="2.5" strokeLinecap="round" className="stroke-white" />
       </g>
 
-      {/* Motion between the two. */}
-      <path data-a="chev" d="m84 64 6 8-6 8" strokeOpacity="0.5" />
-      <path data-a="chev" d="m92 64 6 8-6 8" strokeOpacity="0.5" />
-
-      {/* The new card: chip, number, contactless. */}
-      <g data-a="card">
-        <g transform="rotate(-8 142 72)">
-          <rect x="102" y="42" width="84" height="56" rx="10" />
-          <rect x="112" y="54" width="15" height="11" rx="3" />
-          <path d="M112 84h30" />
-          <path d="M148 84h10" strokeOpacity="0.5" />
-          <path data-a="wave" d="M166 55a7 7 0 0 1 0 11" strokeOpacity="0.6" />
-          <path data-a="wave" d="M171 52a12 12 0 0 1 0 17" strokeOpacity="0.6" />
-        </g>
+      {/* The card — morphs between this and a thumbnail on the screen. */}
+      <path
+        data-a="morph"
+        d="M110 40h66a10 10 0 0 1 10 10v36a10 10 0 0 1-10 10h-66a10 10 0 0 1-10-10V50a10 10 0 0 1 10-10Z"
+        className="fill-brand-400"
+      />
+      <g data-a="detail">
+        <rect x="112" y="52" width="15" height="11" rx="3" className="fill-white/85" />
+        <rect x="112" y="78" width="38" height="5" rx="2.5" className="fill-white/70" />
+        <circle cx="166" cy="57" r="6" className="fill-white/55" />
+        <circle cx="173" cy="57" r="6" className="fill-white/35" />
       </g>
-      <path data-a="spark" d="M182 22v8M178 26h8" strokeOpacity="0.6" />
-    </Line>
+
+      <path
+        data-a="spark"
+        d="M182 14l2.5 5.5L190 22l-5.5 2.5L182 30l-2.5-5.5L174 22l5.5-2.5Z"
+        className="fill-brand-500"
+      />
+    </Art>
   );
 }
 
-/** Security: a checkout form with a lock and a masked number, shield beside. */
+/** Security: a checkout field, and a shield that is sometimes a padlock. */
 function ShieldArt(props) {
   return (
-    <Line {...props}>
-      {/* Browser window. */}
-      <rect x="14" y="18" width="126" height="104" rx="12" />
-      <path d="M14 38h126" strokeOpacity="0.5" />
-      <circle cx="26" cy="28" r="2.5" strokeOpacity="0.6" />
-      <circle cx="35" cy="28" r="2.5" strokeOpacity="0.6" />
-      <circle cx="44" cy="28" r="2.5" strokeOpacity="0.6" />
+    <Art {...props}>
+      {/* Checkout form. */}
+      <rect x="12" y="28" width="108" height="84" rx="14" className="fill-white" />
+      <rect x="24" y="42" width="84" height="20" rx="6" className="fill-brand-100" />
+      <circle data-a="dot" cx="36" cy="52" r="3" className="fill-brand-500" />
+      <circle data-a="dot" cx="46" cy="52" r="3" className="fill-brand-500" />
+      <circle data-a="dot" cx="56" cy="52" r="3" className="fill-brand-500" />
+      <circle data-a="dot" cx="66" cy="52" r="3" className="fill-brand-500" />
+      <rect x="76" y="50" width="24" height="4" rx="2" className="fill-brand-300" />
+      <rect x="24" y="72" width="44" height="18" rx="6" className="fill-brand-100" />
+      <rect x="74" y="72" width="34" height="18" rx="6" className="fill-brand-100" />
 
-      {/* Card number field: padlock, masked digits, last four. */}
-      <rect x="26" y="50" width="102" height="22" rx="6" />
-      <rect x="34" y="60" width="10" height="8" rx="2" />
-      <path data-a="shackle" d="M36 60v-2.5a3 3 0 0 1 6 0V60" />
-      <circle data-a="dot" cx="56" cy="61" r="2" fill="currentColor" />
-      <circle data-a="dot" cx="63" cy="61" r="2" fill="currentColor" />
-      <circle data-a="dot" cx="70" cy="61" r="2" fill="currentColor" />
-      <circle data-a="dot" cx="77" cy="61" r="2" fill="currentColor" />
-      <path d="M88 61h28" strokeOpacity="0.6" />
-
-      {/* Expiry and CVC. */}
-      <rect x="26" y="82" width="56" height="22" rx="6" strokeOpacity="0.5" />
-      <rect x="90" y="82" width="38" height="22" rx="6" strokeOpacity="0.5" />
-
-      {/* Shield, checked. */}
-      <g data-a="shield">
-        <path d="M168 62c8 5 15 7 22 7v17c0 15-10 27-22 33-12-6-22-18-22-33V69c7 0 14-2 22-7Z" />
-        <path data-a="check" d="m160 90 6 6 11-12" strokeWidth="3" />
-      </g>
-    </Line>
+      {/* Shield ⇄ padlock. */}
+      <path
+        data-a="morph"
+        d="M164 46c10 6 19 9 28 9v22c0 20-12 35-28 42-16-7-28-22-28-42V55c9 0 18-3 28-9Z"
+        className="fill-brand-400"
+      />
+      <path
+        data-a="check"
+        d="m154 82 8 8 15-16"
+        fill="none"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="stroke-white"
+      />
+    </Art>
   );
 }
 
-/** Plans: one total split into four parts, paid off along a timeline. */
+/** Plans: a total split into four instalments, paid along a timeline. */
 function PlansArt(props) {
   return (
-    <Line {...props}>
-      {/* The total, in four instalments. */}
-      <rect x="24" y="20" width="152" height="28" rx="14" />
-      <path d="M62 20v28M100 20v28M138 20v28" strokeOpacity="0.5" />
-      <path data-a="segcheck" d="m37 34 4 4 7-8" />
-      <path data-a="segcheck" d="m75 34 4 4 7-8" />
-      <path data-a="segcheck" d="m113 34 4 4 7-8" />
-      <path data-a="segcheck" d="m151 34 4 4 7-8" />
-
-      {/* Each part drops to its date. */}
+    <Art {...props}>
+      {/* The total ⇄ four parts. */}
       <path
-        data-a="dash"
-        d="M43 54v28M81 54v28M119 54v28M157 54v28"
-        strokeOpacity="0.4"
-        strokeDasharray="3 6"
+        data-a="morph"
+        d="M35 28h10a13 13 0 0 1 0 26H35a13 13 0 0 1 0-26ZM77 28h10a13 13 0 0 1 0 26H77a13 13 0 0 1 0-26ZM119 28h10a13 13 0 0 1 0 26h-10a13 13 0 0 1 0-26ZM161 28h10a13 13 0 0 1 0 26h-10a13 13 0 0 1 0-26Z"
+        className="fill-brand-200"
       />
+
+      {/* Paid instalments, filled left to right. */}
+      {[22, 64, 106, 148].map((x, i) => (
+        <g key={x} data-a="paid" opacity={i < 2 ? 1 : 0}>
+          <rect x={x} y="28" width="36" height="26" rx="13" className="fill-brand-500" />
+          <path
+            d={`m${x + 12} 41 4 4 8-9`}
+            fill="none"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="stroke-white"
+          />
+        </g>
+      ))}
 
       {/* Timeline. */}
-      <path d="M52 94h20M90 94h20M128 94h20" strokeOpacity="0.5" />
-      <circle data-a="node" cx="43" cy="94" r="9" />
-      <circle data-a="node" cx="81" cy="94" r="9" />
-      <circle data-a="node" cx="119" cy="94" r="9" />
-      <circle data-a="node" cx="157" cy="94" r="9" />
-      <path data-a="nodecheck" d="m39 94 3 3 5-6" />
-      <path data-a="nodecheck" d="m77 94 3 3 5-6" />
-      <path data-a="nodecheck" d="m115 94 3 3 5-6" />
-      <path data-a="nodecheck" d="m153 94 3 3 5-6" />
-      <path d="M35 116h16M73 116h16M111 116h16M149 116h16" strokeOpacity="0.45" />
-    </Line>
+      <rect x="40" y="94" width="126" height="4" rx="2" className="fill-brand-200" />
+      <rect data-a="progress" x="40" y="94" width="42" height="4" rx="2" className="fill-brand-500" />
+      {[40, 82, 124, 166].map((cx, i) => (
+        <circle
+          key={cx}
+          data-a="node"
+          cx={cx}
+          cy="96"
+          r="8"
+          className={i < 2 ? "fill-brand-500" : "fill-brand-200"}
+        />
+      ))}
+      {[40, 82, 124, 166].map((cx) => (
+        <rect key={cx} x={cx - 10} y="112" width="20" height="4" rx="2" className="fill-brand-200" />
+      ))}
+    </Art>
   );
 }
 
-/** Monitoring: a spend lands on the chart and fires a notification. */
+/** Monitoring: spending surges on the chart and an alert drops in. */
 function MonitorArt(props) {
   return (
-    <Line {...props}>
-      {/* Notification, with its bell. */}
+    <Art {...props}>
+      {/* Alert. */}
       <g data-a="toast">
-        <rect x="66" y="10" width="122" height="32" rx="16" />
+        <rect x="66" y="8" width="122" height="30" rx="15" className="fill-brand-500" />
         <g data-a="bell">
-          <path d="M78 30h12M80 30v-6a4 4 0 0 1 8 0v6M82 33a2 2 0 0 0 4 0" />
+          <path d="M78 28h14l-2-3v-5a5 5 0 0 0-10 0v5Z" className="fill-white" />
+          <circle cx="85" cy="30.5" r="2" className="fill-white" />
         </g>
-        <path d="M100 21h44" strokeOpacity="0.6" />
-        <path d="M100 30h28" strokeOpacity="0.45" />
-        <path d="M160 26h16" />
+        <rect x="100" y="16" width="48" height="5" rx="2.5" className="fill-white/85" />
+        <rect x="100" y="25" width="30" height="4" rx="2" className="fill-white/60" />
+        <rect x="158" y="20" width="18" height="5" rx="2.5" className="fill-white" />
       </g>
-
-      {/* What triggered it. */}
-      <path data-a="dash" d="M120 42v22" strokeOpacity="0.4" strokeDasharray="3 5" />
 
       {/* Dashboard. */}
-      <rect x="14" y="50" width="134" height="78" rx="14" />
-      <path d="M26 62h26" strokeOpacity="0.6" />
-      <path d="M26 116h110" strokeOpacity="0.35" />
-      <polyline data-a="line" points="26,108 46,94 64,100 86,80 104,86 120,70" strokeWidth="3" />
-      <circle data-a="point" cx="120" cy="70" r="5" />
-      <circle data-a="ring" cx="120" cy="70" r="11" strokeOpacity="0.35" />
-    </Line>
+      <rect x="12" y="46" width="146" height="84" rx="14" className="fill-white" />
+      <rect x="24" y="58" width="28" height="5" rx="2.5" className="fill-brand-200" />
+      <path
+        data-a="area"
+        d="M24 120v-14c14-2 24-10 38-8s22-14 36-20 26-12 44-18v60Z"
+        className="fill-brand-100"
+      />
+      <path
+        data-a="line"
+        d="M24 106c14-2 24-10 38-8s22-14 36-20 26-12 44-18"
+        fill="none"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        className="stroke-brand-500"
+      />
+      <circle data-a="point" cx="142" cy="60" r="6" className="fill-brand-500" />
+    </Art>
   );
 }
 
-/** Currencies: a globe, with $, € and £ coins in orbit around it. */
+/** Currencies: one coin whose symbol turns $ → € → £. */
 function CurrencyArt(props) {
   return (
-    <Line {...props}>
-      {/* Orbit. */}
-      <ellipse
-        cx="100"
-        cy="72"
-        rx="86"
-        ry="26"
-        transform="rotate(-12 100 72)"
-        strokeOpacity="0.4"
+    <Art {...props}>
+      <circle data-a="float" cx="36" cy="96" r="16" className="fill-brand-200" />
+      <circle data-a="float" cx="166" cy="40" r="13" className="fill-brand-200" />
+      <circle cx="176" cy="96" r="5" className="fill-brand-300" />
+      <circle cx="28" cy="40" r="4" className="fill-brand-300" />
+
+      <circle cx="100" cy="70" r="46" className="fill-brand-400" />
+      <circle cx="100" cy="70" r="37" className="fill-brand-300" />
+      <path
+        data-a="morph"
+        d="M112 54c-3-5-8-8-13-8-9 0-15 5-15 12 0 15 31 9 31 25 0 8-7 13-16 13-7 0-13-3-16-8M100 38v64"
+        fill="none"
+        strokeWidth="7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="stroke-white"
       />
-
-      {/* Globe. */}
-      <circle cx="100" cy="72" r="34" />
-      <ellipse data-a="meridian" cx="100" cy="72" rx="14" ry="34" strokeOpacity="0.6" />
-      <path d="M66 72h68" strokeOpacity="0.6" />
-      <path d="M72 55h56M72 89h56" strokeOpacity="0.4" />
-
-      {/* Coins. `data-cx/cy` is each drawn centre, which the orbit starts from. */}
-      <g data-a="coin" data-cx="26" data-cy="92">
-        <circle cx="26" cy="92" r="13" />
-        <path d="M31 86a7 7 0 1 0 0 12M19 90h9M19 94h9" />
-      </g>
-      <g data-a="coin" data-cx="174" data-cy="50">
-        <circle cx="174" cy="50" r="13" />
-        <path d="M178 45c-1-2-2-3-4-3-3 0-4 2-4 4v9M166 51h8M166 55h12" />
-      </g>
-      <g data-a="coin" data-cx="152" data-cy="104">
-        <circle cx="152" cy="104" r="13" />
-        <path d="M152 95v18M156 99c-1-2-2-2-4-2-3 0-4 1-4 3 0 4 8 2 8 6 0 2-2 3-4 3-2 0-4-1-5-2" />
-      </g>
-    </Line>
+    </Art>
   );
 }
 
-/** Support: a headset, a round-the-clock clock, and a reply on its way. */
+/** Support: the question becomes a reply, still typing; the clock runs. */
 function SupportArt(props) {
   return (
-    <Line {...props}>
-      {/* Headset and mic. */}
-      <g data-a="headset">
-        <path d="M30 76v-8a32 32 0 0 1 64 0v8" />
-        <rect x="24" y="72" width="14" height="28" rx="6" />
-        <rect x="86" y="72" width="14" height="28" rx="6" />
-        <path d="M93 100c0 13-10 20-24 20h-4" />
-        <rect x="52" y="114" width="14" height="10" rx="5" />
+    <Art {...props}>
+      {/* Reply ⇄ question. */}
+      <path
+        data-a="morph"
+        d="M84 40h76a16 16 0 0 1 16 16v30a16 16 0 0 1-16 16h-6v14l-16-14H84a16 16 0 0 1-16-16V56a16 16 0 0 1 16-16Z"
+        className="fill-brand-400"
+      />
+      <g data-a="typing">
+        <circle data-a="dot" cx="104" cy="71" r="5" className="fill-white" />
+        <circle data-a="dot" cx="122" cy="71" r="5" className="fill-white" />
+        <circle data-a="dot" cx="140" cy="71" r="5" className="fill-white" />
+      </g>
+      <g data-a="question" opacity="0">
+        <rect x="38" y="44" width="62" height="7" rx="3.5" className="fill-white" />
+        <rect x="38" y="59" width="40" height="7" rx="3.5" className="fill-white/75" />
       </g>
 
-      {/* 24/7 clock with a looping arrow. */}
-      <circle cx="150" cy="40" r="20" />
-      <path data-a="minute" d="M150 40V28" />
-      <path data-a="hour" d="m150 40 7 5" />
-      <g data-a="loop">
-        <path d="M124 26a28 28 0 0 1 44-8" strokeOpacity="0.5" />
-        <path d="m164 12 4 6-7 1" strokeOpacity="0.5" />
-      </g>
-
-      {/* Reply, still typing. */}
-      <path d="M126 74h44a12 12 0 0 1 12 12v12a12 12 0 0 1-12 12h-28l-12 10v-10h-4a12 12 0 0 1-12-12V86a12 12 0 0 1 12-12Z" />
-      <circle data-a="dot" cx="136" cy="92" r="2.5" fill="currentColor" />
-      <circle data-a="dot" cx="148" cy="92" r="2.5" fill="currentColor" />
-      <circle data-a="dot" cx="160" cy="92" r="2.5" fill="currentColor" />
-    </Line>
+      {/* Round-the-clock badge. */}
+      <circle cx="176" cy="22" r="16" className="fill-brand-200" />
+      <path
+        data-a="minute"
+        d="M176 22v-9"
+        fill="none"
+        strokeWidth="3"
+        strokeLinecap="round"
+        className="stroke-brand-500"
+      />
+      <path
+        data-a="hour"
+        d="m176 22 5 3.5"
+        fill="none"
+        strokeWidth="3"
+        strokeLinecap="round"
+        className="stroke-brand-500"
+      />
+    </Art>
   );
 }
 

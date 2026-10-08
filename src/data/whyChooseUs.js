@@ -8,11 +8,18 @@
  * the keys in `ART` inside the component. The status values are placeholder
  * figures until real ones are supplied.
  */
+/**
+ * The title, line by line. Each line is a list of pieces: a string is plain
+ * text, `{ highlight }` is set in the brand colour and `{ pill }` is framed
+ * in an outlined pill with an animated capsule. Keep a pill phrase short — it
+ * never wraps, so it has to fit a phone's width on its own.
+ */
 export const whyChooseUsHeading = {
   eyebrow: "Why choose us",
-  title: "What Makes Us Your Best Choice",
-  description:
-    "Reliable, secure and built around you. Here's why people and teams trust StripCard with every payment.",
+  title: [
+    ["Discover why ", { highlight: "StripCard" }, " is"],
+    ["your safest and ", { pill: "smartest choice" }],
+  ],
 };
 
 export const whyChooseUs = [
