@@ -22,7 +22,6 @@ export const whyChooseUs = [
     description:
       "Instantly create and manage virtual cards for secure online transactions, customized to suit your specific needs.",
     status: { label: "status", value: "ready in 3s" },
-    action: "new card",
     art: "cards",
   },
   {
@@ -31,7 +30,6 @@ export const whyChooseUs = [
     description:
       "Benefit from advanced encryption and authentication methods, ensuring that your online payments are protected.",
     status: { label: "protection", value: "always on" },
-    action: "details",
     art: "shield",
   },
   {
@@ -40,7 +38,6 @@ export const whyChooseUs = [
     description:
       "Choose from a variety of flexible payment plans designed to accommodate different budgets and preferences.",
     status: { label: "plan", value: "saving: 20%" },
-    action: "compare",
     art: "plans",
   },
   {
@@ -49,7 +46,6 @@ export const whyChooseUs = [
     description:
       "Keep track of your spending with real-time notifications and detailed transaction history.",
     status: { label: "live", value: "updated 1s ago" },
-    action: "view",
     art: "monitor",
   },
   {
@@ -58,7 +54,6 @@ export const whyChooseUs = [
     description:
       "Easily manage transactions in multiple currencies, perfect for international shopping and payments.",
     status: { label: "rates", value: "live" },
-    action: "convert",
     art: "currency",
   },
   {
@@ -67,7 +62,6 @@ export const whyChooseUs = [
     description:
       "Access round-the-clock customer support to resolve any payment-related issues or inquiries.",
     status: { label: "support", value: "reply in 2 min" },
-    action: "contact",
     art: "support",
   },
 ];

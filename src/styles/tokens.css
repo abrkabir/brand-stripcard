@@ -26,8 +26,6 @@
   /* Four faces taking turns in one slot: each rises in from below, holds,
      and is pushed out of the top by the next. 2s per face; every face runs
      the same keyframes, offset by its slot (see IconTiles). */
-  /* A warm glow slowly breathing — scale and brightness swell and settle. */
-  --animate-glow-breathe: glow-breathe 7s ease-in-out infinite;
   --animate-icon-cycle: icon-cycle 8s cubic-bezier(0.65, 0, 0.35, 1) infinite both;
 
   /* Hero motion. Tailwind only emits a @keyframes block when a matching
@@ -70,11 +68,6 @@
   0%        { translate: 0 100%; }
   4%, 25%   { translate: 0 0; }
   29%, 100% { translate: 0 -100%; }
-}
-
-@keyframes glow-breathe {
-  0%, 100% { transform: scale(1); opacity: 0.85; }
-  50%      { transform: scale(1.08); opacity: 1; }
 }
 
 @keyframes marquee {
