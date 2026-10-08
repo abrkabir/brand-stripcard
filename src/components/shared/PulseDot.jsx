@@ -12,8 +12,8 @@ export function PulseDot({ className }) {
       aria-hidden="true"
       className={cn("relative grid size-2.5 shrink-0 place-items-center", className)}
     >
-      <span className="animate-ripple absolute inset-0 rounded-full bg-brand" />
-      <span className="animate-ripple absolute inset-0 rounded-full bg-brand [animation-delay:1.2s]" />
+      <span data-loop className="animate-ripple absolute inset-0 rounded-full bg-brand" />
+      <span data-loop className="animate-ripple absolute inset-0 rounded-full bg-brand [animation-delay:1.2s]" />
       <span className="relative size-2.5 rounded-full bg-brand" />
     </span>
   );

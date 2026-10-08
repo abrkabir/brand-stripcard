@@ -1,5 +1,6 @@
 import { WhyDeck } from "@/components/home/WhyDeck";
 import { Reveal } from "@/components/shared/Reveal";
+import { SwipePill } from "@/components/shared/SwipePill";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { whyChooseUs, whyChooseUsHeading } from "@/data/whyChooseUs";
@@ -52,24 +53,5 @@ export function WhyChooseUs() {
         <WhyDeck items={whyChooseUs} />
       </Container>
     </section>
-  );
-}
-
-/**
- * A phrase framed like a swipe control: an outlined brand pill holding a
- * solid capsule that keeps stretching from a round knob into a long pill and
- * back. Everything is sized in `em`, so it scales with the title around it.
- * The capsule starts moving once the surrounding `Reveal` sets
- * `data-visible`; with reduced motion it stays a still knob.
- */
-function SwipePill({ children }) {
-  return (
-    <span className="inline-flex items-center gap-[0.28em] rounded-full border-2 border-brand py-[0.08em] pr-[0.42em] pl-[0.1em] align-middle leading-none whitespace-nowrap">
-      <span
-        aria-hidden="true"
-        className="h-[0.82em] w-[0.82em] shrink-0 rounded-full bg-brand in-data-visible:animate-pill-swipe"
-      />
-      {children}
-    </span>
   );
 }

@@ -94,6 +94,14 @@
     border-radius: 4px;
   }
 
+  /* Decorative loops rest while the page is scrolling (see ScrollCalm),
+     so every frame goes to the scroll. They resume where they stopped. */
+  /* !important: the animate-* utilities set the `animation` shorthand,
+     which would reset the play state, and they sit in a later layer. */
+  :root[data-scrolling] [data-loop] {
+    animation-play-state: paused !important;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
       animation-duration: 0.01ms !important;

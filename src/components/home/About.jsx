@@ -100,6 +100,7 @@ function IconTiles({ icons }) {
         return (
           <span
             key={name}
+            data-loop
             className={cn(
               "absolute inset-0 grid place-items-center motion-safe:in-data-visible:animate-icon-cycle",
               i === 0 ? "translate-y-0" : "translate-y-full",

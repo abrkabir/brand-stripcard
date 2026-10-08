@@ -1,6 +1,7 @@
 import { Anton, Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 import "@/styles/globals.css";
+import { ScrollCalm } from "@/components/shared/ScrollCalm";
 import { ThemeProvider, THEME_COOKIE } from "@/lib/theme";
 import { siteConfig } from "@/lib/site";
 
@@ -88,6 +89,7 @@ export default async function RootLayout({ children }) {
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider initialTheme={theme}>{children}</ThemeProvider>
+        <ScrollCalm />
       </body>
     </html>
   );

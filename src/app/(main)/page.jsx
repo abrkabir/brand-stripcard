@@ -6,6 +6,7 @@ import { ContactSection } from "@/components/home/ContactSection";
 import { FeaturedItems } from "@/components/home/FeaturedItems";
 import { Features } from "@/components/home/Features";
 import { Gallery } from "@/components/home/Gallery";
+import { HowItWorks } from "@/components/home/HowItWorks";
 import { Properties } from "@/components/home/Properties";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
@@ -34,6 +35,7 @@ export default function HomePage() {
       <About />
       <WhyChooseUs />
       <Features />
+      <HowItWorks />
       <AppSection />
       <Properties />
       <FeaturedItems />

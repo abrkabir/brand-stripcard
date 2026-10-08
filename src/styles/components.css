@@ -662,6 +662,8 @@
 
   .eyebrow {
     display: inline-flex;
+    /* Only as wide as its words, even inside a stretching flex column. */
+    width: fit-content;
     align-items: center;
     gap: 0.5rem;
     padding: 0.375rem 0.875rem;

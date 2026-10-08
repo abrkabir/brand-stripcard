@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { StarIcon } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
+import { TrustBadge } from "@/components/shared/TrustBadge";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { banner } from "@/data/banner";
-import { cn } from "@/lib/cn";
 
 /**
  * Homepage banner.
@@ -86,41 +85,5 @@ export function Banner() {
         </Container>
       </div>
     </section>
-  );
-}
-
-/** Overlapping country flags beside a five-star line. */
-function TrustBadge({ label, countries, className }) {
-  return (
-    <div className={cn("flex items-center gap-3.5", className)}>
-      <ul aria-label="Countries we serve" className="flex -space-x-3">
-        {countries.map((country) => (
-          <li
-            key={country.code}
-            title={country.name}
-            className="relative size-10 overflow-hidden rounded-full border-2 border-white bg-white shadow-soft transition-transform duration-300 hover:z-10 hover:-translate-y-1 sm:size-12"
-          >
-            <Image
-              src={`/images/flags/${country.code}.svg`}
-              alt={country.name}
-              fill
-              sizes="48px"
-              className="object-cover"
-            />
-          </li>
-        ))}
-      </ul>
-
-      <div>
-        <div aria-hidden="true" className="flex gap-0.5 text-white">
-          {Array.from({ length: 5 }, (_, i) => (
-            <StarIcon key={i} className="size-4.5" />
-          ))}
-        </div>
-        <p className="mt-1 text-[15px] leading-snug whitespace-nowrap text-white/80">
-          {label}
-        </p>
-      </div>
-    </div>
   );
 }

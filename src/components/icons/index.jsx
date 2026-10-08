@@ -50,6 +50,12 @@ export const ChevronRightIcon = (p) => (
   </Svg>
 );
 
+export const PlusIcon = (p) => (
+  <Svg {...p}>
+    <path d="M12 5v14M5 12h14" />
+  </Svg>
+);
+
 export const ArrowRightIcon = (p) => (
   <Svg {...p}>
     <path d="M4 12h16" />
@@ -375,6 +381,7 @@ export const icons = {
   chevronDown: ChevronDownIcon,
   chevronRight: ChevronRightIcon,
   arrowRight: ArrowRightIcon,
+  plus: PlusIcon,
   menu: MenuIcon,
   close: CloseIcon,
   sun: SunIcon,

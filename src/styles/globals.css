@@ -10,8 +10,14 @@
      utilities.css  custom @utility classes
 
    Import order matters: variables and tokens must be defined before base,
-   components and utilities consume them. Add a new partial by dropping it in this folder and adding
-   one @import line below — @import rules must stay above every other rule.
+   components and utilities consume them. Add a new partial by dropping it in
+   this folder and adding one @import line below — @import rules must stay
+   above every other rule.
+
+   If the dev server keeps showing a CSS error after the partial that caused
+   it is fixed, its cache is stale: Turbopack keys the compiled stylesheet on
+   this file and does not always notice edits inside the partials. Saving a
+   change here, or restarting `npm run dev`, makes it rebuild.
    ────────────────────────────────────────────────────────────────────────── */
 
 @import "tailwindcss" source(none);
