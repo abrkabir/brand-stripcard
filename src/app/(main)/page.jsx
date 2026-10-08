@@ -4,6 +4,7 @@ import { Agents } from "@/components/home/Agents";
 import { Banner } from "@/components/home/Banner";
 import { ContactSection } from "@/components/home/ContactSection";
 import { FeaturedItems } from "@/components/home/FeaturedItems";
+import { Features } from "@/components/home/Features";
 import { Gallery } from "@/components/home/Gallery";
 import { Properties } from "@/components/home/Properties";
 import { Testimonials } from "@/components/home/Testimonials";
@@ -32,6 +33,7 @@ export default function HomePage() {
       <Banner />
       <About />
       <WhyChooseUs />
+      <Features />
       <AppSection />
       <Properties />
       <FeaturedItems />

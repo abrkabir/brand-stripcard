@@ -157,6 +157,17 @@ export const CreditCardIcon = (p) => (
   </Svg>
 );
 
+export const SlidersIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 7h10" />
+    <path d="M18 7h2" />
+    <circle cx="16" cy="7" r="2" />
+    <path d="M4 17h2" />
+    <path d="M10 17h10" />
+    <circle cx="8" cy="17" r="2" />
+  </Svg>
+);
+
 export const GlobeIcon = (p) => (
   <Svg {...p}>
     <circle cx="12" cy="12" r="9" />
@@ -378,6 +389,7 @@ export const icons = {
   users: UsersIcon,
   card: CreditCardIcon,
   globe: GlobeIcon,
+  sliders: SlidersIcon,
   chart: ChartIcon,
   shield: ShieldIcon,
   sparkles: SparklesIcon,
