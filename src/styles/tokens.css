@@ -32,16 +32,10 @@
   --animate-pill-swipe: pill-swipe 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   --animate-icon-cycle: icon-cycle 8s cubic-bezier(0.65, 0, 0.35, 1) infinite both;
 
-  /* Hero motion. Tailwind only emits a @keyframes block when a matching
-     --animate-* token is actually used in the markup, so these must be
-     declared as tokens — a bare @keyframes here would be pruned from the
-     build and the animation would silently do nothing.
-     The durations below are fallbacks: HeroSlider overrides them inline from
-     SLIDE_MS, which is the real source of truth. */
-  --animate-ken-zoom-in: ken-zoom-in 9s linear both;
-  --animate-ken-zoom-out: ken-zoom-out 9s linear both;
-  --animate-ken-pan-left: ken-pan-left 9s linear both;
-  --animate-ken-pan-right: ken-pan-right 9s linear both;
+  /* Tailwind only emits a @keyframes block when a matching --animate-* token
+     is actually used in the markup, so animations are declared as tokens — a
+     bare @keyframes here would be pruned and silently do nothing.
+     The duration is a fallback: Testimonials sets it inline. */
   --animate-ring-fill: ring-fill 7s linear forwards;
 
   /* Clearance under the fixed header: the floating pill plus the gap above
@@ -96,34 +90,8 @@
   100%     { transform: translateY(100%); opacity: 0; }
 }
 
-/* ── Hero motion ──────────────────────────────────────────────────────────── */
-/* Four slow drifts applied to the slide photography. Stills read as footage
-   because the frame never stops moving, and alternating the direction per
-   slide keeps the loop from feeling mechanical. Duration is set inline from
-   SLIDE_MS so the motion and the progress ring can never fall out of sync. */
-
-@keyframes ken-zoom-in {
-  from { transform: scale(1.02) translate3d(0, 0, 0); }
-  to   { transform: scale(1.18) translate3d(-1.5%, -1.2%, 0); }
-}
-
-@keyframes ken-zoom-out {
-  from { transform: scale(1.18) translate3d(1.2%, 1%, 0); }
-  to   { transform: scale(1.02) translate3d(0, 0, 0); }
-}
-
-@keyframes ken-pan-left {
-  from { transform: scale(1.14) translate3d(3%, -0.6%, 0); }
-  to   { transform: scale(1.14) translate3d(-3%, 0.6%, 0); }
-}
-
-@keyframes ken-pan-right {
-  from { transform: scale(1.14) translate3d(-3%, 0.6%, 0); }
-  to   { transform: scale(1.14) translate3d(3%, -0.6%, 0); }
-}
-
 /* Progress ring on the active slider dot: the dash offset walks to zero over
-   exactly one slide, so the ring reads as a countdown to the next frame.
+   exactly one slide, so the ring reads as a countdown to the next one.
    The circle carries pathLength="100", which normalises its geometry to 100
    user units — so these numbers hold whatever radius the dot is drawn at. */
 @keyframes ring-fill {

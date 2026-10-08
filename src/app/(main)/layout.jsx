@@ -2,7 +2,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 
 /**
- * Chrome for every public marketing page: `/`, `/buy`, `/agents`, …
+ * Chrome for every public marketing page: `/`, `/about`, `/services`, …
  *
  * Route groups do not add a URL segment, so `(main)/buy/page.tsx` still serves
  * `/buy`. Dashboards and auth screens get their own groups with their own

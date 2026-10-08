@@ -20,21 +20,9 @@ export const footerLede = {
  */
 export const footerColumns = [
   {
-    title: "Properties",
-    links: [
-      { label: "Homes for sale", href: "/buy" },
-      { label: "Homes for rent", href: "/rent" },
-      { label: "New developments", href: "/new-projects", badge: "New" },
-      { label: "Commercial space", href: "/commercial" },
-      { label: "Plots & land", href: "/buy/land" },
-      { label: "Luxury collection", href: "/luxury" },
-    ],
-  },
-  {
     title: "Company",
     links: [
       { label: "About Adestate", href: "/about" },
-      { label: "Our agents", href: "/agents" },
       { label: "Careers", href: "/careers", badge: "6 open" },
       { label: "Press kit", href: "/press" },
       { label: "Partner with us", href: "/partners" },

@@ -1,13 +1,9 @@
 import { About } from "@/components/home/About";
 import { AppSection } from "@/components/home/AppSection";
-import { Agents } from "@/components/home/Agents";
 import { Banner } from "@/components/home/Banner";
 import { ContactSection } from "@/components/home/ContactSection";
-import { FeaturedItems } from "@/components/home/FeaturedItems";
 import { Features } from "@/components/home/Features";
-import { Gallery } from "@/components/home/Gallery";
 import { HowItWorks } from "@/components/home/HowItWorks";
-import { Properties } from "@/components/home/Properties";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { siteConfig } from "@/lib/site";
@@ -37,10 +33,6 @@ export default function HomePage() {
       <Features />
       <HowItWorks />
       <AppSection />
-      <Properties />
-      <FeaturedItems />
-      <Gallery />
-      <Agents />
       <Testimonials />
       <ContactSection />
     </>
