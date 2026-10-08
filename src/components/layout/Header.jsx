@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronDownIcon, MenuIcon } from "@/components/icons";
+import { ChevronDownIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import { Logo } from "@/components/layout/Logo";
 import { MegaMenu } from "@/components/layout/MegaMenu";
 import { MobileNav } from "@/components/layout/MobileNav";
@@ -45,6 +45,7 @@ export function Header() {
 
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
   const [navWidth, setNavWidth] = useState(0);
   const [ready, setReady] = useState(false);
   const closeTimer = useRef(null);
@@ -92,6 +93,16 @@ export function Header() {
 
   useEffect(() => cancelClose, [cancelClose]);
 
+  // A tap anywhere outside the header closes the mobile menu.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onPointerDown = (event) => {
+      if (!headerRef.current?.contains(event.target)) setMobileOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, [mobileOpen]);
+
   // The compact surface hugs the nav, so it needs the nav's real width. It is
   // 0 below lg, where the nav is hidden — the surface then has nothing to sit
   // behind and simply fades out.
@@ -114,7 +125,7 @@ export function Header() {
     };
   }, []);
 
-  const compact = heroRoutes.includes(pathname) && !scrolled && !openMenu;
+  const compact = heroRoutes.includes(pathname) && !scrolled && !openMenu && !mobileOpen;
 
   const isActive = (href) =>
     href === "/"
@@ -260,9 +271,10 @@ export function Header() {
 
               <button
                 type="button"
-                onClick={() => setMobileOpen(true)}
-                aria-label="Open menu"
+                onClick={() => setMobileOpen((v) => !v)}
+                aria-label={mobileOpen ? "Close menu" : "Open menu"}
                 aria-expanded={mobileOpen}
+                aria-controls="mobile-menu"
                 className={cn(
                   "grid size-9 place-items-center rounded-full transition-colors duration-500 lg:hidden",
                   compact
@@ -270,10 +282,13 @@ export function Header() {
                     : "text-headline hover:bg-surface",
                 )}
               >
-                <MenuIcon className="size-6" />
+                {mobileOpen ? <CloseIcon className="size-6" /> : <MenuIcon className="size-6" />}
               </button>
             </div>
           </div>
+
+          {/* The menu below lg, dropping out of the pill. */}
+          <MobileNav id="mobile-menu" open={mobileOpen} onClose={closeMobile} />
 
           {/* Panel layer. Hangs under the bar, inside the same container, so
               every panel opens to the same frame. Zero height of its own — the
@@ -299,7 +314,6 @@ export function Header() {
         </Container>
       </header>
 
-      <MobileNav open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </>
   );
 }

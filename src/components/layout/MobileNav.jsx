@@ -1,25 +1,40 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronDownIcon, ChevronRightIcon, CloseIcon, MailIcon, PhoneIcon } from "@/components/icons";
-import { Logo } from "@/components/layout/Logo";
-import { Button } from "@/components/ui/Button";
+import { ArrowRightIcon, ChevronDownIcon } from "@/components/icons";
 import { headerCta, mainNav } from "@/data/navigation";
-import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { cn } from "@/lib/cn";
-import { siteConfig } from "@/lib/site";
 
 /**
- * Full-screen menu for < lg, styled to match the desktop panel: one accordion
- * per section, painted from semantic tokens so it follows the theme. It
- * renders the same `mainNav` the desktop header does, so the two can never
- * drift apart.
+ * The menu below `lg`: a white card that drops out of the header pill, with
+ * every link as a full-width row (the current page tinted in the brand) and
+ * the call to action as a wide pill at the foot.
+ *
+ * It renders inside the header, directly under the pill, so it shares the
+ * pill's width and gutters. The header owns the open state and the toggle
+ * (the burger turns into a close mark); Escape closes it too. Items with a
+ * `panel` expand in place to show their sub-links.
  */
-export function MobileNav({ open, onClose }) {
-  const [expanded, setExpanded] = useState(null);
+/**
+ * Each row eases in a beat after the one above when the menu opens, and all
+ * leave together, at once, when it closes — a stagger on the way out would
+ * only make closing feel slow.
+ */
+function stagger(open, index) {
+  return {
+    className: cn(
+      "transition-[opacity,translate] duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]",
+      open ? "translate-y-0 opacity-100" : "-translate-y-1.5 opacity-0",
+    ),
+    style: { transitionDelay: open ? `${80 + index * 40}ms` : "0ms" },
+  };
+}
 
-  useLockBodyScroll(open);
+export function MobileNav({ id, open, onClose }) {
+  const pathname = usePathname();
+  const [expanded, setExpanded] = useState(null);
 
   useEffect(() => {
     if (!open) return;
@@ -30,130 +45,105 @@ export function MobileNav({ open, onClose }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  const isActive = (href) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/");
+
+  const row =
+    "flex w-full items-center justify-between rounded-xl px-3.5 py-2 text-left text-[15px] transition-colors";
+
   return (
-    <div
-      role="dialog"
-      aria-modal={open}
+    <nav
+      id={id}
       aria-label="Main menu"
       aria-hidden={!open}
+      inert={!open}
       className={cn(
-        "fixed inset-0 z-60 flex flex-col bg-page transition-all duration-400 lg:hidden",
+        // `visibility` is in the transition list on purpose: it then flips
+        // at the start of opening and the end of closing, so the card
+        // animates out instead of vanishing. The clip-path unfolds it from
+        // the top edge.
+        "pointer-events-auto absolute inset-x-5 top-full mt-2 origin-top rounded-[1.75rem] border border-line bg-elevated p-2 shadow-lift transition-[opacity,translate,clip-path,visibility] duration-[450ms] ease-[cubic-bezier(0.16,1,0.3,1)] sm:inset-x-6 lg:hidden",
         open
-          ? "visible opacity-100"
-          : "pointer-events-none invisible -translate-y-4 opacity-0",
+          ? "visible translate-y-0 opacity-100 [clip-path:inset(0_0_0_0_round_1.75rem)]"
+          : "invisible -translate-y-2 opacity-0 [clip-path:inset(0_0_100%_0_round_1.75rem)]",
       )}
     >
-      <header className="flex h-[var(--header-h)] shrink-0 items-center justify-between px-5 sm:px-6">
-        <Logo />
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close menu"
-          className="text-content transition-colors hover:text-headline"
-        >
-          <CloseIcon className="size-6" />
-        </button>
-      </header>
+      <ul className="space-y-0.5">
+        {mainNav.map((item, index) => {
+          const active = isActive(item.href);
+          const enter = stagger(open, index);
 
-      <nav className="no-scrollbar flex-1 overflow-y-auto px-5 pb-8 sm:px-6">
-        <ul className="divide-y divide-line border-y border-line">
-          {mainNav.map((item) => {
-            const isOpen = expanded === item.label;
-
-            if (!item.panel) {
-              return (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    onClick={onClose}
-                    tabIndex={open ? undefined : -1}
-                    className="block py-5 font-heading text-lg font-semibold text-headline transition-colors hover:text-brand"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            }
-
+          if (!item.panel) {
             return (
-              <li key={item.label}>
-                <button
-                  type="button"
-                  onClick={() => setExpanded(isOpen ? null : item.label)}
-                  aria-expanded={isOpen}
-                  tabIndex={open ? undefined : -1}
-                  className="flex w-full items-center justify-between py-5 font-heading text-lg font-semibold text-headline"
-                >
-                  {item.label}
-                  <ChevronDownIcon
-                    className={cn(
-                      "size-4 text-muted transition-transform duration-300",
-                      isOpen && "-rotate-180",
-                    )}
-                  />
-                </button>
-
-                <div
+              <li key={item.label} className={enter.className} style={enter.style}>
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
-                    "grid transition-[grid-template-rows] duration-400 ease-out",
-                    isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                    row,
+                    active
+                      ? "bg-brand/10 text-brand"
+                      : "text-content hover:bg-surface hover:text-headline",
                   )}
                 >
-                  <div className="overflow-hidden">
-                    <ul className="space-y-6 pb-6">
-                      {item.panel.map((entry) => (
-                        <li key={entry.href}>
-                          <Link
-                            href={entry.href}
-                            onClick={onClose}
-                            tabIndex={isOpen && open ? undefined : -1}
-                            className="group block"
-                          >
-                            <span className="flex items-center gap-2 font-heading text-[15px] font-semibold text-headline transition-colors group-hover:text-brand">
-                              {entry.label}
-                              <ChevronRightIcon className="size-3.5 transition-transform group-hover:translate-x-1" />
-                            </span>
-                            <span className="mt-2 block text-sm leading-relaxed text-muted">
-                              {entry.description}
-                            </span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                  {item.label}
+                </Link>
               </li>
             );
-          })}
-        </ul>
+          }
 
-        <Button
-          href={headerCta.href}
-          onClick={onClose}
-          tabIndex={open ? undefined : -1}
-          block
-          className="mt-8"
-        >
-          {headerCta.label}
-        </Button>
+          const isOpen = expanded === item.label;
+          return (
+            <li key={item.label} className={enter.className} style={enter.style}>
+              <button
+                type="button"
+                onClick={() => setExpanded(isOpen ? null : item.label)}
+                aria-expanded={isOpen}
+                className={cn(row, "text-content hover:bg-surface hover:text-headline")}
+              >
+                {item.label}
+                <ChevronDownIcon
+                  className={cn("size-4 transition-transform duration-300", isOpen && "-rotate-180")}
+                />
+              </button>
+              <div
+                className={cn(
+                  "grid transition-[grid-template-rows] duration-300 ease-out",
+                  isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                )}
+              >
+                <ul className="overflow-hidden pl-4">
+                  {item.panel.map((entry) => (
+                    <li key={entry.href}>
+                      <Link
+                        href={entry.href}
+                        onClick={onClose}
+                        className="block rounded-xl px-3.5 py-2 text-sm text-muted transition-colors hover:bg-surface hover:text-headline"
+                      >
+                        {entry.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
 
-        <div className="mt-8 space-y-3 text-sm">
-          <a
-            href={siteConfig.contact.phoneHref}
-            className="flex items-center gap-3 text-muted transition-colors hover:text-brand"
-          >
-            <PhoneIcon className="size-4" />
-            {siteConfig.contact.phone}
-          </a>
-          <a
-            href={siteConfig.contact.emailHref}
-            className="flex items-center gap-3 text-muted transition-colors hover:text-brand"
-          >
-            <MailIcon className="size-4" />
-            {siteConfig.contact.email}
-          </a>
-        </div>
-      </nav>
-    </div>
+      <Link
+        href={headerCta.href}
+        onClick={onClose}
+        style={stagger(open, mainNav.length).style}
+        className={cn(
+          stagger(open, mainNav.length).className,
+          "mt-2 flex h-11 items-center justify-center gap-2 rounded-full bg-linear-to-r from-brand-600 to-brand-400 text-[15px] font-semibold text-white transition-[opacity,translate,filter] hover:brightness-105",
+        )}
+      >
+        {headerCta.label}
+        <ArrowRightIcon aria-hidden="true" className="size-4 -rotate-45" />
+      </Link>
+    </nav>
   );
 }
