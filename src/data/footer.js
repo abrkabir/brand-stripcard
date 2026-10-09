@@ -1,13 +1,14 @@
 /**
  * The footer's opening statement, over the rippled backdrop.
  *
- * `title` is set at display size and wraps to three lines by design — keep it
- * to roughly this length or the backdrop's bloom starts fighting the type.
+ * `title` is set at display size and wraps to two or three lines by design —
+ * keep it to roughly this length or the backdrop's bloom starts fighting the
+ * type.
  */
 export const footerLede = {
-  tagline: "Verified listings, honest pricing, and an agent who answers.",
-  title: "Every home, seen in person before it reaches you",
-  cta: { label: "Talk to an agent", href: "/contact" },
+  tagline: "Virtual cards for safer online payments, ready in seconds.",
+  title: "Every payment, protected from the very first tap",
+  cta: { label: "Get your card", href: "/register" },
 };
 
 /**
@@ -20,35 +21,29 @@ export const footerLede = {
  */
 export const footerColumns = [
   {
+    title: "Product",
+    links: [
+      { label: "Virtual cards", href: "/services" },
+      { label: "Spending controls", href: "/services" },
+      { label: "Security", href: "/services" },
+      { label: "Global payments", href: "/services" },
+    ],
+  },
+  {
     title: "Company",
     links: [
-      { label: "About Adestate", href: "/about" },
-      { label: "Careers", href: "/careers", badge: "6 open" },
-      { label: "Press kit", href: "/press" },
-      { label: "Partner with us", href: "/partners" },
+      { label: "About StripCard", href: "/about" },
+      { label: "Announcements", href: "/announcements" },
+      { label: "Careers", href: "/careers" },
       { label: "Contact", href: "/contact" },
     ],
   },
   {
-    title: "Resources",
+    title: "Support",
     links: [
-      { label: "Market insights", href: "/insights" },
-      { label: "Mortgage calculator", href: "/tools/mortgage" },
-      { label: "Buying guide", href: "/guides/buying" },
-      { label: "Selling guide", href: "/guides/selling" },
-      { label: "Tenant rights", href: "/guides/tenant-rights" },
       { label: "Help centre", href: "/help" },
-    ],
-  },
-  {
-    title: "Popular areas",
-    links: [
-      { label: "Gulshan", href: "/areas/gulshan" },
-      { label: "Banani", href: "/areas/banani" },
-      { label: "Dhanmondi", href: "/areas/dhanmondi" },
-      { label: "Bashundhara R/A", href: "/areas/bashundhara" },
-      { label: "Uttara", href: "/areas/uttara" },
-      { label: "Mirpur DOHS", href: "/areas/mirpur-dohs" },
+      { label: "Get started", href: "/register" },
+      { label: "Log in", href: "/login" },
     ],
   },
 ];
@@ -67,7 +62,7 @@ export const legalLinks = [
  * argument back up: an /about page, or a strip above the fold.
  */
 export const footerBadges = [
-  { icon: "shield", label: "Every listing verified on site" },
-  { icon: "star", label: "4.9 / 5 from 2,840 reviews" },
-  { icon: "users", label: "320 licensed agents" },
+  { icon: "shield", label: "Tokenised numbers and 3-D Secure" },
+  { icon: "card", label: "Cards issued in seconds" },
+  { icon: "globe", label: "Pay in any currency" },
 ];
