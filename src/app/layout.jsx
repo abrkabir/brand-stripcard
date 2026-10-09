@@ -1,8 +1,8 @@
 import { Anton, Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
-import { cookies } from "next/headers";
 import "@/styles/globals.css";
 import { ScrollCalm } from "@/components/shared/ScrollCalm";
-import { ThemeProvider, THEME_COOKIE } from "@/lib/theme";
+import { ThemeProvider } from "@/lib/theme";
+import { themeScript } from "@/lib/theme-script";
 import { siteConfig } from "@/lib/site";
 
 /**
@@ -72,23 +72,24 @@ export const viewport = {
   ],
 };
 
-export default async function RootLayout({ children }) {
-  // Reading the cookie here means the first byte of HTML already carries the
-  // right class — no flash, and no render-blocking inline script. When there
-  // is no cookie yet we stamp nothing and let the CSS follow the OS instead
-  // (see the @custom-variant in styles/variables.css).
-  const stored = (await cookies()).get(THEME_COOKIE)?.value;
-  const theme = stored === "dark" || stored === "light" ? stored : undefined;
-
+export default function RootLayout({ children }) {
+  // The site is a static export, so the HTML is the same for everyone and
+  // carries no theme class. `themeScript` reads the saved choice from the
+  // cookie and stamps it before the first paint; with no cookie the CSS
+  // follows the OS (see the @custom-variant in styles/variables.css).
+  // `suppressHydrationWarning` lets React accept the class the script added.
   return (
     <html
       lang="en"
-      className={`${headingFont.variable} ${displayFont.variable} ${condensedFont.variable} ${bodyFont.variable} h-full antialiased${theme ? ` ${theme}` : ""}`}
-      style={{ colorScheme: theme ?? "light dark" }}
+      className={`${headingFont.variable} ${displayFont.variable} ${condensedFont.variable} ${bodyFont.variable} h-full antialiased`}
+      style={{ colorScheme: "light dark" }}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="flex min-h-full flex-col">
-        <ThemeProvider initialTheme={theme}>{children}</ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
         <ScrollCalm />
       </body>
     </html>

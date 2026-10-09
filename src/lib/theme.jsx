@@ -8,8 +8,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
-
-export const THEME_COOKIE = "adestate-theme";
+import { THEME_COOKIE, THEME_COOKIE_PATTERN } from "@/lib/theme-script";
 
 /**
  * Context shape: `theme` is the resolved "light" | "dark", `chosen` is the
@@ -31,14 +30,17 @@ function subscribeToScheme(onChange) {
   return () => query.removeEventListener("change", onChange);
 }
 
+/** The cookie only changes through `setTheme`, which re-renders on its own. */
+const subscribeToNothing = () => () => {};
+
+function readStoredTheme() {
+  const match = document.cookie.match(new RegExp(THEME_COOKIE_PATTERN));
+  return match ? match[1] : null;
+}
+
 function persist(theme) {
-  try {
-    localStorage.setItem(THEME_COOKIE, theme);
-  } catch {
-    /* Private mode blocks storage — the cookie below is what actually matters. */
-  }
-  // The server reads this cookie in the root layout, so every visit after the
-  // first paints the right theme in the very first byte of HTML.
+  // The inline script in the root layout reads this cookie, so every visit
+  // after the first paints the right theme before any content shows.
   document.cookie = `${THEME_COOKIE}=${theme};path=/;max-age=31536000;SameSite=Lax`;
 }
 
@@ -53,17 +55,20 @@ function apply(theme) {
 }
 
 /**
- * `initialTheme` is the cookie value read server-side, or `undefined` on a
- * first visit. While it is undefined the OS preference drives the theme — CSS
- * already handles that for the first paint, so there is no flash and no
- * render-blocking inline script.
+ * The static HTML carries no theme, so both the saved cookie and the OS
+ * preference are read through `useSyncExternalStore`. Their server snapshots
+ * (`null` and `false`) match that HTML, which keeps hydration clean, and React
+ * re-renders with the real values straight after.
  */
-export function ThemeProvider({ children, initialTheme }) {
-  const [chosen, setChosen] = useState(initialTheme ?? null);
+export function ThemeProvider({ children }) {
+  const stored = useSyncExternalStore(
+    subscribeToNothing,
+    readStoredTheme,
+    () => null,
+  );
+  const [picked, setPicked] = useState(null);
+  const chosen = picked ?? stored;
 
-  // The OS preference is external mutable state, so it is read through the
-  // API built for that. The server snapshot is `false`, matching the
-  // cookie-less HTML the server sent.
   const systemDark = useSyncExternalStore(
     subscribeToScheme,
     () => window.matchMedia(SCHEME_QUERY).matches,
@@ -80,10 +85,10 @@ export function ThemeProvider({ children, initialTheme }) {
     persist(theme);
   }, [theme, chosen]);
 
-  const setTheme = useCallback((next) => setChosen(next), []);
+  const setTheme = useCallback((next) => setPicked(next), []);
 
   const toggleTheme = useCallback(
-    () => setChosen(theme === "dark" ? "light" : "dark"),
+    () => setPicked(theme === "dark" ? "light" : "dark"),
     [theme],
   );
 

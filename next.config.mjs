@@ -1,19 +1,18 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Static export for Cloudflare Pages: `next build` writes plain HTML, CSS
+  // and JS to `out/`, and that folder is all Pages has to serve. Anything that
+  // needs a server per request (cookies(), searchParams, Server Actions, the
+  // image optimizer) is unavailable, so the app reads those in the browser.
+  output: "export",
+
   reactCompiler: true,
 
   images: {
-    // Placeholder photography for the hero and mega menus. Every URL is
-    // centralised in `src/data/`, so when real assets land in
-    // `public/images/properties/` you can swap the data file and delete this
-    // block in one go.
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
-    ],
+    // There is no server to resize images on a static host, so `next/image`
+    // hands the browser the original file. Keep files in `public/images/`
+    // exported at the size they are drawn; remote URLs load directly.
+    unoptimized: true,
   },
 };
 

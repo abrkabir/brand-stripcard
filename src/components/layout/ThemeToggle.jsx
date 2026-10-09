@@ -11,9 +11,9 @@ import { useTheme } from "@/lib/theme";
  * the header passes a white override through `className` — twMerge lets the
  * caller win.
  *
- * Both icons stay mounted and cross-fade, so the button never reflows and
- * there is nothing to hydrate-mismatch: the server already rendered the right
- * theme class from the cookie.
+ * Both icons stay mounted and cross-fade, so the button never reflows. The
+ * provider hydrates with the same theme the static HTML was built with, then
+ * swaps in the saved one, so there is nothing to hydrate-mismatch.
  */
 export function ThemeToggle({ className }) {
   const { theme, toggleTheme } = useTheme();
