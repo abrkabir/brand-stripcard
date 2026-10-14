@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { UseCaseCards } from "@/components/home/UseCaseCards";
 import { Reveal } from "@/components/shared/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -7,8 +8,8 @@ import { useCases, useCasesHeading } from "@/data/useCases";
 import { cn } from "@/lib/cn";
 
 /**
- * "Use cases": a heading, then a bento of four photo tiles with their copy laid
- * over the picture.
+ * "Use cases": a heading, then a bento of four tiles with their copy laid over
+ * the picture: three photos, and three StripCard cards drawn in CSS.
  *
  *   desktop   story │ stat   │ feature        tablet   story │ feature
  *                   │ action │                         stat  │ action
@@ -105,13 +106,15 @@ export function UseCases() {
             </Button>
           </Tile>
 
-          {/* Feature: the copy sits in the black above the cards. */}
+          {/* Feature: no photo. The cards are drawn (see UseCaseCards) under a
+              glow from the top corner, and the copy sits in the dark above
+              them. The cards scale with the tile's width, so it stays 3:4 on
+              small screens, where they would otherwise climb into the copy. */}
           <Tile
-            {...feature}
             index={3}
-            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 50vw, 100vw"
-            className="aspect-[4/5] md:aspect-[3/4] md:[grid-area:feature] lg:aspect-auto"
+            className="aspect-[3/4] bg-[radial-gradient(130%_60%_at_100%_0%,rgb(255_255_255/0.2),transparent_65%)] md:[grid-area:feature] lg:aspect-auto"
           >
+            <UseCaseCards className="-z-10" />
             <p className="text-xs font-semibold tracking-[0.14em] text-white/55 uppercase">
               {feature.label}
             </p>
@@ -129,10 +132,10 @@ export function UseCases() {
 }
 
 /**
- * A rounded photo tile. The photo fills it behind everything; children are
- * laid out in a padded column over it. Tiles fade up one after another once
- * the grid around them is revealed — `index` sets each one's place in that
- * stagger.
+ * A rounded tile. The photo, when there is one, fills it behind everything;
+ * children are laid out in a padded column over it. Tiles fade up one after
+ * another once the grid around them is revealed — `index` sets each one's
+ * place in that stagger.
  */
 function Tile({ image, alt, focus, sizes, index, className, children }) {
   return (
@@ -143,14 +146,16 @@ function Tile({ image, alt, focus, sizes, index, className, children }) {
         className,
       )}
     >
-      <Image
-        src={image}
-        alt={alt}
-        fill
-        sizes={sizes}
-        style={{ objectPosition: focus }}
-        className="-z-10 object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-      />
+      {image && (
+        <Image
+          src={image}
+          alt={alt}
+          fill
+          sizes={sizes}
+          style={{ objectPosition: focus }}
+          className="-z-10 object-cover transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+        />
+      )}
       {children}
     </article>
   );

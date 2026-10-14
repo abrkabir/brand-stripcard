@@ -1,7 +1,6 @@
 import shopperImage from "../../public/images/assets/use-cases/use-case-shopper.webp";
 import shoppingImage from "../../public/images/assets/use-cases/use-case-shopping.webp";
 import onTheGoImage from "../../public/images/assets/use-cases/use-case-on-the-go.webp";
-import subscriptionsImage from "../../public/images/assets/use-cases/use-case-subscriptions.webp";
 
 /**
  * The "use cases" bento on the homepage. `UseCases` renders straight from this.
@@ -45,10 +44,8 @@ export const useCases = {
     title: "Pay on the go, right from your phone",
     cta: { label: "Explore more", href: "/services" },
   },
+  // No photo: its three cards are drawn by the component (see UseCaseCards).
   feature: {
-    image: subscriptionsImage,
-    alt: "Three payment cards standing side by side",
-    focus: "50% 100%",
     label: "Subscriptions",
     title: "A separate card for every subscription",
     description: "Freeze or cancel one in a tap while the rest keep running.",

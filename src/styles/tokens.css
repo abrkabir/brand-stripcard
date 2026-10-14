@@ -31,6 +31,9 @@
      and the words beside it travel with it. */
   --animate-pill-swipe: pill-swipe 3.6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   --animate-icon-cycle: icon-cycle 8s cubic-bezier(0.65, 0, 0.35, 1) infinite both;
+  /* A card bobbing where it stands: up a little and back. `translate`, not
+     `transform`, so it stacks on whatever transform angles the card. */
+  --animate-card-bob: card-bob 6s ease-in-out infinite;
 
   /* Tailwind only emits a @keyframes block when a matching --animate-* token
      is actually used in the markup, so animations are declared as tokens — a
@@ -72,6 +75,11 @@
   0%, 12%   { width: 0.8em; }
   45%, 62%  { width: 2.6em; }
   95%, 100% { width: 0.8em; }
+}
+
+@keyframes card-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -0.625rem; }
 }
 
 @keyframes marquee {
