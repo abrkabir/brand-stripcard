@@ -40,12 +40,13 @@
 
      Fully rounded. The end caps are semicircles of radius `--btn-h / 2`, so an
      arrow compartment — exactly `--btn-h` wide — becomes a D-shaped cap with
-     the arrow centred in it, and the divider meets the curve's tangent point.
-     `overflow: hidden` clips the compartments to the curve.                 */
+     the arrow centred in it. `overflow: hidden` clips the compartments to the
+     curve.                                                                  */
 
   .btn {
     --btn-h: 3.25rem;
     --btn-pad: 1.75rem;
+    --btn-gap: 0.25rem;
 
     position: relative;
     display: inline-flex;
@@ -142,14 +143,19 @@
     height: 100%;
   }
 
-  /* The rule beside the arrow tracks the label colour, so it needs no variant
-     of its own — it just transitions with everything else. */
-  .btn__slot--left > * {
-    border-right: 1px solid currentColor;
+  /* The arrow's compartment already leaves air around the icon, so the label
+     keeps only a sliver of padding on the side that faces it. The sliver
+     follows the arrow across on hover, on the slots' own timing, so the two
+     paddings always add up to the same and the button never changes width. */
+  .btn__slot + .btn__label {
+    padding-inline: var(--btn-pad) var(--btn-gap);
+    transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .btn__slot--right > * {
-    border-left: 1px solid currentColor;
+  .btn:hover .btn__slot + .btn__label,
+  .btn:focus-visible .btn__slot + .btn__label,
+  .btn--active .btn__slot + .btn__label {
+    padding-inline: var(--btn-gap) var(--btn-pad);
   }
 
   .btn__slot--left {
@@ -182,7 +188,7 @@
 
   /* ── Variants ─────────────────────────────────────────────────────────── */
   /* A filled variant borders in its own background, so its frame disappears
-     while the divider — currentColor — stays visible. */
+     into the fill. There is no divider between the label and the arrow. */
 
   .btn--base {
     border-color: var(--color-brand);
