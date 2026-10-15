@@ -317,7 +317,7 @@ function Copy({ slide }) {
           <span className="size-1.5 rounded-full bg-white" />
           {tag.strong}
         </p>
-        <h3 className="mt-3 max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+        <h3 className="mt-3 max-w-[27rem] font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
           <Words text={statement} />
         </h3>
         <p data-meta className="mt-4 text-sm text-white/80">
@@ -336,7 +336,7 @@ function Copy({ slide }) {
         >
           {tag.strong}
         </p>
-        <h3 className="mt-4 max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+        <h3 className="mt-4 max-w-[27rem] font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
           <Words text={statement} />
         </h3>
         <p data-meta className="mt-4 text-sm text-white/80">
@@ -348,7 +348,7 @@ function Copy({ slide }) {
 
   return (
     <>
-      <h3 className="max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+      <h3 className="max-w-[27rem] font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
         <Words text={statement} />
       </h3>
       <p data-meta className="mt-4 text-sm text-white/70">
@@ -360,13 +360,14 @@ function Copy({ slide }) {
 
 /**
  * Each word in its own mask, so it can rise into view rather than fade. The
- * mask is padded below the line so descenders are not clipped.
+ * mask is padded above and below the line, so tall capitals and descenders
+ * are never clipped.
  */
 function Words({ text }) {
   return text.split(" ").map((word, i) => (
     <span key={i}>
       {i > 0 && " "}
-      <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-top">
+      <span className="-my-[0.14em] inline-block overflow-hidden py-[0.14em] align-top">
         <span data-word className="inline-block will-change-transform">
           {word}
         </span>

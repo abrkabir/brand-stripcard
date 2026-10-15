@@ -1,78 +1,87 @@
-/**
- * How long each review holds before the next one, in milliseconds.
- *
- * This is the only place the pace is set: the ring around the active number
- * fills over exactly this long, and finishing that fill is what advances the
- * slide — so the indicator and the timer cannot drift apart.
- */
-export const TESTIMONIAL_MS = 9000;
+import aisha from "../../public/images/testimonials/customer-aisha.webp";
+import daniel from "../../public/images/testimonials/customer-daniel.webp";
+import marcus from "../../public/images/testimonials/customer-marcus.webp";
+import maya from "../../public/images/testimonials/customer-maya.webp";
+import sofia from "../../public/images/testimonials/customer-sofia.webp";
+
+/** How long the rail rests before gliding on by one card, in milliseconds. */
+export const TESTIMONIAL_MS = 5000;
 
 export const testimonialsHeading = {
-  title: "Don't take our word for it.",
-  description:
-    "Every review below is from a completed transaction, published unedited. We do not remove the ones that cost us four stars instead of five.",
+  eyebrow: "Customer stories",
+  title: "Hear from real customers who pay safer, spend smarter and save more with StripCard",
 };
 
 /**
- * Client testimonials for the homepage.
+ * The orange card pinned at the start of the rail. PLACEHOLDER figures:
+ * replace `score` and `users` with real, current numbers (and say where the
+ * rating comes from) before launch. `avatars` are a few of the faces below.
+ */
+export const testimonialsRating = {
+  score: "4.9",
+  label: "Rating",
+  note: "Average from customers paying with StripCard every day.",
+  users: "15k+",
+  usersLabel: "Trusted users",
+  avatars: [maya, daniel, aisha],
+};
+
+/**
+ * Customer stories for the rail (see Testimonials).
  *
- * `context` matters as much as the quote — "Bought in Gulshan 2" is what makes
- * a review checkable rather than decorative. Keep quotes near sixty words:
- * past that they stop being read and start being scenery.
+ * PLACEHOLDERS. The people and quotes below are illustrative, and the photos
+ * are stock (CC0, StockSnap). Before launch, replace every entry with a real
+ * customer who has agreed to be quoted, with their own photo. Publishing
+ * invented reviews as genuine is misleading, and in many countries unlawful.
  *
- * The photography shows agents working with clients — a consultation, a
- * handover, a handshake. Scenes, never portraits: a stock face beside a named
- * review reads as a claim that this is the reviewer, which it is not.
+ * Keep each quote near twenty words, so it sits in the lower part of the
+ * photo. `rating` is out of 5. `focus` is the photo's `object-position`,
+ * keeping the face in view.
  */
 export const testimonials = [
   {
     quote:
-      "Shirin was an invaluable guide through the whole buying process, from the first search to closing. She understood immediately what we were after, steered us away from two places that looked right on paper, and kept every stage moving with a steady, reassuring hand.",
-    name: "Matt Powers",
-    context: "Bought in Gulshan 2",
+      "Every free trial gets its own StripCard now. The renewals I used to forget simply stop, and that money stays with me.",
+    name: "Maya Collins",
     rating: 5,
-    image:
-      "https://images.unsplash.com/photo-1573497491208-6b1acb260507?auto=format&fit=crop&w=1400&q=75",
-    alt: "An agent talking a client through options across a table, city skyline behind them",
+    role: "Freelance designer",
+    image: maya,
+    focus: "50% 25%",
   },
   {
     quote:
-      "We had been burned twice by listings that turned out not to exist. Adestate was the first place where what we saw online was exactly what we walked into. The floor plan was accurate to the centimetre.",
-    name: "Nusrat Jahan",
-    context: "Rented in Dhanmondi",
+      "Ads, hosting and every tool we use run on their own card with a limit. I see each charge the moment it lands.",
+    name: "Daniel Brooks",
     rating: 5,
-    image:
-      "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1400&q=75",
-    alt: "An agent going through listings on a laptop with a client",
+    role: "Founder, Brookline Studio",
+    image: daniel,
+    focus: "50% 20%",
   },
   {
     quote:
-      "The valuation came back in thirty-one hours with the comparable sales attached, so I could see exactly how they had arrived at the number. We listed that week and had three offers by the following Sunday.",
-    name: "Imran Chowdhury",
-    context: "Sold in Banani",
+      "Hotels, trains and street food in thirty-two countries, all on StripCard, with no surprise conversion fees along the way.",
+    name: "Aisha Bello",
     rating: 5,
-    image:
-      "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=75",
-    alt: "Two people shaking hands over a completed sale",
+    role: "Travel creator",
+    image: aisha,
+    focus: "50% 20%",
   },
   {
     quote:
-      "Renting direct from the owner saved us a full month's rent in brokerage, and the deposit went into a protected account the same day. Small things, but they are the ones nobody else was doing.",
-    name: "Tanvir Rahman",
-    context: "Rented in Bashundhara R/A",
+      "Every card is tagged to a team and a budget, so closing the month now takes a morning instead of a week.",
+    name: "Sofia Lindqvist",
     rating: 4,
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=75",
-    alt: "An agent handing over keys and paperwork at a counter",
+    role: "Finance lead, Northwind",
+    image: sofia,
+    focus: "50% 18%",
   },
   {
     quote:
-      "We needed eleven hundred square feet of office space in under a month. Our agent sent four options, all of them genuinely available, with the service charges already worked into the figures. No time wasted.",
-    name: "Farhana Haque",
-    context: "Leased commercial space, Motijheel",
+      "Merchant lock stopped a supplier charging us twice. The duplicate never went through, and I didn't have to call anyone.",
+    name: "Marcus Reid",
     rating: 5,
-    image:
-      "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=75",
-    alt: "An agent and a client reviewing floor plans and documents at a desk",
+    role: "Online store owner",
+    image: marcus,
+    focus: "55% 20%",
   },
 ];

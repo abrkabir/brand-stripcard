@@ -37,9 +37,7 @@
 
   /* Tailwind only emits a @keyframes block when a matching --animate-* token
      is actually used in the markup, so animations are declared as tokens — a
-     bare @keyframes here would be pruned and silently do nothing.
-     The duration is a fallback: Testimonials sets it inline. */
-  --animate-ring-fill: ring-fill 7s linear forwards;
+     bare @keyframes here would be pruned and silently do nothing. */
 
   /* Clearance under the fixed header: the floating pill plus the gap above
      and below it. The hero sits underneath it; every other page starts with
@@ -96,13 +94,4 @@
   0%       { transform: translateY(-100%); opacity: 0; }
   35%, 65% { opacity: 1; }
   100%     { transform: translateY(100%); opacity: 0; }
-}
-
-/* Progress ring on the active slider dot: the dash offset walks to zero over
-   exactly one slide, so the ring reads as a countdown to the next one.
-   The circle carries pathLength="100", which normalises its geometry to 100
-   user units — so these numbers hold whatever radius the dot is drawn at. */
-@keyframes ring-fill {
-  from { stroke-dashoffset: 100; }
-  to   { stroke-dashoffset: 0; }
 }

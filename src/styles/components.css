@@ -234,6 +234,46 @@
     width: 0;
   }
 
+  /* ══ Story rail (Testimonials) ═══════════════════════════════════════════
+     A rating card pinned at the left, a slim peek of the story just passed,
+     then whole story cards. `--cw` is a card's width, and the rating card
+     (`--rw`) is always the same width as the story cards. `--peek` is the
+     sliver shown beside it and `--base` where the current story starts.
+     With n story cards in view, the row is n + 1 cards, n gaps and the peek:
+     cw = (100% - peek - n gaps) / (n + 1). Below md the rating card stacks
+     above and the rail starts at the edge. Every % resolves against the
+     rail's width.                                                           */
+
+  .story-rail {
+    --gap: 1rem;
+    --peek: 0px;
+    --base: 0px;
+    --cw: 80%;
+    --rw: var(--cw);
+  }
+
+  @media (min-width: 640px) {
+    .story-rail {
+      --cw: calc((100% - var(--gap)) / 2);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .story-rail {
+      --gap: 1.25rem;
+      --peek: 2rem;
+      --base: calc(var(--rw) + var(--peek) + var(--gap));
+      --cw: calc((100% - var(--peek) - 2 * var(--gap)) / 3);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .story-rail {
+      --peek: 2.75rem;
+      --cw: calc((100% - var(--peek) - 3 * var(--gap)) / 4);
+    }
+  }
+
   /* ══ Form ═════════════════════════════════════════════════════════════════ */
 
   .field {
