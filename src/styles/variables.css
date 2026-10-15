@@ -174,11 +174,12 @@
 }
 
 /* ── Fonts ────────────────────────────────────────────────────────────────── */
-/* `--font-roboto-condensed`, `--font-arimo` and `--font-inter-tight` are
+/* `--font-roboto-condensed`, `--font-arimo`, `--font-instrument-serif` and
+   `--font-inter-tight` are
    injected on <html> by next/font (see app/layout.jsx); the tokens below wrap
    them with a fallback stack and are what the app actually uses.
 
-   Utilities: font-heading · font-body · font-display. `font-sans` aliases
+   Utilities: font-heading · font-body · font-display · font-accent. `font-sans` aliases
    body so Tailwind's default sans matches the page. Swapping a family is two
    lines — the import in layout.jsx and the variable name here. No component
    names a font. */
@@ -193,6 +194,9 @@
   /* Display: brand marks only, the StripCard wordmarks drawn on cards and the
      store badges. Never a title. Arimo is metric-compatible with Arial. */
   --font-display: var(--font-arimo), Arial, ui-sans-serif, system-ui, sans-serif;
+  /* Accent: an italic serif for an emphasised word or two inside a heading
+     title (the FAQ title, for one). Italic only; never a whole line. */
+  --font-accent: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }

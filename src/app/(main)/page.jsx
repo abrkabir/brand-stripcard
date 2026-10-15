@@ -1,6 +1,8 @@
 import { About } from "@/components/home/About";
 import { AppSection } from "@/components/home/AppSection";
 import { Banner } from "@/components/home/Banner";
+import { Cta } from "@/components/home/Cta";
+import { Faq } from "@/components/home/Faq";
 import { Features } from "@/components/home/Features";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { Testimonials } from "@/components/home/Testimonials";
@@ -35,6 +37,8 @@ export default function HomePage() {
       <UseCases />
       <AppSection />
       <Testimonials />
+      <Cta />
+      <Faq />
     </>
   );
 }

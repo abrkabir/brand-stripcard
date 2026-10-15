@@ -1,4 +1,5 @@
 import { About } from "@/components/home/About";
+import { Cta } from "@/components/home/Cta";
 import { Testimonials } from "@/components/home/Testimonials";
 import { WhyChooseUs } from "@/components/home/WhyChooseUs";
 import { PageHero } from "@/components/shared/PageHero";
@@ -11,7 +12,8 @@ export const metadata = {
   description: hero.description,
 };
 
-/** About: the page banner, then who we are, why choose us and what customers say. */
+/** About: the page banner, then who we are, why choose us, what customers say
+    and the call to action. */
 export default function AboutPage() {
   return (
     <>
@@ -19,6 +21,7 @@ export default function AboutPage() {
       <About />
       <WhyChooseUs />
       <Testimonials />
+      <Cta />
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { AppSection } from "@/components/home/AppSection";
+import { Cta } from "@/components/home/Cta";
 import { Features } from "@/components/home/Features";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { PageHero } from "@/components/shared/PageHero";
@@ -11,7 +12,8 @@ export const metadata = {
   description: hero.description,
 };
 
-/** Services: the page banner, then the features, how it works and the app. */
+/** Services: the page banner, then the features, how it works, the app and
+    the call to action. */
 export default function ServicesPage() {
   return (
     <>
@@ -19,6 +21,7 @@ export default function ServicesPage() {
       <Features />
       <HowItWorks />
       <AppSection />
+      <Cta />
     </>
   );
 }

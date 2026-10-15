@@ -1,4 +1,4 @@
-import { Arimo, Inter_Tight, Roboto_Condensed } from "next/font/google";
+import { Arimo, Instrument_Serif, Inter_Tight, Roboto_Condensed } from "next/font/google";
 import "@/styles/globals.css";
 import { ScrollCalm } from "@/components/shared/ScrollCalm";
 import { ThemeProvider } from "@/lib/theme";
@@ -25,6 +25,15 @@ const headingFont = Roboto_Condensed({
 /** Display: the StripCard wordmarks and store badges, never a title. */
 const displayFont = Arimo({
   variable: "--font-arimo",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+/** Accent: an italic serif for the odd emphasised word inside a title. */
+const accentFont = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  weight: "400",
+  style: "italic",
   subsets: ["latin"],
   display: "swap",
 });
@@ -73,7 +82,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${headingFont.variable} ${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={`${headingFont.variable} ${displayFont.variable} ${accentFont.variable} ${bodyFont.variable} h-full antialiased`}
       style={{ colorScheme: "light dark" }}
       suppressHydrationWarning
     >
