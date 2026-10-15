@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { ArrowRightIcon, StarIcon } from "@/components/icons";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -41,7 +41,7 @@ const mod = (n, m) => ((n % m) + m) % m;
  * `.story-rail` (styles/components.css).
  */
 export function Testimonials() {
-  const { eyebrow, title } = testimonialsHeading;
+  const { eyebrow, title, highlight, attribution } = testimonialsHeading;
   const count = testimonials.length;
   const root = useRef(null);
   const swipe = useRef(null);
@@ -122,14 +122,21 @@ export function Testimonials() {
   return (
     <section ref={root} aria-labelledby="testimonials-title" className="bg-page py-20 lg:py-28">
       <Container>
-        <div className="flex flex-col items-center text-center">
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h2
-            id="testimonials-title"
-            className="mt-5 max-w-4xl font-heading text-[clamp(1.75rem,3.2vw,2.75rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-balance text-headline"
-          >
-            {title}
-          </h2>
+        {/* The heading as a quotation: a tall quote mark lit from the top
+            left, then the label, the title closing on the brand colour, and
+            who said it. */}
+        <div className="mx-auto flex w-fit max-w-6xl items-center gap-4 sm:gap-6">
+          <QuoteMark className="h-[clamp(6.5rem,12vw,11rem)] w-auto shrink-0" />
+          <div className="max-w-[46rem] min-w-0 pt-1">
+            <Eyebrow>{eyebrow}</Eyebrow>
+            <h2
+              id="testimonials-title"
+              className="mt-4 font-heading text-[clamp(1.5rem,2.7vw,2.375rem)] leading-[1.12] font-bold tracking-[-0.015em] text-balance text-headline"
+            >
+              {title} <span className="text-brand">{highlight}</span>
+            </h2>
+            <p className="mt-4 text-sm text-muted italic sm:text-base">-{attribution}</p>
+          </div>
         </div>
 
         <div
@@ -284,6 +291,38 @@ function StoryCard({ story, label, hidden, passed, instant }) {
         </span>
       </figcaption>
     </figure>
+  );
+}
+
+/**
+ * A tall opening quote mark, slanted and lit from the top left: each mark is
+ * drawn twice, a dark copy set back and down for depth and the lit face on
+ * top. Decorative.
+ */
+function QuoteMark({ className }) {
+  const id = useId();
+  // One "6"-shaped mark: a tail curling up to the right over a squared blob.
+  const mark =
+    "M62 0 L70 16 C46 28 34 60 34 100 L58 100 Q70 100 70 112 L70 168 Q70 180 58 180 L12 180 Q0 180 0 168 L0 104 C0 52 22 14 62 0 Z";
+  return (
+    <svg aria-hidden="true" viewBox="-4 -2 170 192" className={className}>
+      <defs>
+        <linearGradient id={`${id}-face`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#ffd9bd" />
+          <stop offset="0.35" stopColor="#fd8645" />
+          <stop offset="0.7" stopColor="#f26a1b" />
+          <stop offset="1" stopColor="#c4450c" />
+        </linearGradient>
+      </defs>
+      <g transform="skewX(-8) translate(16 0)">
+        {[0, 86].map((x) => (
+          <g key={x} transform={`translate(${x} 0)`}>
+            <path d={mark} transform="translate(6 7)" fill="#7a2c0c" opacity="0.85" />
+            <path d={mark} fill={`url(#${id}-face)`} />
+          </g>
+        ))}
+      </g>
+    </svg>
   );
 }
 

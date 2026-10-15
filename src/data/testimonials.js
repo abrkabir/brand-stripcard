@@ -7,9 +7,16 @@ import sofia from "../../public/images/testimonials/customer-sofia.webp";
 /** How long the rail rests before gliding on by one card, in milliseconds. */
 export const TESTIMONIAL_MS = 5000;
 
+/**
+ * Set as a quotation: a large quote mark, then the eyebrow and the title,
+ * with `highlight` in the brand colour as its closing phrase, and
+ * `attribution` under it.
+ */
 export const testimonialsHeading = {
   eyebrow: "Customer stories",
-  title: "Hear from real customers who pay safer, spend smarter and save more with StripCard",
+  title: "Hear from real customers who pay safer, spend smarter and",
+  highlight: "save more with StripCard.",
+  attribution: "StripCard customers, in their own words",
 };
 
 /**

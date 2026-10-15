@@ -197,6 +197,24 @@ export const ShieldIcon = (p) => (
   </Svg>
 );
 
+export const LockIcon = (p) => (
+  <Svg {...p}>
+    <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
+    <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" />
+    <path d="M12 14.5v2" />
+  </Svg>
+);
+
+export const FingerprintIcon = (p) => (
+  <Svg {...p}>
+    <path d="M6.5 18.5A9 9 0 0 1 5 13.5a7 7 0 0 1 12.6-4.2" />
+    <path d="M19 12.5c.3 2.2 0 4.6-.8 6.6" />
+    <path d="M8.8 20.2A11.5 11.5 0 0 1 8 13.5a4 4 0 0 1 8 0c0 1.4-.1 2.8-.4 4.1" />
+    <path d="M12 13.5c0 3-.6 5.6-1.6 7.5" />
+    <path d="M14.4 20.4c.3-.7.5-1.4.7-2.2" />
+  </Svg>
+);
+
 export const SparklesIcon = (p) => (
   <Svg {...p}>
     <path d="m12 3 1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6Z" />
@@ -399,6 +417,8 @@ export const icons = {
   sliders: SlidersIcon,
   chart: ChartIcon,
   shield: ShieldIcon,
+  lock: LockIcon,
+  fingerprint: FingerprintIcon,
   sparkles: SparklesIcon,
   star: StarIcon,
   heart: HeartIcon,

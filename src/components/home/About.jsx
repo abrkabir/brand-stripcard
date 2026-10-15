@@ -1,4 +1,4 @@
-import { getIcon, ShieldIcon } from "@/components/icons";
+import { getIcon } from "@/components/icons";
 import { PulseDot } from "@/components/shared/PulseDot";
 import { Reveal } from "@/components/shared/Reveal";
 import { Container } from "@/components/ui/Container";
@@ -55,9 +55,13 @@ export function About() {
             <PulseDot />
             {facts.title}
           </p>
-          <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-8 lg:mt-6 lg:grid-cols-4">
+          {/* Each figure in its own rounded box, cornered like the cards above. */}
+          <dl className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:mt-8 lg:grid-cols-4 lg:gap-5">
             {facts.items.map((fact) => (
-              <div key={fact.label} className="flex flex-col-reverse gap-2">
+              <div
+                key={fact.label}
+                className="flex flex-col-reverse gap-2 rounded-3xl border border-line bg-elevated px-4 py-7 transition-colors hover:border-brand/40 sm:px-6 lg:py-9"
+              >
                 <dt className="text-sm text-muted">{fact.label}</dt>
                 <dd className="text-[2rem] leading-none font-medium tracking-[-0.03em] text-headline tabular-nums lg:text-[2.75rem]">
                   <Odometer value={fact.value} />
@@ -119,13 +123,41 @@ function IconTiles({ icons }) {
 const cardBase =
   "relative flex min-h-[22rem] flex-col overflow-hidden rounded-3xl p-7 lg:h-[26rem] lg:p-8";
 
-/** Dark card: an icon, a two-tone statement and a working toggle. */
-function SecurityCard({ text, toggle }) {
+/**
+ * Dark card: a stack of security badges, a two-tone statement and a working
+ * toggle. The badges overlap like the flags in the banner, each ringed in the
+ * card's own colour so they read as cut out of one another, and each lifts a
+ * little on hover.
+ */
+function SecurityCard({ text, toggle, badges }) {
   return (
     <article className={cn(cardBase, "bg-hero-ink text-white")}>
-      <span className="grid size-11 place-items-center rounded-xl bg-white/10">
-        <ShieldIcon className="size-5" />
-      </span>
+      <ul aria-label="Security features" className="flex -space-x-2.5">
+        {badges.map((item) => {
+          const Icon = item.icon && getIcon(item.icon);
+          return (
+            <li
+              key={item.label}
+              title={item.label}
+              className={cn(
+                "relative grid size-11 place-items-center rounded-full border-2 border-hero-ink transition-transform duration-300 hover:z-10 hover:-translate-y-1",
+                item.badge
+                  ? "bg-brand text-white"
+                  : "bg-[#2a1f1a] text-white/85 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.09)]",
+              )}
+            >
+              {Icon ? (
+                <Icon aria-hidden="true" className="size-[18px]" />
+              ) : (
+                <span aria-hidden="true" className="font-heading text-[0.8125rem] font-bold tracking-[0.02em]">
+                  {item.badge}
+                </span>
+              )}
+              <span className="sr-only">{item.label}</span>
+            </li>
+          );
+        })}
+      </ul>
 
       <p className="mt-auto text-2xl leading-[1.3] font-medium tracking-[-0.01em] lg:text-[1.65rem]">
         {text.map((piece) => (

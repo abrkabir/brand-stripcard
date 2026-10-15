@@ -30,6 +30,18 @@ export const about = {
       { text: " anywhere online.", strong: true },
     ],
     toggle: "Secure mode",
+    /**
+     * The overlapping badges at the top of the card, one per layer of
+     * protection. `icon` names an icon in components/icons; `badge` sets
+     * a short mark instead, on the brand colour, to close the stack.
+     */
+    badges: [
+      { icon: "shield", label: "Fraud protection" },
+      { icon: "lock", label: "Encrypted card data" },
+      { icon: "fingerprint", label: "Biometric sign-in" },
+      { icon: "key", label: "Tokenised card numbers" },
+      { badge: "3DS", label: "3-D Secure checkout" },
+    ],
   },
 
   /** Picture card: a drawn virtual card and a floating caption. */
