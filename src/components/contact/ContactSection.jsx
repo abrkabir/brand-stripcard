@@ -1,12 +1,12 @@
 import { MailIcon, MapPinIcon, PhoneIcon, getIcon } from "@/components/icons";
-import { ContactForm } from "@/components/home/ContactForm";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 import { Container } from "@/components/ui/Container";
 import { contactHeading, offices } from "@/data/contact";
 import { siteConfig } from "@/lib/site";
 
 /**
- * Contact section — a centred heading over two columns: the ways to reach us on
+ * The contact page body: a centred heading over two columns, the ways to reach us on
  * the left, the enquiry form on the right.
  *
  * The rail is a brand panel and the form is left open on the page, which is
@@ -18,7 +18,7 @@ import { siteConfig } from "@/lib/site";
  */
 export function ContactSection() {
   return (
-    <section className="bg-page py-24 lg:py-32">
+    <section className="bg-page py-20 lg:py-28">
       <Container>
         <SectionHeading
           align="center"
@@ -34,7 +34,7 @@ export function ContactSection() {
               names its own tones, which is what `on-dark` does not cover.
               `justify-between` pins the socials to the foot of the panel, so
               the column filling its row height reads as intentional. */}
-          <div className="on-dark flex flex-col justify-between gap-14 bg-brand p-8 text-white sm:p-10">
+          <div className="on-dark flex flex-col justify-between gap-14 rounded-[1.5rem] bg-brand p-8 text-white sm:p-10">
             <ul className="divide-y divide-white/15">
               {offices.map((office) => (
                 <li key={office.email} className="py-7 first:pt-0 last:pb-0">

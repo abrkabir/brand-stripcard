@@ -33,7 +33,7 @@ export const footerColumns = [
     title: "Company",
     links: [
       { label: "About StripCard", href: "/about" },
-      { label: "Announcements", href: "/announcements" },
+      { label: "Use cases", href: "/use-cases" },
       { label: "Careers", href: "/careers" },
       { label: "Contact", href: "/contact" },
     ],

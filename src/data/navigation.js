@@ -12,18 +12,19 @@
  * first section with the `pt-header` utility.
  */
 /**
- * Routes that open on the orange banner. Here the header starts compact —
+ * Routes that open on a dark banner: the homepage banner, or the PageHero an
+ * inner page opens with. Here the header starts compact —
  * white logo, white pills only behind the links and the button — and its
  * surface grows into the full bar once the page scrolls. Everywhere else it
  * is the full bar from the start. Matched exactly.
  */
-export const heroRoutes = ["/"];
+export const heroRoutes = ["/", "/about", "/services", "/use-cases", "/contact"];
 
 export const mainNav = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Services", href: "/services" },
-  { label: "Announcement", href: "/announcements" },
+  { label: "Use Cases", href: "/use-cases" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -40,8 +40,8 @@ export function ContactForm() {
           <CheckIcon className="size-5" />
         </span>
         <p className="text-sm leading-relaxed text-content">
-          <span className="font-medium text-headline">Thank you.</span> An agent
-          will be in touch within one working day. For anything urgent, call{" "}
+          <span className="font-medium text-headline">Thank you.</span> Our team
+          will reply within one working day. For anything urgent, call{" "}
           <a href={siteConfig.contact.phoneHref} className="text-brand underline">
             {siteConfig.contact.phone}
           </a>
