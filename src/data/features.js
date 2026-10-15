@@ -1,4 +1,4 @@
-import cardsImage from "../../public/images/assets/features/feature-cards-wide.webp";
+import cardsImage from "../../public/images/assets/features/feature-virtual-cards-wide.webp";
 import controlsImage from "../../public/images/assets/features/feature-controls-wide.webp";
 import globalImage from "../../public/images/assets/features/feature-global-wide.webp";
 import securityImage from "../../public/images/assets/features/feature-security-wide.webp";
@@ -35,7 +35,7 @@ export const featureTabs = [
   {
     id: "cards",
     label: "Virtual cards",
-    image: { src: cardsImage, alt: "A woman in an orange blazer holding up an orange StripCard" },
+    image: { src: cardsImage, alt: "A fan of glowing orange virtual cards spread out on black" },
     title: "A card for every way you pay",
     description:
       "Create virtual cards in seconds, for a single purchase, a subscription or a whole team, without waiting for plastic.",

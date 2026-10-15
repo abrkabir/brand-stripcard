@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { UseCaseCards } from "@/components/home/UseCaseCards";
+import { UseCaseStory } from "@/components/home/UseCaseStory";
 import { Reveal } from "@/components/shared/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
@@ -9,7 +10,8 @@ import { cn } from "@/lib/cn";
 
 /**
  * "Use cases": a heading, then a bento of four tiles with their copy laid over
- * the picture: three photos, and three StripCard cards drawn in CSS.
+ * the picture: stories that play in turn, two photos, and three StripCard
+ * cards drawn in CSS.
  *
  *   desktop   story │ stat   │ feature        tablet   story │ feature
  *                   │ action │                         stat  │ action
@@ -18,7 +20,7 @@ import { cn } from "@/lib/cn";
  * in turn the first time the grid scrolls into view, and its photo eases in
  * a touch on hover.
  *
- * A Server Component; only the reveal is client-side.
+ * A Server Component; the reveal and the stories are client-side.
  */
 export function UseCases() {
   const { eyebrow, title, description } = useCasesHeading;
@@ -41,27 +43,13 @@ export function UseCases() {
         </Reveal>
 
         <Reveal className="mt-10 grid gap-4 md:grid-cols-2 md:[grid-template-areas:'story_feature'_'stat_action'] lg:mt-14 lg:h-[42rem] lg:grid-cols-[1.15fr_1fr_1fr] lg:grid-rows-2 lg:[grid-template-areas:'story_stat_feature'_'story_action_feature']">
-          {/* Story: the shopper, with the promise set over a scrim at the foot. */}
+          {/* Story: three use cases told in turn, each with its own person
+              and look (see UseCaseStory). */}
           <Tile
-            {...story}
             index={0}
-            sizes="(min-width: 1024px) 34vw, (min-width: 768px) 50vw, 100vw"
-            className="aspect-[4/5] justify-between md:aspect-[3/4] md:[grid-area:story] lg:aspect-auto"
+            className="aspect-[4/5] md:aspect-[3/4] md:[grid-area:story] lg:aspect-auto"
           >
-            <div
-              aria-hidden="true"
-              className="absolute inset-x-0 bottom-0 -z-10 h-3/5 bg-linear-to-t from-hero-ink/90 via-hero-ink/45 to-transparent"
-            />
-            <p className="text-center text-sm font-medium text-hero-ink/70">{story.caption}</p>
-            <div>
-              <h3 className="max-w-xs font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
-                {story.statement}
-              </h3>
-              <p className="mt-4 text-sm text-white/70">
-                <strong className="font-semibold text-white">{story.tag.strong}</strong>,{" "}
-                {story.tag.rest}
-              </p>
-            </div>
+            <UseCaseStory {...story} />
           </Tile>
 
           {/* Stat: dark type, since the backdrop here is a pale blue. */}
