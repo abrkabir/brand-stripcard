@@ -75,14 +75,14 @@ export function HowCard({ step, index }) {
 
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[0.2em] left-[0.05em] font-display text-[42cqw] leading-none font-bold tracking-[-0.05em] text-brand-300/70 select-none"
+          className="pointer-events-none absolute -bottom-[0.2em] left-[0.05em] font-heading text-[42cqw] leading-none font-bold tracking-[-0.05em] text-brand-300/70 select-none"
         >
           {step.word}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col justify-center px-3 pb-4 sm:px-0 sm:py-4 sm:pr-5">
-        <h3 className="font-display text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.15] font-normal tracking-[-0.02em] text-headline">
+        <h3 className="font-heading text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.15] font-normal tracking-[-0.02em] text-headline">
           {step.title}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-content">{step.description}</p>

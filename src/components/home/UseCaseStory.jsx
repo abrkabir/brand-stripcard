@@ -317,7 +317,7 @@ function Copy({ slide }) {
           <span className="size-1.5 rounded-full bg-white" />
           {tag.strong}
         </p>
-        <h3 className="mt-3 max-w-xs font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+        <h3 className="mt-3 max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
           <Words text={statement} />
         </h3>
         <p data-meta className="mt-4 text-sm text-white/80">
@@ -336,7 +336,7 @@ function Copy({ slide }) {
         >
           {tag.strong}
         </p>
-        <h3 className="mt-4 max-w-xs font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+        <h3 className="mt-4 max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
           <Words text={statement} />
         </h3>
         <p data-meta className="mt-4 text-sm text-white/80">
@@ -348,7 +348,7 @@ function Copy({ slide }) {
 
   return (
     <>
-      <h3 className="max-w-xs font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+      <h3 className="max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
         <Words text={statement} />
       </h3>
       <p data-meta className="mt-4 text-sm text-white/70">

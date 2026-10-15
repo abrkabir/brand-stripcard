@@ -174,24 +174,25 @@
 }
 
 /* ── Fonts ────────────────────────────────────────────────────────────────── */
-/* `--font-merriweather-sans`, `--font-arimo` and `--font-inter-tight` are
+/* `--font-roboto-condensed`, `--font-arimo` and `--font-inter-tight` are
    injected on <html> by next/font (see app/layout.jsx); the tokens below wrap
    them with a fallback stack and are what the app actually uses.
 
-   Utilities: font-heading · font-body · font-display · font-condensed. `font-sans` aliases
+   Utilities: font-heading · font-body · font-display. `font-sans` aliases
    body so Tailwind's default sans matches the page. Swapping a family is two
    lines — the import in layout.jsx and the variable name here. No component
    names a font. */
 @theme {
-  --font-heading: var(--font-merriweather-sans), ui-sans-serif, system-ui,
-    sans-serif;
+  /* Heading: every title on the site. All h1–h6 take it by default (see
+     base.css), and titles set in other tags use `font-heading`, so changing
+     the heading font is this one line. Arial Narrow is the closest local
+     fallback, so the swap-in after load barely changes the line lengths. */
+  --font-heading: var(--font-roboto-condensed), "Arial Narrow", ui-sans-serif,
+    system-ui, sans-serif;
   --font-body: var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
-  /* Display: big statements only — the banner headline and its eyebrow.
-     Arimo is metric-compatible with Arial, so Arial is a shift-free fallback. */
+  /* Display: brand marks only, the StripCard wordmarks drawn on cards and the
+     store badges. Never a title. Arimo is metric-compatible with Arial. */
   --font-display: var(--font-arimo), Arial, ui-sans-serif, system-ui, sans-serif;
-  /* Condensed: poster capitals for a statement title (the app section).
-     Anton has one weight, so never bold it. */
-  --font-condensed: var(--font-anton), Impact, "Arial Narrow", sans-serif;
   --font-sans: var(--font-body);
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }

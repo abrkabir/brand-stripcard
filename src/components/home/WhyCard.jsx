@@ -132,7 +132,7 @@ export function WhyCard({ item, index, defaultOpen = false }) {
 
         {/* Pushed to the foot of the panel, so titles of one or two lines all
             sit on the same baseline across a row. */}
-        <h3 className="mt-auto pt-10 font-display text-[1.35rem] leading-tight font-semibold tracking-[-0.025em] text-headline lg:pt-12 lg:text-[1.45rem]">
+        <h3 className="mt-auto pt-10 font-heading text-[1.35rem] leading-tight font-semibold tracking-[-0.025em] text-headline lg:pt-12 lg:text-[1.45rem]">
           {item.title}
         </h3>
 

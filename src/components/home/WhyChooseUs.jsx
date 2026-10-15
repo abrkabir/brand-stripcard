@@ -30,7 +30,7 @@ export function WhyChooseUs() {
 
           <h2
             id="why-title"
-            className="mt-6 max-w-4xl font-display text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.16] font-medium tracking-[-0.025em] text-headline"
+            className="mt-6 max-w-4xl font-heading text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.16] font-medium tracking-[-0.025em] text-headline"
           >
             {title.map((line, i) => (
               <span key={i} className="block">

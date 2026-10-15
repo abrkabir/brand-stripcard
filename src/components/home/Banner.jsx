@@ -49,7 +49,7 @@ export function Banner() {
           <div className="lg:col-span-7 lg:row-span-3 lg:row-start-1 lg:-translate-y-12 lg:self-center">
             <Eyebrow className="animate-fade-up">{eyebrow}</Eyebrow>
 
-            <h1 className="mt-4 font-display text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-5">
+            <h1 className="mt-4 font-heading text-[clamp(2.25rem,5.2vw,4.5rem)] leading-[0.98] font-bold tracking-[-0.03em] text-white lg:mt-5">
               {headline.map((line, i) => (
                 <span
                   key={line}

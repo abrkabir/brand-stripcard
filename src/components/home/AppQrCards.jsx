@@ -43,7 +43,7 @@ export function AppQrCards({ stores, scanLabel, viewLabel }) {
                 className="group flex w-full cursor-pointer items-center justify-between gap-4 rounded-3xl border border-line bg-elevated p-5 text-left transition-[border-color,box-shadow,translate] duration-300 hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-soft"
               >
                 <span className="min-w-0">
-                  <span className="block font-display text-lg font-semibold tracking-[-0.01em] text-headline">
+                  <span className="block font-heading text-lg font-semibold tracking-[-0.01em] text-headline">
                     {scanLabel}
                   </span>
                   <span className="mt-1 flex items-center gap-1.5 text-xs text-muted">
@@ -96,7 +96,7 @@ export function AppQrCards({ stores, scanLabel, viewLabel }) {
             </p>
             <h3
               id="qr-title"
-              className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] text-headline"
+              className="mt-2 font-heading text-2xl font-semibold tracking-[-0.02em] text-headline"
             >
               Scan with your phone
             </h3>

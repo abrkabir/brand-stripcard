@@ -34,7 +34,7 @@ export function UseCases() {
             <Eyebrow>{eyebrow}</Eyebrow>
             <h2
               id="use-cases-title"
-              className="mt-5 max-w-2xl font-display text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
+              className="mt-5 max-w-2xl font-heading text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
             >
               {title}
             </h2>
@@ -63,7 +63,7 @@ export function UseCases() {
               <p className="text-xs font-semibold tracking-[0.14em] text-hero-ink/60 uppercase">
                 {stat.label}
               </p>
-              <p className="mt-1 font-display text-[clamp(2.5rem,4vw,3.5rem)] leading-none font-semibold tracking-[-0.04em] text-hero-ink">
+              <p className="mt-1 font-heading text-[clamp(2.5rem,4vw,3.5rem)] leading-none font-semibold tracking-[-0.04em] text-hero-ink">
                 {stat.value}
               </p>
             </div>
@@ -82,7 +82,7 @@ export function UseCases() {
               aria-hidden="true"
               className="absolute inset-0 -z-10 bg-linear-to-b from-hero-ink/65 via-hero-ink/10 to-hero-ink/55"
             />
-            <h3 className="max-w-[15rem] font-display text-xl leading-tight font-semibold text-balance text-white">
+            <h3 className="max-w-[15rem] font-heading text-xl leading-tight font-semibold text-balance text-white">
               {action.title}
             </h3>
             <Button
@@ -106,7 +106,7 @@ export function UseCases() {
             <p className="text-xs font-semibold tracking-[0.14em] text-white/55 uppercase">
               {feature.label}
             </p>
-            <h3 className="mt-3 max-w-xs font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
+            <h3 className="mt-3 max-w-xs font-heading text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.12] font-semibold tracking-[-0.02em] text-balance text-white">
               {feature.title}
             </h3>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/65">

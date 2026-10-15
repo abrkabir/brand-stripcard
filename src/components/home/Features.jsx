@@ -23,7 +23,7 @@ export function Features() {
             <ScrollRevealTitle
               id="features-title"
               parts={title}
-              className="mt-6 max-w-6xl font-display text-[clamp(1.375rem,2.7vw,2.25rem)] leading-[1.18] font-medium tracking-[-0.01em] text-balance text-headline uppercase"
+              className="mt-6 max-w-6xl font-heading text-[clamp(1.375rem,2.7vw,2.25rem)] leading-[1.18] font-medium tracking-[-0.01em] text-balance text-headline uppercase"
             />
           </div>
 

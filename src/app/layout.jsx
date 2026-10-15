@@ -1,4 +1,4 @@
-import { Anton, Arimo, Inter_Tight, Merriweather_Sans } from "next/font/google";
+import { Arimo, Inter_Tight, Roboto_Condensed } from "next/font/google";
 import "@/styles/globals.css";
 import { ScrollCalm } from "@/components/shared/ScrollCalm";
 import { ThemeProvider } from "@/lib/theme";
@@ -15,24 +15,16 @@ import { siteConfig } from "@/lib/site";
  * these in styles/variables.css, together with their fallback stacks.
  */
 
-/** Headings. Variable font, so the whole 300–800 axis ships in one file. */
-const headingFont = Merriweather_Sans({
-  variable: "--font-merriweather-sans",
+/** Headings: every title and h tag. Variable, so 100–900 ships in one file. */
+const headingFont = Roboto_Condensed({
+  variable: "--font-roboto-condensed",
   subsets: ["latin"],
   display: "swap",
 });
 
-/** Display — headlines. Variable, so 400–700 ships in one file. */
+/** Display: the StripCard wordmarks and store badges, never a title. */
 const displayFont = Arimo({
   variable: "--font-arimo",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-/** Condensed: poster-style capitals for the odd statement title. One weight. */
-const condensedFont = Anton({
-  variable: "--font-anton",
-  weight: "400",
   subsets: ["latin"],
   display: "swap",
 });
@@ -81,7 +73,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${headingFont.variable} ${displayFont.variable} ${condensedFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={`${headingFont.variable} ${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
       style={{ colorScheme: "light dark" }}
       suppressHydrationWarning
     >

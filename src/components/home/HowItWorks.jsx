@@ -42,7 +42,7 @@ export function HowItWorks() {
           <Eyebrow>{eyebrow}</Eyebrow>
           <h2
             id="how-title"
-            className="mt-5 font-display text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
+            className="mt-5 font-heading text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
           >
             {title.map((piece, i) => (
               <TitlePiece key={i} piece={piece} />

@@ -109,7 +109,7 @@ export function FeatureTabs({ tabs }) {
           key={tab.id}
           className="animate-fade-up flex flex-col justify-center px-6 py-10 sm:px-10 md:px-7 md:py-8 lg:px-12 lg:py-14"
         >
-          <h3 className="max-w-md font-display text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-semibold tracking-[-0.02em] text-headline">
+          <h3 className="max-w-md font-heading text-[clamp(1.5rem,2.4vw,2rem)] leading-tight font-semibold tracking-[-0.02em] text-headline">
             {tab.title}
           </h3>
           <p className="mt-4 max-w-md text-base leading-relaxed text-content">

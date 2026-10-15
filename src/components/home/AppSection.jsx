@@ -61,7 +61,7 @@ export async function AppSection() {
 
           <h2
             id="app-title"
-            className="mt-6 max-w-xl font-condensed text-[clamp(2.5rem,4.6vw,4rem)] leading-[1] font-normal tracking-[0] text-balance text-headline"
+            className="mt-6 max-w-xl font-heading text-[clamp(2.5rem,4.6vw,4rem)] leading-[1.02] font-semibold tracking-[-0.02em] text-balance text-headline"
           >
             {title}
           </h2>
