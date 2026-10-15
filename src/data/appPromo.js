@@ -1,3 +1,7 @@
+import phoneControls from "../../public/images/assets/app/phone-controls.webp";
+import phoneHome from "../../public/images/assets/app/phone-home.webp";
+import phoneInsights from "../../public/images/assets/app/phone-insights.webp";
+
 /**
  * The "get the app" section on the homepage. `AppSection` renders straight
  * from this.
@@ -11,7 +15,8 @@
  * reviews to quote.
  */
 export const appPromo = {
-  title: "Manage your money anywhere",
+  /** One string per line; the title always breaks after "money". */
+  title: ["Manage your money", "anywhere"],
   scanLabel: "Scan to get App",
   viewLabel: "Click & View QR",
   stores: [
@@ -31,12 +36,16 @@ export const appPromo = {
     },
   ],
   /**
-   * `app-mockup.png`, re-branded: caption cropped, scaled up 2x, a StripCard
-   * home screen drawn and perspective-fitted onto the phone, and the faded
-   * lettering behind it cleared. The originals stay beside it.
+   * The phones beside the copy (see AppPhones), in their starting places:
+   * front, back right, back left. Each is a transparent render of a phone
+   * with its screen, 760px wide; `screen` notes what each shows. Only
+   * `phonesLabel` is read out, for the group as a whole.
    */
-  image: {
-    src: "/images/assets/app/app-mockup-stripcard.webp",
-    alt: "A hand holding a phone with the StripCard app open, showing a balance, an orange virtual card and recent payments",
-  },
+  phones: [
+    { src: phoneHome, screen: "Home: the balance, an orange virtual card and recent payments" },
+    { src: phoneControls, screen: "Card controls: a monthly limit and switches for each card" },
+    { src: phoneInsights, screen: "Spending: the month by day and by category, and a blocked charge" },
+  ],
+  phonesLabel:
+    "The StripCard app on three phones: the home screen with a balance and an orange virtual card, card controls with limits and switches, and spending insights",
 };

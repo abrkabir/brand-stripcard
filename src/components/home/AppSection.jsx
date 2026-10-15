@@ -1,5 +1,5 @@
-import Image from "next/image";
 import QRCode from "qrcode";
+import { AppPhones } from "@/components/home/AppPhones";
 import { AppQrCards } from "@/components/home/AppQrCards";
 import { AppleIcon, GooglePlayIcon } from "@/components/icons";
 import { Reveal } from "@/components/shared/Reveal";
@@ -11,7 +11,8 @@ const STORE_ICONS = { apple: AppleIcon, googlePlay: GooglePlayIcon };
 /**
  * "Get the app" as two bordered panels of equal height. Left, centred: where
  * to get it, a poster-style title, a scan card per store with a real QR
- * code, and the store badges. Right: the app in hand, filling its panel.
+ * code, and the store badges. Right: the app on three phones that take
+ * turns in front.
  * Stacks on small screens.
  *
  * The QR codes are rendered to SVG on the server from each store's link, so
@@ -20,7 +21,7 @@ const STORE_ICONS = { apple: AppleIcon, googlePlay: GooglePlayIcon };
  * straight to the stores, for visitors already on a phone. Everything fades up once, the first time it scrolls into view.
  */
 export async function AppSection() {
-  const { title, scanLabel, viewLabel, stores, image } = appPromo;
+  const { title, scanLabel, viewLabel, stores, phones, phonesLabel } = appPromo;
 
   const qrs = await Promise.all(
     stores.map((store) =>
@@ -61,9 +62,14 @@ export async function AppSection() {
 
           <h2
             id="app-title"
-            className="mt-6 max-w-xl font-heading text-[clamp(2.5rem,4.6vw,4rem)] leading-[1.02] font-semibold tracking-[-0.02em] text-balance text-headline"
+            className="mt-6 max-w-xl font-heading text-[clamp(1.75rem,2.6vw,2.375rem)] leading-[1.1] font-semibold tracking-[-0.02em] text-headline"
           >
-            {title}
+            {title.map((line, i) => (
+              <span key={line}>
+                {i > 0 && <br />}
+                {line}
+              </span>
+            ))}
           </h2>
 
           {/* Scan cards; each opens its QR code in a modal. */}
@@ -74,7 +80,7 @@ export async function AppSection() {
           />
 
           {/* Store badges. */}
-          <ul className="mt-8 flex flex-wrap justify-center gap-3">
+          <ul className="mt-7 flex flex-wrap justify-center gap-2.5">
             {stores.map((store) => {
               const Icon = STORE_ICONS[store.icon];
               return (
@@ -83,14 +89,14 @@ export async function AppSection() {
                     href={store.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-13 items-center gap-2.5 rounded-xl border border-black bg-black px-4 text-left text-white transition-[translate,opacity] duration-300 hover:-translate-y-0.5 hover:opacity-90 dark:border-white/20"
+                    className="flex h-11 items-center gap-2 rounded-full border border-black bg-black pr-5 pl-4 text-left text-white transition-[translate,opacity] duration-300 hover:-translate-y-0.5 hover:opacity-90 dark:border-white/20"
                   >
-                    {Icon && <Icon aria-hidden="true" className="size-6" />}
+                    {Icon && <Icon aria-hidden="true" className="size-5" />}
                     <span className="leading-none">
-                      <span className="block text-[10px] tracking-[0.02em] uppercase">
+                      <span className="block text-[9px] tracking-[0.02em] uppercase">
                         {store.badge.small}
                       </span>
-                      <span className="mt-0.5 block font-display text-lg font-semibold tracking-[-0.01em]">
+                      <span className="mt-0.5 block font-display text-[0.9375rem] font-semibold tracking-[-0.01em]">
                         {store.badge.large}
                       </span>
                     </span>
@@ -101,16 +107,13 @@ export async function AppSection() {
           </ul>
         </Reveal>
 
-        {/* The app, in hand. The grid stretches this panel to the content
-            panel's height; the photo covers it, anchored on the phone. */}
-        <Reveal className="relative min-h-[28rem] translate-y-6 overflow-hidden rounded-2xl border border-line bg-[#fdf6ee] opacity-0 transition-[opacity,translate] delay-150 duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100 lg:col-span-5 lg:min-h-0">
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="(min-width: 1024px) 40vw, 100vw"
-            className="object-cover object-[50%_35%]"
-          />
+        {/* The app on three phones that take turns in front (see AppPhones).
+            The grid stretches this panel to the content panel's height, and
+            the phones size themselves to whatever room that leaves. Its
+            backdrop is the brand orange in rgba washes: over warm cream in
+            the light theme, over black in the dark one. */}
+        <Reveal className="relative min-h-[32rem] translate-y-6 overflow-hidden rounded-2xl border border-line bg-[#fdf6ee] bg-[radial-gradient(90%_60%_at_50%_100%,rgba(242,106,27,0.2)_0%,rgba(242,106,27,0.06)_45%,rgba(242,106,27,0)_75%),linear-gradient(160deg,rgba(242,106,27,0.12)_0%,rgba(242,106,27,0.03)_35%,rgba(242,106,27,0)_60%)] dark:border-black dark:bg-black dark:bg-[radial-gradient(90%_60%_at_50%_100%,rgba(242,106,27,0.42)_0%,rgba(242,106,27,0.12)_45%,rgba(0,0,0,0)_75%),linear-gradient(160deg,rgba(242,106,27,0.28)_0%,rgba(242,106,27,0.06)_35%,rgba(0,0,0,0)_60%)] opacity-0 transition-[opacity,translate] delay-150 duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100 lg:col-span-5 lg:min-h-0">
+          <AppPhones label={phonesLabel} phones={phones} />
         </Reveal>
       </Container>
     </section>
