@@ -14,9 +14,14 @@ export const banner = {
 
   cta: { label: "Explore Products", href: "/products" },
 
+  /**
+   * `hero_img1.webp`, rebranded: the receipt on the phone reads "$4,200.00,
+   * Payment approved, StripCard", the button "Continue", and the card is an
+   * orange StripCard with its own number. The original stays beside it.
+   */
   image: {
-    src: "/images/assets/banner/hero_img1.webp",
-    alt: "A contactless card tapped against a phone, approving a ৳4,200 payment",
+    src: "/images/assets/banner/hero-stripcard.webp",
+    alt: "An orange StripCard tapped against a phone, approving a $4,200.00 payment",
     width: 2400,
     height: 1340,
   },
