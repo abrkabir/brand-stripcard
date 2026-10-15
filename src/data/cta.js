@@ -3,8 +3,8 @@
  * (before the FAQ) and at the foot of the About, Services and Use cases
  * pages.
  *
- * `title` is two phrases of pieces, set as one line in the dark band:
- * `accent` pieces are in the brand colour, the rest in white. `card` is the
+ * `title` is two phrases of pieces, set as one line in the band: `accent`
+ * pieces are in the brand colour, the rest in the heading colour. `card` is the
  * benefit and tags at the top of the tall card on the left. `primary` and
  * `secondary` are the two buttons under the title, and `note` the line
  * under them.
