@@ -3,7 +3,7 @@
  * Server Component importing a plain value from one gets a client reference
  * rather than the value. The root layout needs the real string.
  */
-export const THEME_COOKIE = "adestate-theme";
+export const THEME_COOKIE = "stripcard-theme";
 
 /** Matches a saved choice; anything else in the cookie is ignored. */
 export const THEME_COOKIE_PATTERN = `(?:^|; )${THEME_COOKIE}=(dark|light)`;
