@@ -34,6 +34,8 @@
   /* A card bobbing where it stands: up a little and back. `translate`, not
      `transform`, so it stacks on whatever transform angles the card. */
   --animate-card-bob: card-bob 6s ease-in-out infinite;
+  /* The auth image shell's photo, easing in and out of a slight zoom. */
+  --animate-shell-breathe: shell-breathe 18s ease-in-out infinite alternate;
   /* A glow wandering slowly, back and forth, behind a page banner. */
   --animate-glow-drift: glow-drift 16s ease-in-out infinite alternate;
 
@@ -75,6 +77,11 @@
   0%, 12%   { width: 0.8em; }
   45%, 62%  { width: 2.6em; }
   95%, 100% { width: 0.8em; }
+}
+
+@keyframes shell-breathe {
+  from { scale: 1; }
+  to   { scale: 1.08; }
 }
 
 /* `transform`, so it composes with the `translate` that centres the glow. */
