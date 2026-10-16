@@ -1,14 +1,17 @@
 import { notFound } from "next/navigation";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { PageHeader } from "@/components/dashboard/PageHeader";
 import { SectionIcon } from "@/components/dashboard/SectionIcon";
 import { Button } from "@/components/ui/Button";
 import { dashboardPages } from "@/data/dashboard";
 
-/** One page per sidebar link, built at export time; any other slug is a 404. */
+/** One page per sidebar link, plus Help and the premium plan, built at export time; any other slug is a 404. */
 export const dynamicParams = false;
 
+/** Pages built as routes of their own, so not here. */
+const OWN_ROUTE = new Set(["transactions"]);
+
 export function generateStaticParams() {
-  return dashboardPages.map((page) => ({ section: page.slug }));
+  return dashboardPages.filter((page) => !OWN_ROUTE.has(page.slug)).map((page) => ({ section: page.slug }));
 }
 
 export async function generateMetadata({ params }) {
@@ -22,9 +25,9 @@ export async function generateMetadata({ params }) {
 }
 
 /**
- * A dashboard page that is not built yet: the shell's header with its name,
- * then a calm empty state saying what will live here and a way back. Each one
- * gets replaced by the real screen as the backend for it lands.
+ * A dashboard page that is not built yet: a way back and its name, then a
+ * calm empty state saying what will live here. Each one gets replaced by the
+ * real screen as the backend for it lands.
  */
 export default async function DashboardSectionPage({ params }) {
   const { section } = await params;
@@ -33,11 +36,11 @@ export default async function DashboardSectionPage({ params }) {
 
   return (
     <>
-      <DashboardHeader title={page.label} />
+      <PageHeader title={page.label} back={{ href: "/dashboard", label: "Back to dashboard" }} />
 
       <section
         aria-labelledby="section-empty-title"
-        className="mt-8 grid min-h-[26rem] place-items-center rounded-3xl border border-dashed border-line bg-surface/60 px-6 py-16 text-center lg:mt-10"
+        className="grid min-h-[28rem] place-items-center rounded-[1.75rem] bg-card px-6 py-16 text-center"
       >
         <div className="max-w-md">
           <span className="mx-auto grid size-16 place-items-center rounded-2xl bg-brand-50 text-brand dark:bg-brand/15">

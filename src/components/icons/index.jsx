@@ -63,6 +63,50 @@ export const ArrowRightIcon = (p) => (
   </Svg>
 );
 
+export const SettingsIcon = (p) => (
+  <Svg {...p}>
+    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+    <circle cx="12" cy="12" r="3" />
+  </Svg>
+);
+
+/** An eye; `off` strikes it through. */
+export const EyeIcon = ({ off, ...p }) => (
+  <Svg {...p}>
+    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+    <circle cx="12" cy="12" r="2.8" />
+    {off && <path d="m4 4 16 16" />}
+  </Svg>
+);
+
+/** A cup with a handle and two curls of steam, on a saucer. */
+export const CoffeeIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 9h12v4.5a5.5 5.5 0 0 1-5.5 5.5h-1A5.5 5.5 0 0 1 4 13.5V9Z" />
+    <path d="M16 10.5h1.25a2.75 2.75 0 0 1 0 5.5H16" />
+    <path d="M8 3.5c-.6.7-.6 1.8 0 2.5M12 3.5c-.6.7-.6 1.8 0 2.5" />
+    <path d="M3 21.5h14" />
+  </Svg>
+);
+
+/** A fuel pump with its window, and the nozzle on its hose. */
+export const FuelIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4.5 21V5a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v16" />
+    <path d="M3 21h12" />
+    <rect x="6.5" y="6" width="5" height="4" rx="1" />
+    <path d="M13.5 11h1.75A1.75 1.75 0 0 1 17 12.75V16a1.5 1.5 0 0 0 3 0V8.5l-2.5-2.5" />
+  </Svg>
+);
+
+/** A long, slim arrow: edge to edge with a small head. */
+export const LongArrowRightIcon = (p) => (
+  <Svg {...p}>
+    <path d="M2 12h20" />
+    <path d="m18 8 4 4-4 4" />
+  </Svg>
+);
+
 export const MenuIcon = (p) => (
   <Svg {...p}>
     <path d="M4 7h16" />
@@ -239,6 +283,57 @@ export const LogOutIcon = (p) => (
   <Svg {...p}>
     <path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14" />
     <path d="M10 8l-4 4 4 4M6 12h10" />
+  </Svg>
+);
+
+export const ArrowUpRightIcon = (p) => (
+  <Svg {...p}>
+    <path d="M7 17 17 7" />
+    <path d="M8.5 7H17v8.5" />
+  </Svg>
+);
+
+export const DownloadIcon = (p) => (
+  <Svg {...p}>
+    <path d="M12 4v10.5M7.5 10 12 14.5 16.5 10" />
+    <path d="M4.5 15.5v3A1.5 1.5 0 0 0 6 20h12a1.5 1.5 0 0 0 1.5-1.5v-3" />
+  </Svg>
+);
+
+export const UploadIcon = (p) => (
+  <Svg {...p}>
+    <path d="M12 14.5V4M7.5 8.5 12 4l4.5 4.5" />
+    <path d="M4.5 15.5v3A1.5 1.5 0 0 0 6 20h12a1.5 1.5 0 0 0 1.5-1.5v-3" />
+  </Svg>
+);
+
+export const SwapIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 8h14M14.5 4.5 18 8l-3.5 3.5" />
+    <path d="M20 16H6M9.5 12.5 6 16l3.5 3.5" />
+  </Svg>
+);
+
+export const BarChartIcon = (p) => (
+  <Svg {...p}>
+    <path d="M6 20v-6M12 20V5M18 20v-9" />
+  </Svg>
+);
+
+export const HelpCircleIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M9.6 9.4a2.5 2.5 0 0 1 4.9.7c0 1.7-2.5 2.1-2.5 3.7" />
+    <path d="M12 16.9h.01" />
+  </Svg>
+);
+
+/** Three stacked dots, for a handle or an overflow menu. */
+export const MoreVerticalIcon = (p) => (
+  <Svg fill="currentColor" stroke="none" {...p}>
+    <circle cx="12" cy="6" r="1.6" />
+    <circle cx="12" cy="12" r="1.6" />
+    <circle cx="12" cy="18" r="1.6" />
   </Svg>
 );
 

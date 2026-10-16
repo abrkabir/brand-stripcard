@@ -101,16 +101,11 @@
   --color-danger:  #dc2626;
   --color-success: #16a34a;
 
-  /* ── Tints ─────────────────────────────────────────────────────────────── */
-  /*   Soft grounds for tiles that sit side by side and need telling apart    */
-  /*   (the dashboard's card tiles), each with an `-ink` for type set on it.  */
-  /*   bg-tint-violet text-tint-violet-ink · …-green · …-amber                */
-  --color-tint-violet:     #ece7fb;
-  --color-tint-violet-ink: #5b3fc4;
-  --color-tint-green:      #e2f3e7;
-  --color-tint-green-ink:  #1f7a43;
-  --color-tint-amber:      #faf0d6;
-  --color-tint-amber-ink:  #8f6208;
+  /* ── App surfaces ──────────────────────────────────────────────────────── */
+  /*   canvas → the signed-in app's ground, behind its floating cards         */
+  /*   card   → those cards, the top bar and the sidebar                      */
+  --color-canvas: #eef0f4;
+  --color-card:   #ffffff;
 }
 
 /* ── Dark palette ─────────────────────────────────────────────────────────── */
@@ -141,13 +136,9 @@
   --dark-danger:   #f87171;
   --dark-success:  #4ade80;
 
-  /* Tints: the same hues, deep and quiet, with light inks. */
-  --dark-tint-violet:     #1b1630;
-  --dark-tint-violet-ink: #b9a7ff;
-  --dark-tint-green:      #10231a;
-  --dark-tint-green-ink:  #7fdc9f;
-  --dark-tint-amber:      #261e0c;
-  --dark-tint-amber-ink:  #f1c766;
+  /* App surfaces: black ground, cards lifted just enough to read as cards. */
+  --dark-canvas: #000000;
+  --dark-card:   #121212;
 }
 
 /* 1 · Explicit choice. Unlayered, so it beats the :root tokens from @theme. */
@@ -163,12 +154,8 @@
   --color-brand:    var(--dark-brand);
   --color-danger:   var(--dark-danger);
   --color-success:  var(--dark-success);
-  --color-tint-violet:     var(--dark-tint-violet);
-  --color-tint-violet-ink: var(--dark-tint-violet-ink);
-  --color-tint-green:      var(--dark-tint-green);
-  --color-tint-green-ink:  var(--dark-tint-green-ink);
-  --color-tint-amber:      var(--dark-tint-amber);
-  --color-tint-amber-ink:  var(--dark-tint-amber-ink);
+  --color-canvas:   var(--dark-canvas);
+  --color-card:     var(--dark-card);
 }
 
 /* 2 · No choice yet — follow the OS until the visitor picks a side. */
@@ -185,12 +172,8 @@
     --color-brand:    var(--dark-brand);
     --color-danger:   var(--dark-danger);
     --color-success:  var(--dark-success);
-    --color-tint-violet:     var(--dark-tint-violet);
-    --color-tint-violet-ink: var(--dark-tint-violet-ink);
-    --color-tint-green:      var(--dark-tint-green);
-    --color-tint-green-ink:  var(--dark-tint-green-ink);
-    --color-tint-amber:      var(--dark-tint-amber);
-    --color-tint-amber-ink:  var(--dark-tint-amber-ink);
+    --color-canvas:   var(--dark-canvas);
+    --color-card:     var(--dark-card);
   }
 }
 

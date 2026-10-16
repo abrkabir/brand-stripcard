@@ -1,14 +1,8 @@
-import {
-  siAirbnb,
-  siBookingdotcom,
-  siFigma,
-  siNetflix,
-  siNotion,
-  siShopify,
-  siSpotify,
-  siUber,
-} from "simple-icons";
-import avatar from "../../public/images/testimonials/customer-maya.webp";
+import { siAirbnb, siApple, siNetflix, siSpotify, siUber } from "simple-icons";
+import aisha from "../../public/images/testimonials/customer-aisha.webp";
+import daniel from "../../public/images/testimonials/customer-daniel.webp";
+import maya from "../../public/images/testimonials/customer-maya.webp";
+import sofia from "../../public/images/testimonials/customer-sofia.webp";
 
 /**
  * Everything the dashboard shows. DEMO DATA: there is no account behind it
@@ -16,14 +10,17 @@ import avatar from "../../public/images/testimonials/customer-maya.webp";
  * components keep the same shapes.
  */
 
-export const dashboardUser = { name: "Maya Collins", short: "Maya C.", avatar };
+export const dashboardUser = { name: "Maya Collins", first: "Maya", email: "maya@example.com", avatar: maya };
+
+/* ── Navigation ──────────────────────────────────────────────────────────── */
 
 /**
  * The sidebar, in groups. A group without a `title` sits above the first
- * heading. `icon` names an icon in the sidebar's map (see DashboardSidebar).
- * Every item but the first opens its own page under /dashboard, built from
- * this list (see app/(dashboard)/dashboard/[section]); `description` is the
- * line that page opens with.
+ * heading; a `collapsible` group shows as one item, its `title` and `icon`,
+ * that opens out to its pages. `icon` names an icon in SectionIcon. Every item
+ * but the first opens its own page under /dashboard, built from this list (see
+ * app/(dashboard)/dashboard/[section]); `description` is the line that page
+ * opens with.
  */
 export const dashboardNav = [
   {
@@ -46,7 +43,9 @@ export const dashboardNav = [
     ],
   },
   {
-    title: "Account",
+    title: "Settings",
+    icon: "settings",
+    collapsible: true,
     items: [
       { label: "My Profile", href: "/dashboard/profile", icon: "userCircle", description: "Your name, contact details and preferences." },
       { label: "KYC Verification", href: "/dashboard/kyc-verification", icon: "shield", description: "Verify your identity to unlock higher limits." },
@@ -55,112 +54,280 @@ export const dashboardNav = [
   },
 ];
 
-/** Every page the sidebar links to except the dashboard itself, by slug. */
-export const dashboardPages = dashboardNav
-  .flatMap((group) => group.items)
-  .filter((item) => item.href !== "/dashboard")
-  .map((item) => ({ ...item, slug: item.href.split("/").pop() }));
+/** Help: at the foot of the sidebar and in the top bar, not in a group. */
+export const dashboardHelp = {
+  label: "Help",
+  href: "/dashboard/help",
+  icon: "help",
+  description: "Answers to common questions, and a direct line to our team.",
+};
+
+/** The premium plan's page: not in the sidebar; search finds it. */
+export const dashboardUpgrade = {
+  label: "Premium plan",
+  href: "/dashboard/upgrade",
+  icon: "sparkles",
+  description: "Higher limits, more cards and priority support.",
+};
+
+/** Every page under /dashboard, by slug: the sidebar's pages, Help and the premium plan. */
+export const dashboardPages = [
+  ...dashboardNav.flatMap((group) => group.items).filter((item) => item.href !== "/dashboard"),
+  dashboardHelp,
+  dashboardUpgrade,
+].map((item) => ({ ...item, slug: item.href.split("/").pop() }));
+
+/** The top bar's tabs: the places people go most. */
+export const dashboardTabs = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Transfer", href: "/dashboard/transfer-money" },
+  { label: "Cards", href: "/dashboard/virtual-card" },
+  { label: "Transactions", href: "/dashboard/transactions" },
+  { label: "Help", href: "/dashboard/help" },
+];
 
 export const dashboardNotifications = [
-  { id: 1, title: "Payment blocked", text: "Merchant lock stopped a $89.00 charge on •••• 7718.", when: "2 min ago" },
-  { id: 2, title: "Card frozen", text: "Your Travel card •••• 3302 is frozen until you unfreeze it.", when: "Yesterday" },
+  { id: 1, title: "Payment blocked", text: "Merchant lock stopped a $65.00 charge at the Apple Store.", when: "2 days ago" },
+  { id: 2, title: "Money received", text: "Daniel Brooks sent you $50.00.", when: "Today" },
 ];
 
-/* ── Balance ─────────────────────────────────────────────────────────────── */
-
-export const balanceRanges = [
-  { id: "1d", label: "1D" },
-  { id: "1w", label: "1W" },
-  { id: "1m", label: "1M" },
-  { id: "1y", label: "1Y" },
-  { id: "all", label: "All" },
-];
-
-/** A smooth, repeatable walk, so the demo chart is the same on every load. */
-function walk(count, start, end, wobble, seed) {
-  let s = seed;
-  const rand = () => {
-    s = (s * 9301 + 49297) % 233280;
-    return s / 233280;
-  };
-  return Array.from({ length: count }, (_, i) => {
-    const t = i / (count - 1);
-    const trend = start + (end - start) * t;
-    return Math.round((trend + (rand() - 0.5) * wobble + Math.sin(i * 1.3) * wobble * 0.3) * 100) / 100;
-  });
-}
-
-const LABELS = {
-  "1d": Array.from({ length: 13 }, (_, i) => `${String(8 + i).padStart(2, "0")}:00`),
-  "1w": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].flatMap((d) => [`${d} am`, `${d} pm`]),
-  "1m": Array.from({ length: 30 }, (_, i) => `Oct ${i + 1}`),
-  "1y": ["Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
-  all: ["2022", "Q2", "Q3", "Q4", "2023", "Q2", "Q3", "Q4", "2024", "Q2", "Q3", "Q4", "2025", "Q2", "Q3", "Q4", "2026", "Q2", "Q3", "Q4"],
-};
-
-const RAW = {
-  "1d": walk(13, 17410, 17643.41, 160, 3),
-  "1w": walk(14, 16820, 17643.41, 420, 7),
-  "1m": walk(30, 15200, 17643.41, 700, 11),
-  "1y": walk(12, 9800, 17643.41, 1300, 17),
-  all: walk(20, 2400, 17643.41, 1600, 23),
-};
-
-/** The series for each range: `{ label, value }` points, oldest first. */
-export const balanceSeries = Object.fromEntries(
-  Object.entries(RAW).map(([id, values]) => {
-    const points = values.map((value, i) => ({ label: LABELS[id][i], value }));
-    points[points.length - 1].value = 17643.41;
-    return [id, points];
-  }),
-);
-
-/* ── Cards ───────────────────────────────────────────────────────────────── */
+/* ── Overview ────────────────────────────────────────────────────────────── */
 
 /**
- * The virtual cards, each on its own tint (violet · green · amber).
- * `spent` and `limit` are this month's figures.
+ * The virtual cards: `purpose` is what each pays for, `limit` the most it may
+ * spend in a month and `status` whether it can be used.
  */
-export const dashboardCards = [
-  { id: "subs", name: "Subscriptions", last4: "7718", spent: 248.5, limit: 500, tint: "violet", icon: "card" },
-  { id: "travel", name: "Travel", last4: "3302", spent: 1236.4, limit: 2000, tint: "green", icon: "globe" },
-  { id: "shop", name: "Shopping", last4: "4821", spent: 412.75, limit: 1500, tint: "amber", icon: "tag" },
+export const myCards = [
+  {
+    id: "subs",
+    name: "Subscriptions",
+    last4: "7718",
+    purpose: "Pays for Netflix, Spotify and 3 more plans",
+    limit: 500,
+    status: "Active",
+  },
+  {
+    id: "travel",
+    name: "Travel",
+    last4: "3302",
+    purpose: "Flights, hotels and rides on trips abroad",
+    limit: 2000,
+    status: "Active",
+  },
+  {
+    id: "shop",
+    name: "Shopping",
+    last4: "4821",
+    purpose: "Online shopping, kept to Amazon and eBay",
+    limit: 800,
+    status: "Frozen",
+  },
 ];
 
-/* ── Transactions ────────────────────────────────────────────────────────── */
-
-export const transactionPeriods = [
-  { id: "week", label: "This week" },
-  { id: "month", label: "This month" },
+/**
+ * Money moved this month, one card each: `kind` picks the icon, `value` is
+ * the total, `change` is against last month, and `latest` the most recent
+ * one.
+ */
+export const moneyStats = [
+  {
+    id: "added",
+    kind: "add",
+    label: "Add Money",
+    value: 4360,
+    change: 0.19,
+    latest: { text: "Latest, from your bank", amount: 500 },
+    noun: "money in",
+    action: "Add money",
+    href: "/dashboard/add-money",
+  },
+  {
+    id: "sent",
+    kind: "transfer",
+    label: "Transfer Money",
+    value: 1980.4,
+    change: 0.064,
+    latest: { text: "Latest, to Aisha Bello", amount: 35, avatar: aisha },
+    noun: "transfers",
+    action: "Transfer money",
+    href: "/dashboard/transfer-money",
+  },
+  {
+    id: "withdrawn",
+    kind: "withdraw",
+    label: "Withdraw Money",
+    value: 750,
+    change: -0.12,
+    latest: { text: "Latest, to bank •••• 2210", amount: 250 },
+    noun: "withdrawals",
+    action: "Withdraw money",
+    href: "/dashboard/withdraw-money",
+  },
 ];
 
-/** How this week's spending compares with last week's, as a share. */
-export const spendingChange = -0.084;
+/** The wallet: its total balance. */
+export const wallet = {
+  balance: 17643.41,
+};
+
+/**
+ * Money added to and withdrawn from the wallet each day, a month at a time,
+ * newest first, for the overview's chart: `added[i]` and `withdrawn[i]` are
+ * day i + 1's totals in dollars. The current month runs to today, and its
+ * totals are the stat cards' (September is their "last month").
+ */
+export const moneyFlow = [
+  {
+    id: "2026-10",
+    label: "October 2026",
+    short: "Oct",
+    year: 2026,
+    added: [290, 250, 426, 219, 344, 259, 153, 229, 121, 381, 141, 165, 283, 443, 238, 418],
+    withdrawn: [33, 39, 61, 45, 53, 64, 39, 63, 68, 72, 25, 32, 46, 48, 44, 18],
+  },
+  {
+    id: "2026-09",
+    label: "September 2026",
+    short: "Sep",
+    year: 2026,
+    added: [
+      88, 110, 80, 94, 95, 50, 51, 159, 99, 104, 225, 142, 185, 239, 124, 60, 98, 116, 91, 125, 135,
+      71, 180, 162, 187, 71, 175, 108, 119, 121
+    ],
+    withdrawn: [
+      22, 27, 33, 42, 40, 50, 16, 32, 47, 33, 35, 12, 19, 14, 22, 26, 12, 21, 25, 51, 95, 19, 38,
+      15, 25, 11, 8, 29, 15, 18
+    ],
+  },
+  {
+    id: "2026-08",
+    label: "August 2026",
+    short: "Aug",
+    year: 2026,
+    added: [
+      97, 169, 176, 201, 94, 91, 127, 69, 108, 51, 90, 68, 88, 118, 189, 164, 73, 108, 82, 301, 132,
+      117, 112, 108, 139, 142, 93, 188, 144, 188, 153
+    ],
+    withdrawn: [
+      25, 33, 40, 22, 44, 47, 49, 24, 19, 77, 46, 22, 27, 20, 34, 39, 26, 52, 19, 56, 61, 25, 50,
+      39, 49, 19, 26, 62, 29, 22, 17
+    ],
+  },
+];
 
 const brand = (icon) => ({ title: icon.title, path: icon.path });
 
 /**
- * Recent payments, newest first. `amount` is negative for money out.
- * `period` is the narrowest filter the row still belongs to.
+ * Where the cards have been used: the countries paid in, most used first (by
+ * ISO code, with where to pin each on the map), how many places, the kinds of
+ * place and the services paid most (`icon` names an icon, `logo` is a brand's
+ * mark, `count` how many payments), and how many countries the cards work in
+ * at all.
  */
-export const transactions = [
-  { id: "t1", merchant: brand(siSpotify), category: "Music", card: "subs", date: "Oct 15", amount: -10.99, status: "completed", period: "week" },
-  { id: "t2", merchant: brand(siUber), category: "Rides", card: "travel", date: "Oct 15", amount: -24.6, status: "pending", period: "week" },
-  { id: "t3", merchant: brand(siNotion), category: "Software", card: "subs", date: "Oct 14", amount: -96, status: "completed", period: "week" },
-  { id: "t4", merchant: brand(siShopify), category: "Online store", card: "shop", date: "Oct 13", amount: -89, status: "blocked", period: "week" },
-  { id: "t5", merchant: brand(siAirbnb), category: "Stays", card: "travel", date: "Oct 12", amount: -412.3, status: "completed", period: "week" },
-  { id: "t6", merchant: brand(siNetflix), category: "Streaming", card: "subs", date: "Oct 6", amount: -15.49, status: "completed", period: "month" },
-  { id: "t7", merchant: brand(siFigma), category: "Design tools", card: "subs", date: "Oct 3", amount: -45, status: "completed", period: "month" },
-  { id: "t8", merchant: brand(siBookingdotcom), category: "Hotels", card: "travel", date: "Oct 2", amount: -268.9, status: "completed", period: "month" },
+export const coverage = {
+  places: 48,
+  worldwide: 180,
+  countries: [
+    { code: "US", name: "United States", lat: 39, lon: -98 },
+    { code: "GB", name: "United Kingdom", lat: 52.5, lon: -1.5 },
+    { code: "FR", name: "France", lat: 46.5, lon: 2.5 },
+    { code: "AE", name: "United Arab Emirates", lat: 24, lon: 54.4 },
+    { code: "JP", name: "Japan", lat: 36.2, lon: 138.3 },
+    { code: "CA", name: "Canada", lat: 54, lon: -106 },
+    { code: "MX", name: "Mexico", lat: 23.5, lon: -102 },
+    { code: "BR", name: "Brazil", lat: -10, lon: -52 },
+    { code: "ZA", name: "South Africa", lat: -29, lon: 24.5 },
+    { code: "IN", name: "India", lat: 22, lon: 79 },
+    { code: "SG", name: "Singapore", lat: 1.35, lon: 103.8 },
+    { code: "AU", name: "Australia", lat: -25, lon: 134 },
+  ],
+  spots: [
+    { label: "Coffee shops", icon: "coffee", count: 14 },
+    { label: "Fuel stations", icon: "fuel", count: 6 },
+    { label: "Apple Pay", logo: brand(siApple) },
+    { label: "Netflix", logo: brand(siNetflix) },
+    { label: "Spotify", logo: brand(siSpotify) },
+    { label: "Airbnb", logo: brand(siAirbnb) },
+  ],
+};
+
+export const historyFilters = [
+  { id: "all", label: "All" },
+  { id: "in", label: "Money in" },
+  { id: "out", label: "Money out" },
 ];
 
-/* ── Rewards ─────────────────────────────────────────────────────────────── */
-
-export const rewardsPromo = {
-  before: "Earn",
-  highlight: "2%",
-  after: "cashback with StripCard Rewards!",
-  text: "Get money back on every card payment, paid into your balance each month.",
-  cta: "Join rewards",
-  joined: "You're in",
-};
+/**
+ * Every transaction, newest first, for the transactions page: people (with a
+ * photo) and merchants (with their logo). `kind` says what it was and `card` which card paid (none for
+ * money moved through the wallet). `amount` is positive for money in, and
+ * `status` is completed, pending, or blocked (a card's controls stopped it).
+ */
+export const history = [
+  {
+    id: "h1",
+    name: "Daniel Brooks",
+    avatar: daniel,
+    kind: "Money received",
+    card: null,
+    date: "16 Oct 2026",
+    time: "10:30 AM",
+    amount: 50,
+    status: "completed",
+  },
+  {
+    id: "h2",
+    name: "Spotify",
+    logo: brand(siSpotify),
+    kind: "Subscription",
+    card: { name: "Subscriptions", last4: "7718" },
+    date: "15 Oct 2026",
+    time: "9:12 AM",
+    amount: -10.99,
+    status: "completed",
+  },
+  {
+    id: "h3",
+    name: "Aisha Bello",
+    avatar: aisha,
+    kind: "Money sent",
+    card: null,
+    date: "15 Oct 2026",
+    time: "12:00 PM",
+    amount: -35,
+    status: "completed",
+  },
+  {
+    id: "h4",
+    name: "Apple Store",
+    logo: brand(siApple),
+    kind: "Online purchase",
+    card: { name: "Shopping", last4: "4821" },
+    date: "14 Oct 2026",
+    time: "4:45 PM",
+    amount: -65,
+    status: "blocked",
+  },
+  {
+    id: "h5",
+    name: "Uber",
+    logo: brand(siUber),
+    kind: "Ride",
+    card: { name: "Travel", last4: "3302" },
+    date: "13 Oct 2026",
+    time: "6:40 PM",
+    amount: -24.6,
+    status: "pending",
+  },
+  {
+    id: "h6",
+    name: "Sofia Lindqvist",
+    avatar: sofia,
+    kind: "Money received",
+    card: null,
+    date: "12 Oct 2026",
+    time: "3:15 PM",
+    amount: 120,
+    status: "completed",
+  },
+];

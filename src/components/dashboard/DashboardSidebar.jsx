@@ -3,32 +3,39 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { SectionIcon } from "@/components/dashboard/SectionIcon";
-import { ChevronRightIcon, CloseIcon, LogOutIcon } from "@/components/icons";
-import { dashboardNav } from "@/data/dashboard";
+import { ArrowRightIcon, ChevronDownIcon, CloseIcon, LogOutIcon, PlusIcon } from "@/components/icons";
+import { dashboardHelp, dashboardNav } from "@/data/dashboard";
 import { useDesktop } from "@/hooks/useDesktop";
 import { cn } from "@/lib/cn";
 import mark from "../../../public/images/logo/favicon_brand.png";
-import wordmark from "../../../public/images/logo/web_logo_white.png";
+import logoDark from "../../../public/images/logo/web_logo_dark.png";
+import logoLight from "../../../public/images/logo/web_logo_light.png";
 
 /**
- * The dashboard's sidebar, on the dark frame: the StripCard mark and
- * wordmark, the links in titled groups, and log out at the foot. The link for
- * the page you are on is lit.
+ * The dashboard's sidebar: a floating card under the top bar with the links in
+ * groups, and at its foot Help, Log out and a nudge to add a card.
+ * The page you are on sits on a soft brand tint, in deep orange. Group titles
+ * are for screen readers only; on screen the links run as one even list, but
+ * for Settings: one item that opens out to its pages on a tree.
  *
- * Large screens: part of the layout, with a round button on its edge that
- * collapses it to an icon rail and back. On the rail the group titles become
- * thin rules and each icon names itself in a tooltip on hover or focus.
+ * Large screens: part of the layout. It starts right under the top bar, level
+ * with the page's content, reaches down to the foot of the window and stays
+ * in view as the page scrolls. Open full, the list scrolls inside it when the
+ * window is short; the rail grows instead, as its tooltips must not be
+ * clipped. The arrow beside the logo in the top bar switches between the two.
+ * On the rail a short rule marks each group, each icon names itself in a
+ * tooltip on hover or keyboard focus, and the nudge is an orange plus.
  *
- * Smaller screens: a drawer from the left (see DashboardShell), always full
- * width, with its own close button; while shut it is inert, so focus cannot
+ * Smaller screens: a drawer from the left (see DashboardShell), always full,
+ * with the logo and a close button; while shut it is inert, so focus cannot
  * wander into it.
  */
-export function DashboardSidebar({ collapsed, onToggleCollapsed, drawer, onCloseDrawer }) {
+export function DashboardSidebar({ collapsed, drawer, onCloseDrawer }) {
   const pathname = usePathname();
-  const closeButton = useRef(null);
   const desktop = useDesktop();
+  const closeButton = useRef(null);
 
   // Focus moves into the drawer when it opens.
   useEffect(() => {
@@ -39,94 +46,122 @@ export function DashboardSidebar({ collapsed, onToggleCollapsed, drawer, onClose
   const rail = collapsed && desktop;
   const isCurrent = (href) => (href === "/dashboard" ? pathname === href : pathname.startsWith(href));
 
+  // The settings tree is open on its own pages and shut elsewhere; a click
+  // flips it until you move to another page.
+  const treeId = useId();
+  const inTree = dashboardNav.some((group) => group.collapsible && group.items.some((entry) => isCurrent(entry.href)));
+  const [tree, setTree] = useState({ open: false, on: null });
+  const treeOpen = tree.on === pathname ? tree.open : inTree;
+  const toggleTree = () => setTree({ open: !treeOpen, on: pathname });
+
+  const item = (current) =>
+    cn(
+      "flex items-center rounded-full text-base font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+      rail ? "mx-auto size-12 justify-center" : "h-11 gap-3 px-3",
+      current ? "bg-brand-50 text-brand-700 dark:bg-brand/15 dark:text-brand-300" : "text-muted hover:bg-canvas hover:text-headline",
+    );
+
   return (
     <aside
       id="dashboard-sidebar"
       aria-label="Dashboard"
       inert={!desktop && !drawer}
       className={cn(
-        "fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-hero-ink text-white transition-[translate,width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+        "fixed inset-y-0 left-0 z-50 flex w-72 flex-col rounded-r-[2.5rem] bg-card transition-[translate,width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         drawer ? "translate-x-0" : "-translate-x-full",
-        "lg:sticky lg:top-0 lg:z-30 lg:h-dvh lg:translate-x-0",
-        rail ? "lg:w-[5.5rem]" : "lg:w-68",
+        "lg:sticky lg:top-[5.75rem] lg:z-30 lg:translate-x-0 lg:self-start lg:rounded-[2.5rem]",
+        rail ? "lg:min-h-[calc(100dvh-6.75rem)] lg:w-20" : "lg:h-[calc(100dvh-6.75rem)] lg:w-64",
       )}
     >
-      {/* ── The mark ──────────────────────────────────────────────────── */}
-      <div className={cn("flex h-20 shrink-0 items-center gap-3 pt-2", rail ? "justify-center px-0" : "px-6")}>
-        <Link
-          href="/dashboard"
-          aria-label="StripCard dashboard"
-          className="flex min-w-0 items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-        >
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-brand-50">
-            <Image src={mark} alt="" sizes="28px" className="size-6" />
+      {/* The drawer's own header: the logo and a way to close it. */}
+      <div className="flex h-20 shrink-0 items-center justify-between px-5 lg:hidden">
+        <Link href="/dashboard" aria-label="StripCard dashboard" className="flex items-center gap-2.5">
+          <span className="grid size-10 place-items-center rounded-full bg-brand-50 dark:bg-brand/15">
+            <Image src={mark} alt="" sizes="24px" className="size-5" />
           </span>
-          {!rail && <Image src={wordmark} alt="" sizes="140px" className="h-6 w-auto" />}
+          <Image src={logoDark} alt="" sizes="120px" className="h-5 w-auto dark:hidden" />
+          <Image src={logoLight} alt="" sizes="120px" className="hidden h-5 w-auto dark:block" />
         </Link>
         <button
           ref={closeButton}
           type="button"
           onClick={onCloseDrawer}
           aria-label="Close menu"
-          className="ml-auto grid size-9 cursor-pointer place-items-center rounded-lg text-white/60 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-brand lg:hidden"
+          className="grid size-10 cursor-pointer place-items-center rounded-full bg-canvas text-headline transition-colors hover:bg-line focus-visible:outline-2 focus-visible:outline-brand"
         >
           <CloseIcon className="size-5" />
         </button>
       </div>
 
-      {/* The collapse button, on the sidebar's edge. */}
-      <button
-        type="button"
-        onClick={onToggleCollapsed}
-        aria-label={rail ? "Expand sidebar" : "Collapse sidebar"}
-        aria-controls="dashboard-sidebar"
-        aria-expanded={!rail}
-        className="absolute top-7 -right-3.5 z-10 hidden size-7 cursor-pointer place-items-center rounded-full bg-elevated text-headline shadow-soft ring-1 ring-line transition-colors hover:bg-brand hover:text-white hover:ring-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand lg:grid"
-      >
-        <ChevronRightIcon className={cn("size-4 transition-transform duration-300", !rail && "rotate-180")} />
-      </button>
-
       {/* ── The links ─────────────────────────────────────────────────── */}
       <nav
         aria-label="Dashboard pages"
-        className={cn("flex-1 pt-4 pb-4", rail ? "overflow-visible px-4" : "overflow-y-auto px-4 [scrollbar-width:thin]")}
+        className={cn(
+          "flex-1 px-3 pt-2 pb-3 lg:pt-5",
+          rail ? "overflow-visible" : "min-h-0 overflow-y-auto [scrollbar-width:thin]",
+        )}
       >
         {dashboardNav.map((group, g) => (
-          <div key={group.title ?? g} className={g > 0 ? "mt-6" : undefined}>
-            {group.title &&
-              (rail ? (
-                <h2 className="mx-auto mb-3 h-px w-8 bg-white/12">
-                  <span className="sr-only">{group.title}</span>
-                </h2>
-              ) : (
-                <h2 className="mb-2 px-3 text-[0.6875rem] font-semibold tracking-[0.14em] text-white/40 uppercase">
-                  {group.title}
-                </h2>
-              ))}
-            <ul className="space-y-1">
-              {group.items.map((item) => {
-                const current = isCurrent(item.href);
-                return (
-                  <li key={item.href} className="group relative">
-                    <Link
-                      href={item.href}
-                      aria-current={current ? "page" : undefined}
-                      className={cn(
-                        "flex h-11 items-center gap-3 rounded-xl text-[0.9375rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-brand",
-                        rail ? "justify-center" : "px-3",
-                        current ? "bg-white/10 text-white" : "text-white/60 hover:bg-white/5 hover:text-white",
-                      )}
-                    >
-                      <SectionIcon name={item.icon} className={cn("size-5 shrink-0", current && "text-brand")} />
-                      <span className={rail ? "sr-only" : "truncate"}>{item.label}</span>
-                    </Link>
-                    {rail && <Tooltip>{item.label}</Tooltip>}
-                    {current && (
-                      <span
+          <div key={group.title ?? g} className={g > 0 ? (rail ? "mt-3" : "mt-1") : undefined}>
+            {group.collapsible ? (
+              <>
+                {rail && <span aria-hidden="true" className="mx-auto mb-3 block h-px w-8 bg-line" />}
+                <h2 className="group relative">
+                  <button
+                    type="button"
+                    onClick={toggleTree}
+                    aria-expanded={treeOpen}
+                    aria-controls={treeId}
+                    className={cn(item(false), "cursor-pointer font-body", !rail && "w-full")}
+                  >
+                    <SectionIcon name={group.icon} className="size-6 shrink-0" />
+                    <span className={rail ? "sr-only" : "truncate"}>{group.title}</span>
+                    {!rail && (
+                      <ChevronDownIcon
                         aria-hidden="true"
-                        className="absolute top-1/2 -left-4 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-brand"
+                        className={cn("ml-auto size-4 shrink-0 transition-transform duration-200", treeOpen && "rotate-180")}
                       />
                     )}
+                  </button>
+                  {rail && <Tooltip>{group.title}</Tooltip>}
+                </h2>
+              </>
+            ) : (
+              group.title && (
+                <h2 className={rail ? "mx-auto mb-3 h-px w-8 bg-line" : "sr-only"}>
+                  <span className="sr-only">{group.title}</span>
+                </h2>
+              )
+            )}
+            {/* A collapsible group's pages hang off a line under it, each on a branch. */}
+            <ul
+              id={group.collapsible ? treeId : undefined}
+              hidden={group.collapsible && !treeOpen}
+              className={cn(
+                "space-y-1",
+                group.collapsible && "mt-1",
+                group.collapsible &&
+                  !rail &&
+                  "relative ml-[1.375rem] before:absolute before:-top-1 before:bottom-[1.375rem] before:left-0 before:w-px before:bg-line",
+              )}
+            >
+              {group.items.map((entry) => {
+                const current = isCurrent(entry.href);
+                return (
+                  <li
+                    key={entry.href}
+                    className={cn(
+                      "group relative",
+                      group.collapsible &&
+                        !rail &&
+                        "pl-3 after:absolute after:top-1/2 after:left-0 after:h-px after:w-3 after:bg-line",
+                    )}
+                  >
+                    <Link href={entry.href} aria-current={current ? "page" : undefined} className={item(current)}>
+                      <SectionIcon name={entry.icon} className="size-6 shrink-0" />
+                      <span className={rail ? "sr-only" : "truncate"}>{entry.label}</span>
+                    </Link>
+                    {rail && <Tooltip>{entry.label}</Tooltip>}
                   </li>
                 );
               })}
@@ -135,21 +170,29 @@ export function DashboardSidebar({ collapsed, onToggleCollapsed, drawer, onClose
         ))}
       </nav>
 
-      {/* ── Log out ───────────────────────────────────────────────────── */}
-      <div className="shrink-0 border-t border-white/10 px-4 py-4">
-        <div className="group relative">
-          <Link
-            href="/login"
-            className={cn(
-              "flex h-11 items-center gap-3 rounded-xl text-[0.9375rem] font-medium text-white/60 transition-colors hover:bg-white/5 hover:text-white focus-visible:outline-2 focus-visible:outline-brand",
-              rail ? "justify-center" : "px-3",
-            )}
-          >
-            <LogOutIcon className="size-5 shrink-0" />
-            <span className={rail ? "sr-only" : undefined}>Log out</span>
-          </Link>
-          {rail && <Tooltip>Log out</Tooltip>}
-        </div>
+      {/* ── Help, log out, then the add-card nudge ───────────────────── */}
+      <div className="shrink-0 space-y-3 px-3 pb-3">
+        <ul className="space-y-1">
+          <li className="group relative">
+            <Link
+              href={dashboardHelp.href}
+              aria-current={isCurrent(dashboardHelp.href) ? "page" : undefined}
+              className={item(isCurrent(dashboardHelp.href))}
+            >
+              <SectionIcon name={dashboardHelp.icon} className="size-6 shrink-0" />
+              <span className={rail ? "sr-only" : undefined}>{dashboardHelp.label}</span>
+            </Link>
+            {rail && <Tooltip>{dashboardHelp.label}</Tooltip>}
+          </li>
+          <li className="group relative">
+            <Link href="/login" className={cn(item(false), "text-danger hover:bg-danger/10 hover:text-danger")}>
+              <LogOutIcon className="size-6 shrink-0" />
+              <span className={rail ? "sr-only" : undefined}>Log out</span>
+            </Link>
+            {rail && <Tooltip>Log out</Tooltip>}
+          </li>
+        </ul>
+        <AddCardPromo rail={rail} />
       </div>
     </aside>
   );
@@ -160,9 +203,60 @@ function Tooltip({ children }) {
   return (
     <span
       aria-hidden="true"
-      className="pointer-events-none absolute top-1/2 left-full z-50 ml-4 -translate-x-1 -translate-y-1/2 rounded-lg bg-headline px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap text-page opacity-0 shadow-soft transition-[opacity,translate] duration-150 group-hover:translate-x-0 group-hover:opacity-100 group-has-[:focus-visible]:translate-x-0 group-has-[:focus-visible]:opacity-100"
+      className="pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-x-1 -translate-y-1/2 rounded-lg bg-headline px-2.5 py-1.5 text-xs font-semibold whitespace-nowrap text-page opacity-0 shadow-soft transition-[opacity,translate] duration-150 group-hover:translate-x-0 group-hover:opacity-100 group-has-[:focus-visible]:translate-x-0 group-has-[:focus-visible]:opacity-100"
     >
       {children}
     </span>
+  );
+}
+
+/**
+ * The nudge at the sidebar's foot to add a card: an orange card with a little
+ * card stack, a line of copy and a dark button. On the rail it is an orange
+ * plus with a tooltip.
+ */
+function AddCardPromo({ rail }) {
+  const href = "/dashboard/virtual-card";
+
+  if (rail) {
+    return (
+      <div className="group relative">
+        <Link
+          href={href}
+          aria-label="Add a new card"
+          className="mx-auto grid size-12 place-items-center rounded-full bg-brand text-hero-ink transition-colors hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        >
+          <PlusIcon className="size-6" />
+        </Link>
+        <Tooltip>Add a new card</Tooltip>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="rounded-[1.5rem] bg-brand px-4 pt-5 pb-4 text-center text-hero-ink">
+        {/* A little stack of cards. */}
+        <div aria-hidden="true" className="relative mx-auto h-12 w-[4.5rem]">
+          <span className="absolute inset-0 -rotate-12 rounded-lg bg-white/70" />
+          <span className="absolute inset-0 rotate-6 rounded-lg bg-hero-ink shadow-[0_8px_16px_-6px_rgb(12_5_3/0.6)]">
+            <span className="absolute top-2 left-2 h-2 w-3 rounded-[3px] bg-brand-300" />
+            <span className="absolute right-2 bottom-1.5 text-[0.5rem] leading-none tracking-[0.2em] text-white/70">
+              ••••
+            </span>
+          </span>
+        </div>
+        <p className="mt-4 font-heading text-lg leading-tight font-semibold">Add a new card</p>
+        <p className="mt-1 text-xs text-balance text-hero-ink/80">A virtual card in seconds, ready to spend.</p>
+        <Link
+          href={href}
+          aria-label="Let's go: add a new card"
+          className="mt-4 inline-flex h-10 items-center gap-2 rounded-full bg-hero-ink pr-3.5 pl-4 text-sm font-semibold text-white transition-colors hover:bg-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-hero-ink"
+        >
+          Let&apos;s go
+          <ArrowRightIcon aria-hidden="true" className="size-4" />
+        </Link>
+      </div>
+    </div>
   );
 }

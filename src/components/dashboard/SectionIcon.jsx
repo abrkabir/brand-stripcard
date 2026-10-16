@@ -3,11 +3,14 @@ import {
   CreditCardIcon,
   DollarSquareIcon,
   GiftIcon,
+  HelpCircleIcon,
   HomeIcon,
   LockIcon,
   PlusCircleIcon,
   SendIcon,
+  SettingsIcon,
   ShieldIcon,
+  SparklesIcon,
   UserCircleIcon,
 } from "@/components/icons";
 
@@ -23,6 +26,9 @@ const ICONS = {
   userCircle: UserCircleIcon,
   shield: ShieldIcon,
   lock: LockIcon,
+  help: HelpCircleIcon,
+  settings: SettingsIcon,
+  sparkles: SparklesIcon,
 };
 
 /** A dashboard page's icon, shared by the sidebar and the pages themselves. */

@@ -89,7 +89,9 @@ export default function RootLayout({ children }) {
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="flex min-h-full flex-col">
+      {/* Extensions such as ColorZilla add attributes to <body> before React loads
+          (cz-shortcut-listen); ignore those, as <html> already does. */}
+      <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <ThemeProvider>{children}</ThemeProvider>
         <ScrollCalm />
       </body>
