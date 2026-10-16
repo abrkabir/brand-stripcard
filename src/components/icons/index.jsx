@@ -197,6 +197,87 @@ export const ShieldIcon = (p) => (
   </Svg>
 );
 
+export const GridIcon = (p) => (
+  <Svg {...p}>
+    <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+    <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+    <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+    <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
+  </Svg>
+);
+
+export const ReceiptIcon = (p) => (
+  <Svg {...p}>
+    <path d="M6 3.5h12v17l-3-2-3 2-3-2-3 2Z" />
+    <path d="M9 8.5h6M9 12h6" />
+  </Svg>
+);
+
+export const GiftIcon = (p) => (
+  <Svg {...p}>
+    <rect x="4" y="9" width="16" height="11" rx="1.5" />
+    <path d="M3 9h18M12 9v11" />
+    <path d="M12 9c-1.5-3.5-5.5-4-5.5-1.5S10 9 12 9Zm0 0c1.5-3.5 5.5-4 5.5-1.5S14 9 12 9Z" />
+  </Svg>
+);
+
+export const BellIcon = (p) => (
+  <Svg {...p}>
+    <path d="M6 9.5a6 6 0 0 1 12 0c0 5.5 2.5 7 2.5 7h-17S6 15 6 9.5Z" />
+    <path d="M10 20a2 2 0 0 0 4 0" />
+  </Svg>
+);
+
+export const UserIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4.5 20.5c1.2-3.6 4.1-5.5 7.5-5.5s6.3 1.9 7.5 5.5" />
+  </Svg>
+);
+
+export const LogOutIcon = (p) => (
+  <Svg {...p}>
+    <path d="M14 4h4.5A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5H14" />
+    <path d="M10 8l-4 4 4 4M6 12h10" />
+  </Svg>
+);
+
+export const PlusCircleIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 8.5v7M8.5 12h7" />
+  </Svg>
+);
+
+export const SendIcon = (p) => (
+  <Svg {...p}>
+    <path d="M20.5 3.5 10.5 13.5" />
+    <path d="M20.5 3.5 14 20.5l-3.5-7-7-3.5Z" />
+  </Svg>
+);
+
+export const ArrowDownCircleIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 8v8M8.5 12.5 12 16l3.5-3.5" />
+  </Svg>
+);
+
+export const DollarSquareIcon = (p) => (
+  <Svg {...p}>
+    <rect x="4" y="4" width="16" height="16" rx="2.5" />
+    <path d="M14.5 9.25c-.4-.9-1.4-1.5-2.5-1.5-1.4 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4.2 0 1.1-1.1 1.9-2.5 1.9-1.2 0-2.2-.6-2.6-1.6M12 6.5v1.25M12 16.25v1.25" />
+  </Svg>
+);
+
+export const UserCircleIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="10" r="3" />
+    <path d="M6.6 18.4c1.2-1.9 3.1-2.9 5.4-2.9s4.2 1 5.4 2.9" />
+  </Svg>
+);
+
 export const LockIcon = (p) => (
   <Svg {...p}>
     <rect x="4.5" y="10.5" width="15" height="10" rx="2.5" />
