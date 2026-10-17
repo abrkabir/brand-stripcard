@@ -1,8 +1,12 @@
-import { siAirbnb, siApple, siNetflix, siSpotify, siUber } from "simple-icons";
+import { siAirbnb, siApple, siNetflix, siSpotify, siStarbucks, siUber } from "simple-icons";
 import aisha from "../../public/images/testimonials/customer-aisha.webp";
 import daniel from "../../public/images/testimonials/customer-daniel.webp";
+import marcus from "../../public/images/testimonials/customer-marcus.webp";
 import maya from "../../public/images/testimonials/customer-maya.webp";
 import sofia from "../../public/images/testimonials/customer-sofia.webp";
+
+/** A brand's mark (from simple-icons), drawn in the text colour wherever it is used. */
+const brand = (icon) => ({ title: icon.title, path: icon.path });
 
 /**
  * Everything the dashboard shows. DEMO DATA: there is no account behind it
@@ -125,18 +129,24 @@ export const myCards = [
 ];
 
 /**
- * Money moved this month, one card each: `kind` picks the icon, `value` is
- * the total, `change` is against last month, and `latest` the most recent
- * one.
+ * The overview's three cards, for adding money, transferring it and gift
+ * cards: `kind` picks the icon and what the card shows (the ways money can
+ * be added, by `sources` id (see PaymentMark) and how many more, with a
+ * `note`; the `contacts` paid most, with a `note`; the `giftCards` held, with
+ * what is left on each), `sub` says
+ * what it is for, and its foot shows either `latest`, the most recent one
+ * (with a person's `avatar` or a brand's `logo`, if it has one), or the
+ * `note`.
  */
 export const moneyStats = [
   {
     id: "added",
     kind: "add",
-    label: "Add Money",
-    value: 4360,
-    change: 0.19,
-    latest: { text: "Latest, from your bank", amount: 500 },
+    label: "Payment Methods",
+    sub: "Ways to add money",
+    sources: ["visa", "mastercard", "paypal", "applepay", "googlepay"],
+    moreSources: 2,
+    note: "Cards arrive instantly, bank transfers in 1 to 2 days",
     noun: "money in",
     action: "Add money",
     href: "/dashboard/add-money",
@@ -144,24 +154,32 @@ export const moneyStats = [
   {
     id: "sent",
     kind: "transfer",
-    label: "Transfer Money",
-    value: 1980.4,
-    change: 0.064,
-    latest: { text: "Latest, to Aisha Bello", amount: 35, avatar: aisha },
+    label: "Quick Transfer",
+    sub: "Send money in a tap",
+    contacts: [
+      { name: "Daniel Brooks", avatar: daniel },
+      { name: "Aisha Bello", avatar: aisha },
+      { name: "Sofia Lindqvist", avatar: sofia },
+      { name: "Marcus Reid", avatar: marcus },
+    ],
+    note: "Free and instant between StripCard users",
     noun: "transfers",
     action: "Transfer money",
     href: "/dashboard/transfer-money",
   },
   {
-    id: "withdrawn",
-    kind: "withdraw",
-    label: "Withdraw Money",
-    value: 750,
-    change: -0.12,
-    latest: { text: "Latest, to bank •••• 2210", amount: 250 },
-    noun: "withdrawals",
-    action: "Withdraw money",
-    href: "/dashboard/withdraw-money",
+    id: "gifts",
+    kind: "gift",
+    label: "Gift Cards",
+    sub: "Give or spend them",
+    giftCards: [
+      { brand: "Netflix", logo: brand(siNetflix), balance: 50, note: "Expires Dec 2027" },
+      { brand: "Starbucks", logo: brand(siStarbucks), balance: 18.4, note: "Expires Mar 2027" },
+    ],
+    latest: { text: "Last used, Starbucks gift card", amount: 5.4, logo: brand(siStarbucks) },
+    noun: "gift card activity",
+    action: "Send a gift card",
+    href: "/dashboard/gift-card",
   },
 ];
 
@@ -173,8 +191,7 @@ export const wallet = {
 /**
  * Money added to and withdrawn from the wallet each day, a month at a time,
  * newest first, for the overview's chart: `added[i]` and `withdrawn[i]` are
- * day i + 1's totals in dollars. The current month runs to today, and its
- * totals are the stat cards' (September is their "last month").
+ * day i + 1's totals in dollars. The current month runs to today.
  */
 export const moneyFlow = [
   {
@@ -215,7 +232,6 @@ export const moneyFlow = [
   },
 ];
 
-const brand = (icon) => ({ title: icon.title, path: icon.path });
 
 /**
  * Where the cards have been used: the countries paid in, most used first (by

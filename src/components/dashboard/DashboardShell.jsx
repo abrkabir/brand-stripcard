@@ -56,6 +56,17 @@ export function DashboardShell({ children }) {
 
   const toggleCollapsed = useCallback(() => writeRail(!readRail()), []);
 
+  // The sidebar's movement waits until the page has settled (two frames after
+  // it comes alive), so it opens at the width you left it at rather than
+  // easing there on every load.
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setSettled(true));
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   const openMenu = useCallback(
     (event) => {
       opener.current = event?.currentTarget ?? null;
@@ -84,7 +95,7 @@ export function DashboardShell({ children }) {
 
   return (
     <div className="flex min-h-dvh flex-1 flex-col bg-canvas">
-      <DashboardTopBar onMenu={openMenu} rail={collapsed} onToggleSidebar={toggleCollapsed} />
+      <DashboardTopBar onMenu={openMenu} rail={collapsed} onToggleSidebar={toggleCollapsed} animate={settled} />
 
       {/* The backdrop behind the drawer. */}
       <div
@@ -96,11 +107,7 @@ export function DashboardShell({ children }) {
       />
 
       <div className="flex flex-1 gap-4 px-3 pb-4 sm:px-4 lg:gap-5">
-        <DashboardSidebar
-          collapsed={collapsed}
-          drawer={drawer}
-          onCloseDrawer={closeMenu}
-        />
+        <DashboardSidebar collapsed={collapsed} drawer={drawer} onCloseDrawer={closeMenu} animate={settled} />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

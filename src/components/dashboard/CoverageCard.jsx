@@ -1,4 +1,4 @@
-import { Flag, hasFlag } from "@/components/dashboard/Flag";
+import { Flag, hasFlag } from "@/components/shared/Flag";
 import { Panel } from "@/components/dashboard/Panel";
 import { WorldMap } from "@/components/dashboard/WorldMap";
 import { CoffeeIcon, FuelIcon, GlobeIcon } from "@/components/icons";

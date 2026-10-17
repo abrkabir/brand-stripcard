@@ -1,11 +1,53 @@
 import { cn } from "@/lib/cn";
 
 /**
- * Square country flags, drawn to be cropped to a circle, by ISO code. Only
- * the countries the overview names have one: check `hasFlag` first. Each is
- * decorative, so say the country's name beside it. Small emblems are
- * simplified to read at a glance at avatar size.
+ * Square flags, drawn to be cropped to a circle, by ISO code (EU for the
+ * European Union): the countries the dashboard names, and a few more. Check
+ * `hasFlag` first. Each is decorative, so say the
+ * country's name beside it. Small emblems are simplified to read at a glance
+ * at avatar size.
  */
+
+/** A star's outline: `points` tips on radius `r` round (cx, cy), the first pointing up. */
+function star(cx, cy, r, points = 5, inner = 0.4) {
+  const step = Math.PI / points;
+  const corners = Array.from({ length: points * 2 }, (_, i) => {
+    const radius = i % 2 ? r * inner : r;
+    const a = i * step - Math.PI / 2;
+    return `${(cx + radius * Math.cos(a)).toFixed(2)} ${(cy + radius * Math.sin(a)).toFixed(2)}`;
+  });
+  return `M${corners.join("L")}Z`;
+}
+
+/** The Union Flag in a 30-unit square, its red diagonals offset against the white as on the real thing. */
+const UNION = (
+  <>
+    <path fill="#012169" d="M0 0h30v30H0z" />
+    <path stroke="#fff" strokeWidth="6" d="M0 0l30 30M30 0L0 30" />
+    <path
+      fill="#c8102e"
+      d="M0 0l15 15h-2.83L0 2.83zM15 15l15 15v-2.83L17.83 15zM15 15L0 30h2.83L15 17.83zM15 15L30 0h-2.83L15 12.17z"
+    />
+    <path fill="#fff" d="M10 0h10v30H10zM0 10h30v10H0z" />
+    <path fill="#c8102e" d="M12 0h6v30h-6zM0 12h30v6H0z" />
+  </>
+);
+
+/** The EU's twelve gold stars, in a ring. */
+const EU_STARS = Array.from({ length: 12 }, (_, i) => {
+  const a = (i * Math.PI) / 6;
+  return star(15 + 8.5 * Math.sin(a), 15 - 8.5 * Math.cos(a), 1.7);
+}).join("");
+
+/** Australia's stars: the Commonwealth Star under the Union Flag, and the Southern Cross. */
+const AU_STARS = [
+  star(7.5, 22.5, 3.4, 7, 0.45),
+  star(22.5, 5.5, 1.7, 7, 0.45),
+  star(26.6, 12.4, 1.7, 7, 0.45),
+  star(18.4, 13.6, 1.7, 7, 0.45),
+  star(22.5, 24.2, 1.9, 7, 0.45),
+  star(24.9, 17.3, 1.1),
+].join("");
 
 /** The Stars and Stripes' fifty stars: nine rows, six and five in turn. */
 const STARS = Array.from({ length: 9 }, (_, row) =>
@@ -49,18 +91,18 @@ const FLAGS = {
       </g>
     </svg>
   ),
-  // The Union Flag, with its red diagonals offset against the white, as on
-  // the real thing.
-  GB: (
+  GB: <svg viewBox="0 0 30 30">{UNION}</svg>,
+  EU: (
+    <svg viewBox="0 0 30 30">
+      <path fill="#003399" d="M0 0h30v30H0z" />
+      <path fill="#ffcc00" d={EU_STARS} />
+    </svg>
+  ),
+  AU: (
     <svg viewBox="0 0 30 30">
       <path fill="#012169" d="M0 0h30v30H0z" />
-      <path stroke="#fff" strokeWidth="6" d="M0 0l30 30M30 0L0 30" />
-      <path
-        fill="#c8102e"
-        d="M0 0l15 15h-2.83L0 2.83zM15 15l15 15v-2.83L17.83 15zM15 15L0 30h2.83L15 17.83zM15 15L30 0h-2.83L15 12.17z"
-      />
-      <path fill="#fff" d="M10 0h10v30H10zM0 10h30v10H0z" />
-      <path fill="#c8102e" d="M12 0h6v30h-6zM0 12h30v6H0z" />
+      <g transform="scale(0.5)">{UNION}</g>
+      <path fill="#fff" d={AU_STARS} />
     </svg>
   ),
   FR: (

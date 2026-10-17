@@ -72,3 +72,17 @@ export const whyChooseUs = [
     art: "support",
   },
 ];
+
+/**
+ * The note under the cards: the currencies StripCard handles, as a row of
+ * coins (the first few, by ISO code; see CurrencyMark), then how many more,
+ * a label, and a line on what that means when you pay. The count is a
+ * placeholder until a real figure is supplied; keep `more` and the figure in
+ * `label` in step.
+ */
+export const whyChooseUsCurrencies = {
+  currencies: ["USD", "EUR", "GBP", "JPY", "INR", "KRW"],
+  more: 24,
+  label: "30+ global currencies",
+  text: "Hold and spend them all from one wallet. Every payment converts at the real exchange rate, with no hidden markups or foreign transaction fees.",
+};

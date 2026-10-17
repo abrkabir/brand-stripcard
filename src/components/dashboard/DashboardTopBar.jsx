@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { SectionIcon } from "@/components/dashboard/SectionIcon";
+import { SearchPalette } from "@/components/dashboard/SearchPalette";
 import { BellIcon, ChevronRightIcon, LogOutIcon, LongArrowRightIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { dashboardNav, dashboardNotifications, dashboardPages, dashboardTabs, dashboardUser } from "@/data/dashboard";
+import { dashboardNotifications, dashboardPages, dashboardTabs, dashboardUser } from "@/data/dashboard";
 import { cn } from "@/lib/cn";
 import mark from "../../../public/images/logo/favicon_brand.png";
 import logoDark from "../../../public/images/logo/web_logo_dark.png";
@@ -24,9 +24,6 @@ const ROUND =
 const OPEN =
   "aria-expanded:bg-brand-50 aria-expanded:text-brand-700 dark:aria-expanded:bg-brand/15 dark:aria-expanded:text-brand-300";
 
-/** Everything search can jump to: the dashboard and every page under it. */
-const SEARCHABLE = [dashboardNav[0].items[0], ...dashboardPages];
-
 const ITEM =
   "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-content transition-colors hover:bg-canvas hover:text-headline focus-visible:outline-2 focus-visible:outline-brand";
 
@@ -42,33 +39,61 @@ const ITEM =
  * and email before your photo, from 88rem), each on a white ground of its
  * own. Below lg a menu button opens the sidebar drawer.
  *
- * Search jumps between dashboard pages: type to narrow the list, Enter opens
- * the first match. Each popover opens under its button, closes on Escape, on
- * a click outside, when another opens, or on going to another page, and
- * Escape hands focus back to its button.
+ * Search opens a palette over the page (see SearchPalette), from its button
+ * or from Ctrl K, Cmd K or / anywhere. The notifications and account
+ * popovers open under their buttons and close on Escape, on a click anywhere
+ * outside them (the bar's empty space too), when another opens, or on going
+ * to another page; Escape hands focus back to the button.
  *
  * It stays at the top while the page scrolls, over a frosted strip of the
  * canvas so cards slide under it cleanly.
  */
-export function DashboardTopBar({ onMenu, rail, onToggleSidebar }) {
+export function DashboardTopBar({ onMenu, rail, onToggleSidebar, animate }) {
   const pathname = usePathname();
-  const router = useRouter();
   // The open popover, tied to the page it was opened on, so going to another
   // page closes it without an effect.
   const [menu, setMenu] = useState({ id: null, on: null });
   const open = menu.on === pathname ? menu.id : null;
-  const [query, setQuery] = useState("");
   const root = useRef(null);
-  const searchInput = useRef(null);
-  const ids = { search: useId(), notes: useId(), account: useId() };
+  const ids = { notes: useId(), account: useId() };
 
-  const close = () => setMenu({ id: null, on: null });
+  // The search palette, open on the page it was opened from.
+  const [searchOn, setSearchOn] = useState(null);
+  const searching = searchOn === pathname;
+  const searchButton = useRef(null);
+  const openSearch = () => {
+    setMenu({ id: null, on: null });
+    setSearchOn(pathname);
+  };
+  const closeSearch = () => {
+    setSearchOn(null);
+    searchButton.current?.focus();
+  };
+
   const toggle = (id) => setMenu((m) => (m.id === id && m.on === pathname ? { id: null, on: null } : { id, on: pathname }));
+
+  // Ctrl K (Cmd K on a Mac), or / when not typing somewhere, opens search.
+  useEffect(() => {
+    const onKey = (event) => {
+      const typing = event.target.closest?.("input, textarea, select, [contenteditable='true']");
+      const shortcut = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k";
+      if (!shortcut && !(event.key === "/" && !typing)) return;
+      event.preventDefault();
+      setMenu({ id: null, on: null });
+      setSearchOn(pathname);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
+    // Anywhere but the open popover and its own button closes it.
     const onPointer = (event) => {
-      if (!root.current?.contains(event.target)) setMenu({ id: null, on: null });
+      const popover = document.getElementById(open);
+      const button = root.current?.querySelector(`[aria-controls="${open}"]`);
+      if (popover?.contains(event.target) || button?.contains(event.target)) return;
+      setMenu({ id: null, on: null });
     };
     const onKey = (event) => {
       if (event.key !== "Escape") return;
@@ -83,10 +108,6 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar }) {
     };
   }, [open]);
 
-  const q = query.trim().toLowerCase();
-  const results = q
-    ? SEARCHABLE.filter((page) => `${page.label} ${page.description ?? ""}`.toLowerCase().includes(q))
-    : SEARCHABLE;
   const isCurrent = (href) => (href === "/dashboard" ? pathname === href : pathname.startsWith(href));
   const unread = dashboardNotifications.length;
 
@@ -117,23 +138,29 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar }) {
             aria-label="StripCard dashboard"
             className={cn(
               "flex shrink-0 items-center gap-3 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
-              // Large screens: a box as wide as the sidebar, rail or full, with
-              // the logo centred in it. It grows and shrinks with the sidebar,
-              // clipped meanwhile so the wordmark never spills out.
-              "lg:justify-center lg:overflow-hidden lg:transition-[width] lg:duration-300 lg:ease-[cubic-bezier(0.16,1,0.3,1)]",
+              // Large screens: a box as wide as the sidebar, rail or full, that
+              // grows and shrinks with it (clipping what spills over), with the
+              // mark and the wordmark both centred in it, crossfading.
+              "lg:relative lg:justify-center lg:overflow-hidden lg:transition-[width] lg:duration-[450ms] lg:ease-in-out",
               rail ? "lg:w-20" : "lg:w-64",
+              !animate && "transition-none! [&_*]:transition-none!",
             )}
           >
             {/* The mark on phones and over the rail; the wordmark, one per theme, otherwise. */}
             <span
               className={cn(
-                "grid size-12 shrink-0 place-items-center rounded-full bg-brand-50 sm:hidden dark:bg-brand/15",
-                rail && "lg:grid",
+                "grid size-12 shrink-0 place-items-center rounded-full bg-brand-50 sm:hidden lg:grid lg:transition-opacity lg:duration-300 dark:bg-brand/15",
+                rail ? "lg:opacity-100" : "lg:opacity-0",
               )}
             >
               <Image src={mark} alt="" sizes="32px" className="size-7" />
             </span>
-            <span className={cn("hidden shrink-0 sm:inline-flex", rail && "lg:hidden")}>
+            <span
+              className={cn(
+                "hidden shrink-0 sm:inline-flex lg:absolute lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:transition-opacity lg:duration-300",
+                rail ? "lg:opacity-0" : "lg:opacity-100",
+              )}
+            >
               <Image src={logoDark} alt="" sizes="160px" className="h-8 w-auto dark:hidden" />
               <Image src={logoLight} alt="" sizes="160px" className="hidden h-8 w-auto dark:block" />
             </span>
@@ -213,64 +240,20 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-2 lg:col-start-3 lg:justify-self-end xl:gap-3">
-          {/* Search */}
-          <div className="relative hidden sm:block">
-            <button
-              type="button"
-              onClick={() => {
-                setQuery("");
-                toggle(ids.search);
-                requestAnimationFrame(() => searchInput.current?.focus());
-              }}
-              aria-expanded={open === ids.search}
-              aria-controls={ids.search}
-              aria-label="Search pages"
-              className={cn(ROUND, OPEN)}
-            >
-              <SearchIcon className="size-5" />
-            </button>
-            <Popover id={ids.search} open={open === ids.search} label="Search pages" className="w-80">
-              <form
-                role="search"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  if (results[0]) {
-                    close();
-                    router.push(results[0].href);
-                  }
-                }}
-                className="border-b border-line p-2"
-              >
-                <label htmlFor={`${ids.search}-q`} className="sr-only">
-                  Search pages
-                </label>
-                <span className="flex items-center gap-2 rounded-xl bg-canvas px-3">
-                  <SearchIcon aria-hidden="true" className="size-4 text-muted" />
-                  <input
-                    ref={searchInput}
-                    id={`${ids.search}-q`}
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Search pages"
-                    autoComplete="off"
-                    className="h-10 w-full bg-transparent text-sm text-headline outline-none placeholder:text-subtle"
-                  />
-                </span>
-              </form>
-              <ul className="max-h-80 overflow-y-auto p-1.5">
-                {results.map((page) => (
-                  <li key={page.href}>
-                    <Link href={page.href} className={ITEM}>
-                      <SectionIcon name={page.icon} className="size-4 shrink-0" />
-                      {page.label}
-                    </Link>
-                  </li>
-                ))}
-                {results.length === 0 && <li className="px-3 py-6 text-center text-sm text-muted">No pages match.</li>}
-              </ul>
-            </Popover>
-          </div>
+          {/* Search: opens the palette. */}
+          <button
+            ref={searchButton}
+            type="button"
+            onClick={() => (searching ? closeSearch() : openSearch())}
+            aria-haspopup="dialog"
+            aria-expanded={searching}
+            aria-label="Search pages"
+            title="Search"
+            className={cn(ROUND, OPEN)}
+          >
+            <SearchIcon className="size-5" />
+          </button>
+          {searching && <SearchPalette onClose={closeSearch} />}
 
           <ThemeToggle className={cn(ROUND, "hidden sm:grid")} />
 

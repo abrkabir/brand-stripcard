@@ -122,7 +122,7 @@ export function WhyDeck({ items }) {
   );
 
   return (
-    <div ref={rootRef} className="mt-12 lg:mt-14">
+    <div ref={rootRef} className="mt-12 lg:mt-10">
       <div className="lg:motion-safe:overflow-hidden">
         <Reveal>
           <ul
