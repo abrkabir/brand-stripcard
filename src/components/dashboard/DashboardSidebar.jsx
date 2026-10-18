@@ -90,7 +90,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, animate }) 
     >
       {/* The drawer's own header: the logo and a way to close it. */}
       <div className="flex h-20 shrink-0 items-center justify-between px-5 lg:hidden">
-        <Link href="/dashboard" aria-label="StripCard dashboard" className="flex items-center gap-2.5">
+        <Link href="/" aria-label="StripCard home" className="flex items-center gap-2.5">
           <span className="grid size-10 place-items-center rounded-full bg-brand-50 dark:bg-brand/15">
             <Image src={mark} alt="" sizes="24px" className="size-5" />
           </span>

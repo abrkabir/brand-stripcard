@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getIcon } from "@/components/icons";
 import { PulseDot } from "@/components/shared/PulseDot";
 import { Reveal } from "@/components/shared/Reveal";
@@ -7,6 +8,9 @@ import { Odometer } from "@/components/ui/Odometer";
 import { Switch } from "@/components/ui/Switch";
 import { about } from "@/data/about";
 import { cn } from "@/lib/cn";
+import cardOrange from "../../../public/images/assets/cards/card-orange.webp";
+import cardPlatinum from "../../../public/images/assets/cards/card-platinum.webp";
+import cardSilver from "../../../public/images/assets/cards/card-silver.webp";
 
 /** Shared entrance: fades up once, the first time the block is in view. */
 const rise =
@@ -181,56 +185,96 @@ function SecurityCard({ text, toggle, badges }) {
 }
 
 /**
- * Picture card. No photography yet, so the product is drawn: two virtual
- * cards fanned on the brand gradient, with a glass caption floating over
- * them — the same composition as a lifestyle photo with a label.
+ * The three StripCards, back to front, as a stack: all at the same tilt, each
+ * further back a step higher (so its logo shows above the card in front) and
+ * a touch smaller. `rise` is where each settles once the tile is in view (they
+ * start tucked behind the front card), `pose` its scale and how it fans out
+ * on hover, and `bob` where it starts in the shared float: the cards float
+ * together, a beat apart, a ripple through the stack that never lets one
+ * card cover the logo of the card behind it.
  */
-function VisualCard({ caption, last4 }) {
+const STACK = [
+  {
+    src: cardSilver,
+    rise: "in-data-visible:-translate-y-[5.5rem] in-data-visible:translate-x-4",
+    delay: "450ms",
+    pose: "scale-90 group-hover:-translate-y-4 group-hover:translate-x-3 group-hover:-rotate-2",
+    bob: "-1s",
+  },
+  {
+    src: cardPlatinum,
+    rise: "in-data-visible:-translate-y-[2.75rem] in-data-visible:translate-x-2",
+    delay: "300ms",
+    pose: "scale-95 group-hover:-translate-y-2 group-hover:translate-x-1.5 group-hover:-rotate-4",
+    bob: "-0.5s",
+  },
+  {
+    src: cardOrange,
+    rise: "",
+    delay: "0ms",
+    pose: "group-hover:translate-y-2 group-hover:-rotate-9",
+    bob: "0s",
+  },
+];
+
+/**
+ * Picture card: the three StripCards (silver, Platinum and orange) stacked on
+ * the brand gradient, every logo in view, with a glass caption under them.
+ *
+ * Once the tile scrolls into view the back cards rise out from behind the
+ * front one, one after the other, and the caption follows; then the stack
+ * floats, a ripple running through it. Pointing at the tile fans them further apart.
+ * Each motion has its own layer (rise, float, fan), so they never fight over
+ * a transform. Without motion, the stack simply sits in place. Decorative;
+ * the caption says what it shows.
+ */
+function VisualCard({ caption }) {
   return (
     <article
-      className={cn(cardBase, "items-center justify-center bg-hero-glow p-0 lg:p-0")}
+      className={cn(cardBase, "group items-center justify-center bg-hero-glow p-0 pb-14 lg:p-0 lg:pb-16")}
     >
       <div
         aria-hidden="true"
         className="bg-grain pointer-events-none absolute inset-0 opacity-[0.16] mix-blend-overlay"
       />
 
-      <div aria-hidden="true" className="relative">
-        {/* Back card: frosted, offset and turned the other way. */}
-        <div className="absolute inset-0 translate-x-6 -translate-y-5 rotate-[10deg] rounded-2xl border border-white/25 bg-white/15 backdrop-blur-sm" />
-        <VirtualCard last4={last4} />
+      <div aria-hidden="true" className="relative w-56 pt-[5.75rem] sm:w-64">
+        <div className="relative aspect-[1411/843]">
+          {STACK.map(({ src, rise, delay, pose, bob }) => (
+            <div
+              key={src.src}
+              className={cn(
+                "absolute inset-0 transition-[translate] duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                rise,
+              )}
+              style={{ transitionDelay: delay }}
+            >
+              <div
+                data-loop
+                className="size-full motion-safe:animate-card-bob"
+                style={{ animationDelay: bob }}
+              >
+                <Image
+                  src={src}
+                  alt=""
+                  sizes="(min-width: 640px) 256px, 224px"
+                  className={cn(
+                    "size-full -rotate-6 drop-shadow-[0_18px_28px_rgb(12_5_3/0.45)] transition-[translate,rotate,scale] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                    pose,
+                  )}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <p className="absolute top-[58%] left-6 rounded-full border border-white/30 bg-white/20 px-4 py-2 text-sm text-white shadow-soft backdrop-blur-md lg:left-7">
-        {caption}
-      </p>
+      <div className="absolute inset-x-6 bottom-7 flex justify-center lg:bottom-8">
+        <p className="translate-y-3 rounded-full border border-white/30 bg-white/20 px-4 py-2 text-sm text-white opacity-0 shadow-soft backdrop-blur-md transition-[opacity,translate] delay-700 duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100 motion-reduce:transition-none">
+          {caption}
+        </p>
+      </div>
     </article>
-  );
-}
-
-/** The drawn card face. Decorative — its parent hides it from assistive tech. */
-function VirtualCard({ last4 }) {
-  return (
-    <div className="relative flex aspect-[1.586] w-60 -rotate-6 flex-col justify-between rounded-2xl border border-white/15 bg-linear-to-br from-hero-ink via-brand-950 to-brand-900 p-5 text-white shadow-lift sm:w-64">
-      <div className="flex items-start justify-between">
-        <span className="font-display text-base font-semibold tracking-[-0.01em]">
-          Strip<span className="text-brand-300">Card</span>
-        </span>
-        <span className="text-[10px] tracking-[0.2em] text-white/60 uppercase">
-          Virtual
-        </span>
-      </div>
-
-      {/* EMV chip */}
-      <span className="h-7 w-9 rounded-md bg-linear-to-br from-gold-300 to-gold-500" />
-
-      <div className="flex items-end justify-between">
-        <span className="font-mono text-sm tracking-[0.18em] text-white/85">
-          •••• {last4}
-        </span>
-        <span className="text-[10px] text-white/60">12/29</span>
-      </div>
-    </div>
   );
 }
 

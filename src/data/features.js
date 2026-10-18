@@ -1,4 +1,4 @@
-import cardsImage from "../../public/images/assets/features/feature-virtual-cards-wide.webp";
+import cardsImage from "../../public/images/assets/features/feature-virtual-cards-fan.webp";
 import controlsImage from "../../public/images/assets/features/feature-controls-wide.webp";
 import globalImage from "../../public/images/assets/features/feature-global-wide.webp";
 import securityImage from "../../public/images/assets/features/feature-security-wide.webp";
@@ -11,7 +11,8 @@ import securityImage from "../../public/images/assets/features/feature-security-
  * the right. The images are 1200 x 1000 (6:5, the panel's ratio), made from
  * the source files beside them in /public/images/assets/features: recoloured,
  * their original branding and copy replaced with StripCard's, and widened or
- * cropped to fit. They are imported rather than linked by path, so the build
+ * cropped to fit; the virtual cards one is the four card designs in
+ * /public/images/assets/cards, fanned out. They are imported rather than linked by path, so the build
  * names each by a hash of its contents and an edited image can never be
  * served stale from a cache. Keep `points` to three
  * short, checkable claims, and `label` to a word or two so the tab bar fits
@@ -35,7 +36,7 @@ export const featureTabs = [
   {
     id: "cards",
     label: "Virtual cards",
-    image: { src: cardsImage, alt: "A fan of glowing orange virtual cards spread out on black" },
+    image: { src: cardsImage, alt: "StripCard cards in all four designs, orange, Platinum, silver and Business, fanned out in a loose ring on black" },
     title: "A card for every way you pay",
     description:
       "Create virtual cards in seconds, for a single purchase, a subscription or a whole team, without waiting for plastic.",
@@ -77,7 +78,7 @@ export const featureTabs = [
   {
     id: "global",
     label: "Global",
-    image: { src: globalImage, alt: "An orange StripCard tucked into the pocket of a dark jacket" },
+    image: { src: globalImage, alt: "The orange StripCard card tucked into the pocket of a dark jacket" },
     title: "Pay anywhere, in any currency",
     description:
       "Shop and pay across borders in the currency each merchant expects, with the rate shown before you confirm.",

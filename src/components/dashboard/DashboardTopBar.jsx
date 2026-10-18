@@ -134,8 +134,8 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar, animate }) {
         {/* The logo, and from lg up the arrow that opens and closes the sidebar. */}
         <div className="flex min-w-0 shrink-0 items-center gap-5 justify-self-start lg:col-start-1">
           <Link
-            href="/dashboard"
-            aria-label="StripCard dashboard"
+            href="/"
+            aria-label="StripCard home"
             className={cn(
               "flex shrink-0 items-center gap-3 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
               // Large screens: a box as wide as the sidebar, rail or full, that

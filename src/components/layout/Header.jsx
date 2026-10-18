@@ -125,7 +125,11 @@ export function Header() {
     };
   }, []);
 
-  const compact = heroRoutes.includes(pathname) && !scrolled && !openMenu && !mobileOpen;
+  // Over the banner and not yet scrolled. The bar sits a little lower here;
+  // it rises only on scroll, never when a panel opens, so a trigger never
+  // moves out from under the pointer that opened it.
+  const onBanner = heroRoutes.includes(pathname) && !scrolled;
+  const compact = onBanner && !openMenu && !mobileOpen;
 
   const isActive = (href) =>
     href === "/"
@@ -144,12 +148,12 @@ export function Header() {
         ref={headerRef}
         className="pointer-events-none fixed inset-x-0 top-0 z-50 pt-3 sm:pt-4 lg:pt-6"
       >
-        {/* Sits lower while compact, clear of the banner's rounded top edge,
-            and rises to its bar position as the surface grows. */}
+        {/* Sits lower over the banner, clear of its rounded top edge, and
+            rises to its bar position once the page scrolls. */}
         <Container
           className={cn(
             "relative transition-[translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
-            compact && "translate-y-3 lg:translate-y-5",
+            onBanner && "translate-y-3 lg:translate-y-5",
           )}
         >
           <div className="relative flex h-12 items-center justify-between gap-4 pr-1.5 pl-5 lg:h-13 lg:pr-[7px] lg:pl-7">
@@ -202,6 +206,9 @@ export function Header() {
                   return (
                     <li
                       key={item.label}
+                      // The hover area runs to the bar's edges, so there is no
+                      // dead strip between a trigger and its panel.
+                      className="-my-2 py-2"
                       onMouseEnter={() => {
                         cancelClose();
                         setOpenMenu(item.panel ? item.label : null);

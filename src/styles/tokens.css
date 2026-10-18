@@ -19,6 +19,9 @@
   --animate-rise: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-float: float 7s ease-in-out infinite;
   --animate-marquee: marquee 38s linear infinite;
+  /* A ring running down, for a quote held for half a minute. Pair it with a
+     `pathLength="1"` stroke with a dash of 1. */
+  --animate-countdown: countdown 30s linear infinite;
   --animate-scroll-cue: scroll-cue 2.4s ease-in-out infinite;
   /* A ring expanding out of a status dot and fading as it goes. Pair two
      with a staggered delay for a continuous ripple. */
@@ -116,6 +119,11 @@
 @keyframes card-bob {
   0%, 100% { translate: 0 0; }
   50%      { translate: 0 -0.625rem; }
+}
+
+@keyframes countdown {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 1; }
 }
 
 @keyframes marquee {

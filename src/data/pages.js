@@ -28,4 +28,22 @@ export const pageHeroes = {
     description:
       "From weekend shopping to team subscriptions, see how people use StripCard to pay online safely.",
   },
+  howItWorks: {
+    title: "How it works",
+    caption: ["From sign up to", "your first payment"],
+    description:
+      "Sign up, issue a virtual card and pay anywhere online, in a few minutes and from one account.",
+  },
+  flexibility: {
+    title: "Flexibility",
+    caption: ["One account for every", "way your money moves"],
+    description:
+      "Send, hold, exchange and spend from one place, with every card under your control and every payment in view.",
+  },
+  control: {
+    title: "Control",
+    caption: ["Your cards and balance,", "all in your hands"],
+    description:
+      "See every balance, set a limit on every card and pause one the moment you need to, from your dashboard or the app.",
+  },
 };

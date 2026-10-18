@@ -44,10 +44,9 @@ export const about = {
     ],
   },
 
-  /** Picture card: a drawn virtual card and a floating caption. */
+  /** Picture card: the three StripCards fanned, and a floating caption. */
   visual: {
     caption: "Single-use & recurring cards",
-    last4: "4291",
   },
 
   /** Light card. Each row draws one dot per three units of `value`. */
