@@ -347,3 +347,42 @@ export const history = [
     status: "completed",
   },
 ];
+
+/**
+ * Adding money (the Add Money page). `wallet` is the wallet's currency, what
+ * every top-up lands as. `gateways` are the ways to pay in, each with its fee
+ * (a `fixed` part plus a `percent` share of the amount added) and how soon
+ * the money arrives; a gateway's id is also its mark (see PaymentMark), but
+ * for the bank. `currencies` can be paid in, each with its `rate`: how many US
+ * dollars one unit buys. A quoted rate holds for `rateLock` seconds, then a
+ * fresh one is quoted. `limits` cap top-ups, with how much of each is used;
+ * `quick` are amounts to pick from.
+ */
+export const addMoney = {
+  wallet: "USD",
+  gateways: [
+    { id: "paypal", name: "PayPal", fixed: 2, percent: 0.01, arrives: "Arrives instantly" },
+    { id: "visa", name: "Visa", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
+    { id: "mastercard", name: "Mastercard", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
+    { id: "applepay", name: "Apple Pay", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
+    { id: "googlepay", name: "Google Pay", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
+    { id: "bank", name: "Bank transfer", fixed: 0, percent: 0, arrives: "Arrives in 1 to 2 days" },
+  ],
+  currencies: [
+    { code: "USD", rate: 1 },
+    { code: "EUR", rate: 1.08 },
+    { code: "GBP", rate: 1.27 },
+  ],
+  rateLock: 30,
+  limits: {
+    min: 10,
+    max: 1000,
+    daily: 10000,
+    dailyUsed: 0,
+    dailyReset: "Resets at midnight",
+    monthly: 50000,
+    monthlyUsed: 4360,
+    monthlyReset: "Resets on 1 Nov",
+  },
+  quick: [50, 100, 250, 500],
+};

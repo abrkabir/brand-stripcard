@@ -99,6 +99,13 @@ export const FuelIcon = (p) => (
   </Svg>
 );
 
+export const ClockIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </Svg>
+);
+
 /** A long, slim arrow: edge to edge with a small head. */
 export const LongArrowRightIcon = (p) => (
   <Svg {...p}>
