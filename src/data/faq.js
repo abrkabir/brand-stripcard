@@ -3,12 +3,14 @@
  *
  * `title` is read as one line: strings are plain text, `{ em }` pieces are set
  * in the italic accent serif. Each question belongs to one `category`, which
- * is what the pills above the list filter by; "all" shows every question.
+ * is what the topic filter above the list goes by; "all" shows every question.
  * Keep answers to two or three sentences, and keep the copy free of dashes.
  */
 export const faqHeading = {
   eyebrow: "FAQ",
   title: [{ em: "Simple" }, " answers to the questions people ", { em: "ask" }, " most"],
+  description:
+    "Quick answers about creating cards, paying in other currencies and keeping your money safe. Pick a topic to narrow the list.",
 };
 
 export const faqCategories = [

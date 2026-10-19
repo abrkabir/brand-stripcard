@@ -26,6 +26,13 @@
   /* A ring expanding out of a status dot and fading as it goes. Pair two
      with a staggered delay for a continuous ripple. */
   --animate-ripple: ripple 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  /* The same, spreading less, for a ring round an icon rather than a dot. */
+  --animate-ripple-soft: ripple-soft 2.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  /* Three cards taking turns in one place, with a dot for each (see
+     UserControlMarketing): every card and every dot runs the same keyframes,
+     a third of a cycle apart. */
+  --animate-card-swap: card-swap 10.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-dot-swap: dot-swap 10.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   /* Four faces taking turns in one slot: each rises in from below, holds,
      and is pushed out of the top by the next. 2s per face; every face runs
      the same keyframes, offset by its slot (see IconTiles). */
@@ -89,6 +96,27 @@
 @keyframes ripple {
   from { transform: scale(1); opacity: 0.55; }
   to   { transform: scale(3.4); opacity: 0; }
+}
+
+@keyframes ripple-soft {
+  from { transform: scale(1); opacity: 0.5; }
+  to   { transform: scale(1.9); opacity: 0; }
+}
+
+/* A card's turn, a third of the cycle: it glides in from the right, holds,
+   and glides out to the left as the next one comes in over the same beat,
+   then waits, unseen, for its next turn. */
+@keyframes card-swap {
+  0%         { opacity: 0; transform: translateX(12%) scale(0.97); }
+  4%, 33.3%  { opacity: 1; transform: translateX(0) scale(1); }
+  37.3%, 100% { opacity: 0; transform: translateX(-12%) scale(0.97); }
+}
+
+/* Its dot, in step: stretched into a dash while its card is showing. */
+@keyframes dot-swap {
+  0%          { width: 0.45em; opacity: 0.5; }
+  4%, 33.3%   { width: 1.5em; opacity: 1; }
+  37.3%, 100% { width: 0.45em; opacity: 0.5; }
 }
 
 /* One quarter per face: in over the first 4%, hold to 25%, out by 29%. The

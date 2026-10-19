@@ -1,6 +1,6 @@
-import phoneControls from "../../public/images/assets/app/phone-controls.webp";
-import phoneHome from "../../public/images/assets/app/phone-home.webp";
-import phoneInsights from "../../public/images/assets/app/phone-insights.webp";
+import phoneCard from "../../public/images/assets/app/phone-card.webp";
+import phoneSpending from "../../public/images/assets/app/phone-spending.webp";
+import phoneWelcome from "../../public/images/assets/app/phone-welcome.webp";
 
 /**
  * The "get the app" section on the homepage. `AppSection` renders straight
@@ -37,15 +37,16 @@ export const appPromo = {
   ],
   /**
    * The phones beside the copy (see AppPhones), in their starting places:
-   * front, back right, back left. Each is a transparent render of a phone
-   * with its screen, 760px wide; `screen` notes what each shows. Only
-   * `phonesLabel` is read out, for the group as a whole.
+   * front, back right, back left. Each is an image: a transparent render of
+   * a phone with its screen, 760 x 1638, in public/images/assets/app. To
+   * change a screen, replace its image at the same size. `screen` notes what
+   * each shows. Only `phonesLabel` is read out, for the group as a whole.
    */
   phones: [
-    { src: phoneHome, screen: "Home: the balance, an orange virtual card and recent payments" },
-    { src: phoneControls, screen: "Card controls: a monthly limit and switches for each card" },
-    { src: phoneInsights, screen: "Spending: the month by day and by category, and a blocked charge" },
+    { src: phoneWelcome, screen: "Welcome: the cards under floating coins, the card that works anywhere, and Get Started" },
+    { src: phoneCard, screen: "My cards: the cards as a carousel, the front one's spend against its limit, and its controls" },
+    { src: phoneSpending, screen: "Spending: the month's total, the week by day, and the categories" },
   ],
   phonesLabel:
-    "The StripCard app on three phones: the home screen with a balance and an orange virtual card, card controls with limits and switches, and spending insights",
+    "The StripCard app on three phones: the welcome screen, the cards in a carousel with one card's limit and controls, and the month's spending by category",
 };

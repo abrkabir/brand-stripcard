@@ -1,7 +1,7 @@
 import cardsImage from "../../public/images/assets/features/feature-virtual-cards-fan.webp";
-import controlsImage from "../../public/images/assets/features/feature-controls-wide.webp";
-import globalImage from "../../public/images/assets/features/feature-global-wide.webp";
-import securityImage from "../../public/images/assets/features/feature-security-wide.webp";
+import controlsImage from "../../public/images/assets/features/feature-controls-phone.webp";
+import globalImage from "../../public/images/assets/features/feature-global-anywhere.webp";
+import securityImage from "../../public/images/assets/features/feature-security-lock.webp";
 
 /**
  * The features section on the homepage: a heading, then one tab per product
@@ -11,12 +11,17 @@ import securityImage from "../../public/images/assets/features/feature-security-
  * the right. The images are 1200 x 1000 (6:5, the panel's ratio), made from
  * the source files beside them in /public/images/assets/features: recoloured,
  * their original branding and copy replaced with StripCard's, and widened or
- * cropped to fit; the virtual cards one is the four card designs in
- * /public/images/assets/cards, fanned out. They are imported rather than linked by path, so the build
- * names each by a hash of its contents and an edited image can never be
- * served stale from a cache. Keep `points` to three
- * short, checkable claims, and `label` to a word or two so the tab bar fits
- * a phone.
+ * cropped to fit. The virtual cards one is the four card designs in
+ * /public/images/assets/cards, floating in a pinwheel, and the controls one is
+ * cards-phone from that folder, set on the same dark ground. The security
+ * one is card-security from that folder, recoloured to the brand, with the
+ * orange card set into the padlock's face; the global one is pay-anywhere
+ * from there, recoloured the same way, its backdrop taken down to a dark
+ * ground and the orange card on top of its stack. They are imported rather
+ * than linked by path, so the build names each by a hash of its contents and
+ * an edited image can never be served stale from a cache. Keep `points` to
+ * three short, checkable claims, and `label` to a word or two so the tab bar
+ * fits a phone.
  */
 export const featuresHeading = {
   eyebrow: "Features",
@@ -36,7 +41,7 @@ export const featureTabs = [
   {
     id: "cards",
     label: "Virtual cards",
-    image: { src: cardsImage, alt: "StripCard cards in all four designs, orange, Platinum, silver and Business, fanned out in a loose ring on black" },
+    image: { src: cardsImage, alt: "Five StripCard cards in all four designs, two silver, Platinum, Business and orange, floating in a loose pinwheel on black" },
     title: "A card for every way you pay",
     description:
       "Create virtual cards in seconds, for a single purchase, a subscription or a whole team, without waiting for plastic.",
@@ -50,7 +55,7 @@ export const featureTabs = [
   {
     id: "controls",
     label: "Controls",
-    image: { src: controlsImage, alt: "Stacked orange glass cards reading Spend only what you plan" },
+    image: { src: controlsImage, alt: "The orange StripCard card in front of two more cards, rising out of a phone" },
     title: "Spend exactly how you mean to",
     description:
       "Put limits on every card and change them whenever you need to, so no payment ever goes further than you planned.",
@@ -64,7 +69,7 @@ export const featureTabs = [
   {
     id: "security",
     label: "Security",
-    image: { src: securityImage, alt: "A ring of glowing orange and dark tiles on black" },
+    image: { src: securityImage, alt: "A padlock with the orange StripCard card as its body, on a pedestal, all in StripCard orange" },
     title: "Your real details, never shared",
     description:
       "Every card carries its own tokenised number, so merchants never see your account, and every payment is checked before it goes through.",
@@ -78,7 +83,7 @@ export const featureTabs = [
   {
     id: "global",
     label: "Global",
-    image: { src: globalImage, alt: "The orange StripCard card tucked into the pocket of a dark jacket" },
+    image: { src: globalImage, alt: "A glass plane flying over a glass globe and a twisting stack of cards topped by the orange StripCard card, on a dark ground" },
     title: "Pay anywhere, in any currency",
     description:
       "Shop and pay across borders in the currency each merchant expects, with the rate shown before you confirm.",

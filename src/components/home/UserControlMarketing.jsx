@@ -1,29 +1,16 @@
 import Image from "next/image";
-import { ArrowUpRightIcon, BellIcon, icons, LayersIcon, PlusIcon, SwapIcon } from "@/components/icons";
+import { icons } from "@/components/icons";
 import { Reveal } from "@/components/shared/Reveal";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { dashboardUser, myCards, wallet } from "@/data/dashboard";
-import { userControlHeading, userControlShowcase } from "@/data/userControlMarketing";
+import { userControlHeading, userControlShowcase, userControlStats } from "@/data/userControlMarketing";
 import { cn } from "@/lib/cn";
+import phoneWallet from "../../../public/images/assets/app/phone-wallet.webp";
+import cardBusiness from "../../../public/images/assets/cards/card-business.webp";
 import cardOrange from "../../../public/images/assets/cards/card-orange.webp";
-import cardPlatinum from "../../../public/images/assets/cards/card-platinum.webp";
 import cardSilver from "../../../public/images/assets/cards/card-silver.webp";
 import dashboardDark from "../../../public/images/assets/user-control/dashboard-dark.webp";
 import dashboardLight from "../../../public/images/assets/user-control/dashboard-light.webp";
-
-/** The wallet's actions on the phone, as round buttons. `flip` turns the arrow to point down and in. */
-const PHONE_BUTTONS = [
-  { label: "Add money", Icon: ArrowUpRightIcon, flip: true },
-  { label: "Withdraw", Icon: ArrowUpRightIcon },
-  { label: "Transfer", Icon: SwapIcon },
-  { label: "New card", Icon: PlusIcon },
-];
-
-/** Each of the dashboard's cards, by id, as one of the card images. */
-const CARD_ART = { subs: cardOrange, travel: cardPlatinum, shop: cardSilver };
-
-const money = (n) => Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /*
  * The showcase is one picture that scales as a whole: the stage sets its font
@@ -48,97 +35,6 @@ function DashboardScreen() {
   );
 }
 
-/**
- * The app's wallet screen on a phone, the same whatever the site's theme, from
- * the same demo account as the dashboard: the balance and the wallet's actions
- * on brand orange, then a white sheet with the cards, each with its monthly
- * limit and whether it is on.
- */
-function PhoneScreen() {
-  const { avatar } = dashboardUser;
-  const [whole, cents] = money(wallet.balance).split(".");
-
-  return (
-    <div className="rounded-[3.2em] bg-hero-ink p-[0.55em] shadow-[0_3em_5em_-1.5em_rgb(50_12_0/0.6)] ring-[0.15em] ring-white/20">
-      <div className="relative flex h-[42em] flex-col overflow-hidden rounded-[2.7em] bg-brand-600 text-white">
-        {/* Status bar. */}
-        <div className="flex h-[1.8em] shrink-0 items-center justify-between px-[1.6em] pt-[0.9em]">
-          <span className="text-[0.66em] font-semibold">9:41</span>
-          <span className="flex items-end gap-[0.12em]">
-            {[0.35, 0.5, 0.65, 0.8].map((h) => (
-              <span key={h} className="w-[0.18em] rounded-full bg-current" style={{ height: `${h}em` }} />
-            ))}
-            <span className="ml-[0.35em] h-[0.7em] w-[1.35em] rounded-[0.25em] p-[0.1em] ring-1 ring-current">
-              <span className="block h-full w-3/4 rounded-[0.12em] bg-current" />
-            </span>
-          </span>
-        </div>
-        <span className="absolute top-[0.85em] left-1/2 h-[1.6em] w-[5.6em] -translate-x-1/2 rounded-full bg-black" />
-
-        <div className="shrink-0 px-[1.2em]">
-          <div className="mt-[1em] flex items-center gap-[0.5em]">
-            <span className="font-heading text-[1.05em] font-semibold">Wallet</span>
-            <span className="relative ml-auto grid size-[2.1em] place-items-center rounded-full bg-brand-100 text-hero-ink">
-              <BellIcon className="size-[1em]" />
-              <span className="absolute top-[0.45em] right-[0.5em] size-[0.4em] rounded-full bg-brand-600" />
-            </span>
-            <Image src={avatar} alt="" sizes="40px" className="size-[2.1em] rounded-full object-cover ring-[0.12em] ring-brand-100" />
-          </div>
-
-          {/* Balance. */}
-          <p className="mt-[1.1em] text-center font-heading text-[2.6em] leading-none font-semibold tracking-[-0.01em]">
-            ${whole}
-            <span className="text-[0.5em] text-white/70">.{cents}</span>
-          </p>
-          <p className="mt-[0.6em] flex items-center justify-center gap-[0.4em] text-[0.52em] text-white/75">
-            Wallet ID: {userControlShowcase.phone.walletId} <LayersIcon className="size-[1.2em]" />
-          </p>
-
-          {/* The wallet's actions. */}
-          <div className="mt-[1.2em] flex justify-between px-[0.6em]">
-            {PHONE_BUTTONS.map(({ label, Icon, flip }) => (
-              <span key={label} className="grid size-[3em] place-items-center rounded-full bg-brand-100 text-hero-ink">
-                <Icon className={cn("size-[1.2em]", flip && "rotate-180")} />
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* The sheet: the cards tab open, transactions beside it. */}
-        <div className="mt-[1.5em] flex flex-1 flex-col">
-          <div className="relative flex h-[2.6em] shrink-0">
-            <span className="grid w-1/2 place-items-center rounded-t-[1.2em] bg-white text-hero-ink">
-              <span className="text-[0.62em] font-semibold">My cards</span>
-            </span>
-            {/* The curve where the open tab meets the sheet. */}
-            <span className="absolute bottom-0 left-1/2 size-[1.2em] bg-[radial-gradient(circle_at_100%_0,transparent_1.15em,white_1.2em)]" />
-            <span className="grid w-1/2 place-items-center">
-              <span className="text-[0.62em] font-medium text-white/85">Transactions</span>
-            </span>
-          </div>
-          <div className="flex-1 rounded-tr-[1.2em] bg-white px-[1.1em] pt-[0.5em] text-hero-ink">
-            {myCards.map((card) => (
-              <div key={card.id} className="flex items-center gap-[0.7em] border-b border-hero-ink/[0.07] py-[0.75em]">
-                <Image src={CARD_ART[card.id]} alt="" sizes="48px" className="h-auto w-[2.9em] shrink-0" />
-                <span className="min-w-0 leading-tight">
-                  <span className="block truncate text-[0.64em] font-semibold">{card.name}</span>
-                  <span className="block text-[0.5em] text-hero-ink/55">•• {card.last4}</span>
-                </span>
-                <span className="ml-auto text-right leading-tight">
-                  <span className="block text-[0.64em] font-semibold">${money(card.limit)}</span>
-                  <span className={cn("block text-[0.5em] font-medium", card.status === "Active" ? "text-success" : "text-brand-600")}>
-                    {card.status === "Active" ? "Active, monthly limit" : card.status}
-                  </span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /** A piece of the showcase that rises into place once it scrolls into view, after `delay` ms. */
 function Rise({ delay, className, children }) {
   return (
@@ -154,43 +50,110 @@ function Rise({ delay, className, children }) {
   );
 }
 
-/** How far in each row of badges starts, so the rows stagger into a loose cluster. */
-const BADGE_ROW_OFFSET = ["ml-16 sm:ml-24", "ml-6 sm:ml-10", "ml-0"];
+/**
+ * The cards that take turns, in order, each with how far into the 10.5s cycle
+ * it starts: a third apart, so orange shows first, then Business, then silver.
+ */
+const SWAP = [
+  { name: "orange", src: cardOrange, delay: "-0.5s" },
+  { name: "business", src: cardBusiness, delay: "-7.5s" },
+  { name: "silver", src: cardSilver, delay: "-4s" },
+];
 
 /**
- * "Your cards and your balance, all in your control": the showcase on a flat
- * brand stage (the dashboard on screen, the app on a phone at its right, the
- * orange card in front at its lower left), then under it a cluster of what
- * you control on the left, and the eyebrow over one bold statement on the
- * right: the title, running on into the description in a quieter colour.
+ * One card at a time, the three swapping by themselves: each glides in from
+ * the right as the last glides out to the left, and a dot for each, on a
+ * small glass pill at the card's foot, stretches while its card is showing
+ * (`animate-card-swap` and `animate-dot-swap` in tokens.css). With reduced
+ * motion it rests on the orange card, its dot lit.
+ */
+function CardSwap() {
+  return (
+    <div className="relative aspect-[1411/843]">
+      {SWAP.map((card, i) => (
+        <div
+          key={card.name}
+          data-loop
+          className={cn("absolute inset-0 animate-card-swap", i > 0 && "opacity-0")}
+          style={{ animationDelay: card.delay }}
+        >
+          <Image
+            src={card.src}
+            alt=""
+            sizes="(min-width: 1024px) 360px, 200px"
+            className="h-auto w-full drop-shadow-[0_1.4em_1.6em_rgb(20_6_0/0.45)]"
+          />
+        </div>
+      ))}
+      <div className="absolute inset-x-0 bottom-[1.1em] flex justify-center">
+        <span className="flex items-center gap-[0.35em] rounded-full bg-hero-ink/35 px-[0.6em] py-[0.5em] ring-1 ring-white/15 backdrop-blur-sm">
+          {SWAP.map((card, i) => (
+            <span
+              key={card.name}
+              data-loop
+              className={cn("h-[0.45em] animate-dot-swap rounded-full bg-white", i === 0 ? "w-[1.5em]" : "w-[0.45em] opacity-50")}
+              style={{ animationDelay: card.delay }}
+            />
+          ))}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * "Your cards and your balance, all in your control": one strong line, then
+ * the showcase on a dark stage deepening to brand orange, in either theme
+ * (the dashboard on screen, the app on a phone at its right, three cards
+ * swapping in turn at its lower left), then under it, on the right, the
+ * eyebrow over one bold statement: the title, running on into the
+ * description in a quieter colour. Four stat cards close the section.
  */
 export function UserControlMarketing() {
-  const { eyebrow, title, description, badges } = userControlHeading;
+  const { lead, eyebrow, title, description } = userControlHeading;
+  const LeadIcon = icons[lead.icon];
 
   return (
     <section id="user-control-marketing" aria-labelledby="user-control-title" className="bg-page py-20 lg:py-28">
       <Container>
+        {/* One strong line over the showcase, its icon rippling like a live
+            signal: two rings, half a cycle apart, so the pulse never stops. */}
+        <Reveal className="mb-8 flex translate-y-6 items-center gap-4 opacity-0 transition-[opacity,translate] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 sm:gap-5 lg:mb-10">
+          <span aria-hidden="true" className="relative grid size-10 shrink-0 place-items-center sm:size-11">
+            <span data-loop className="absolute inset-0 animate-ripple-soft rounded-full bg-brand/45" />
+            <span data-loop className="absolute inset-0 animate-ripple-soft rounded-full bg-brand/45 [animation-delay:1.4s]" />
+            <span className="relative grid size-full place-items-center rounded-full bg-brand text-white shadow-[0_0.5rem_1.25rem_-0.25rem_rgb(242_106_27/0.55)]">
+              <LeadIcon className="size-5" />
+            </span>
+          </span>
+          <p className="font-heading text-[clamp(1rem,1.5vw,1.25rem)] leading-[1.4] font-semibold tracking-[-0.015em] text-balance text-headline">
+            {lead.strong} <span className="font-medium text-muted">{lead.rest}</span>
+          </p>
+        </Reveal>
+
         <Reveal className="@container">
           <div
             role="img"
             aria-label={userControlShowcase.label}
-            className="relative isolate aspect-[4/5] overflow-hidden rounded-[2rem] bg-brand-500 text-[length:2.8cqw] select-none @min-[40rem]:aspect-[2.1/1] @min-[40rem]:text-[length:1cqw] lg:rounded-[2.5rem] dark:bg-brand-600"
+            className="relative isolate aspect-[4/5] overflow-hidden rounded-[2rem] bg-linear-to-br from-hero-ink via-brand-950 to-brand-800 text-[length:2.8cqw] select-none @min-[40rem]:aspect-[2.1/1] @min-[40rem]:text-[length:1cqw] lg:rounded-[2.5rem]"
           >
             <Rise delay={0} className="top-[3.5em] left-[3em] w-[50em] @min-[40rem]:top-[4.5em] @min-[40rem]:left-[15em] @min-[40rem]:w-[70em]">
               <DashboardScreen />
             </Rise>
 
             <Rise delay={300} className="bottom-px left-[2em] w-[18em] @min-[40rem]:left-[6em] @min-[40rem]:w-[28em]">
-              <Image
-                src={cardOrange}
-                alt=""
-                sizes="(min-width: 1024px) 360px, 200px"
-                className="h-auto w-full drop-shadow-[0_1.4em_1.6em_rgb(90_25_0/0.4)]"
-              />
+              <CardSwap />
             </Rise>
 
             <Rise delay={150} className="top-[13.5em] left-[14em] w-[20em] @min-[40rem]:top-[15.5em] @min-[40rem]:left-[73em]">
-              <PhoneScreen />
+              {/* The app's wallet screen: an image, shared with the app section
+                  (public/images/assets/app/phone-wallet.webp). */}
+              <Image
+                src={phoneWallet}
+                alt=""
+                sizes="(min-width: 1024px) 260px, 200px"
+                className="h-auto w-full drop-shadow-[0_3em_2.5em_rgb(50_12_0/0.55)]"
+              />
             </Rise>
           </div>
         </Reveal>
@@ -198,7 +161,7 @@ export function UserControlMarketing() {
         <Reveal className="mt-10 grid translate-y-6 gap-6 opacity-0 transition-[opacity,translate] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100 sm:gap-8 lg:mt-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16">
           <div className="lg:col-start-2 lg:row-start-1">
             <Eyebrow>{eyebrow}</Eyebrow>
-            <div className="mt-5 font-heading text-[clamp(1.5rem,2.5vw,2.25rem)] leading-[1.25] font-medium tracking-[-0.015em] text-pretty">
+            <div className="mt-5 font-heading text-[clamp(1.25rem,2vw,1.75rem)] leading-[1.3] font-medium tracking-[-0.015em] text-pretty">
               <h2 id="user-control-title" className="inline tracking-[inherit] text-headline">
                 {title.map((piece, i) =>
                   typeof piece === "string" ? (
@@ -213,29 +176,94 @@ export function UserControlMarketing() {
               <p className="inline text-muted">{description}</p>
             </div>
           </div>
+        </Reveal>
 
-          <ul className="flex flex-col gap-2.5 lg:col-start-1 lg:row-start-1 lg:self-end">
-            {badges.map((row, i) => (
-              <li key={i} className={cn("flex flex-wrap gap-2.5", BADGE_ROW_OFFSET[i])}>
-                {row.map((badge) => {
-                  const Icon = icons[badge.icon];
-                  return (
-                    <span
-                      key={badge.label}
-                      className="inline-flex items-center gap-2 rounded-full border border-line bg-card py-1.5 pr-4 pl-1.5 text-sm font-medium text-headline"
-                    >
-                      <span className="grid size-7 place-items-center rounded-full bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400">
-                        <Icon className="size-3.5" />
-                      </span>
-                      {badge.label}
-                    </span>
-                  );
-                })}
-              </li>
+        <Reveal className="mt-14 lg:mt-20">
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {userControlStats.map((stat, i) => (
+              <StatCard key={stat.title} stat={stat} index={i} />
             ))}
           </ul>
         </Reveal>
       </Container>
     </section>
+  );
+}
+
+/**
+ * Each stat card's colours, band by band, darkest at the top: the header, the
+ * two rows, then the tall panel, lightest of all. `chip` is the ground of the
+ * header's icon. The ink and neutral cards follow the theme; the brand and
+ * soft ones are the same in both.
+ */
+const STAT_TONES = {
+  // On a dark page, ink would vanish: there the bands are white veils,
+  // brightening down to a pale panel.
+  ink: {
+    header: "bg-hero-ink text-white dark:bg-white/10",
+    chip: "bg-white/15",
+    rows: ["bg-hero-ink/85 text-white dark:bg-white/15", "bg-hero-ink/70 text-white dark:bg-white/20"],
+    panel: "bg-canvas text-headline dark:bg-white/85 dark:text-hero-ink",
+  },
+  brand: {
+    header: "bg-brand-800 text-white",
+    chip: "bg-white/15",
+    rows: ["bg-brand-700 text-white", "bg-brand-600 text-white"],
+    panel: "bg-brand-400 text-hero-ink",
+  },
+  soft: {
+    header: "bg-brand-300 text-hero-ink",
+    chip: "bg-white/35",
+    rows: ["bg-brand-200 text-hero-ink", "bg-brand-100 text-hero-ink"],
+    panel: "bg-brand-50 text-hero-ink",
+  },
+  neutral: {
+    header: "bg-line text-headline dark:bg-white/[0.16]",
+    chip: "bg-card",
+    rows: ["bg-canvas text-headline dark:bg-white/[0.11]", "bg-surface text-headline dark:bg-white/[0.08]"],
+    panel: "bg-surface text-headline ring-1 ring-line ring-inset dark:bg-white/[0.05]",
+  },
+};
+
+/**
+ * One point about what you control, as a stack of separate bands with a thin
+ * gap between each: the title with its icon, two rows (the value first, what
+ * it is after), and a tall panel with the big figure in its middle and a
+ * short line at its foot. The cards rise in one after another as the row
+ * scrolls into view.
+ */
+function StatCard({ stat, index }) {
+  const tone = STAT_TONES[stat.tone] ?? STAT_TONES.neutral;
+  const Icon = icons[stat.icon];
+  const band = "rounded-[0.9rem] px-4";
+
+  return (
+    <li
+      className="flex translate-y-6 flex-col gap-[3px] opacity-0 transition-[opacity,translate] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-visible:translate-y-0 in-data-visible:opacity-100 motion-reduce:translate-y-0 motion-reduce:opacity-100"
+      style={{ transitionDelay: `${index * 90}ms` }}
+    >
+      <h3 className={cn(band, "flex items-center gap-2 py-3 text-[15px] font-medium", tone.header)}>
+        <span className={cn("grid size-6 place-items-center rounded-full", tone.chip)}>
+          <Icon className="size-3.5" />
+        </span>
+        {stat.title}
+      </h3>
+
+      <dl className="flex flex-col gap-[3px]">
+        {stat.rows.map((row, i) => (
+          <div key={row.label} className={cn(band, "flex items-baseline justify-between gap-3 py-3.5", tone.rows[i])}>
+            <dt className="order-last text-xs opacity-65">{row.label}</dt>
+            <dd className="text-[15px] font-medium tabular-nums">{row.value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <div className={cn(band, "flex min-h-52 flex-1 flex-col items-center pt-6 pb-5 text-center sm:min-h-64", tone.panel)}>
+        <p className="my-auto font-heading text-[clamp(2.5rem,3.6vw,3.5rem)] leading-none font-medium tracking-[-0.02em]">
+          {stat.figure}
+        </p>
+        <p className="mt-4 max-w-[18rem] text-[14.5px] leading-snug text-pretty opacity-75">{stat.description}</p>
+      </div>
+    </li>
   );
 }
