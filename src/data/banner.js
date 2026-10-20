@@ -12,12 +12,30 @@ export const banner = {
   description:
     "With StripCard, create virtual credit cards in seconds. Set spending limits, track every payment in real time, and pay securely online, anywhere in the world.",
 
-  cta: { label: "Explore Products", href: "/products" },
+  /**
+   * The payment partners, as a row of logo badges under the pitch. `icon` names a
+   * simple-icons export (see Banner); `h` is the logo's height in pixels,
+   * set per logo so square marks and long wordmarks carry the same weight.
+   */
+  partners: {
+    label: "Works with the payment partners you trust",
+    items: [
+      { name: "Stripe", icon: "siStripe", h: 18 },
+      { name: "Visa", icon: "siVisa", h: 12 },
+      { name: "Mastercard", icon: "siMastercard", h: 18 },
+      { name: "Apple Pay", icon: "siApplepay", h: 21 },
+      { name: "Google Pay", icon: "siGooglepay", h: 14 },
+      { name: "PayPal", icon: "siPaypal", h: 18 },
+    ],
+  },
 
   /**
    * `hero_img1.webp`, rebranded: the receipt on the phone reads "$4,200.00,
-   * Payment approved, StripCard", the button "Continue", and the card is an
-   * orange StripCard with its own number. The original stays beside it.
+   * Payment approved, StripCard", the button "Continue", and the card is the
+   * orange StripCard with its name along the bottom
+   * (public/images/assets/cards/card-orange-naming-reverse.webp), set into
+   * the photo under the thumb so the name reads clear of it. The original
+   * stays beside it.
    */
   image: {
     src: "/images/assets/banner/hero-stripcard.webp",

@@ -1,6 +1,9 @@
+import aishaAvatar from "../../public/images/testimonials/customer-aisha-avatar.webp";
 import aisha from "../../public/images/testimonials/customer-aisha.webp";
+import danielAvatar from "../../public/images/testimonials/customer-daniel-avatar.webp";
 import daniel from "../../public/images/testimonials/customer-daniel.webp";
 import marcus from "../../public/images/testimonials/customer-marcus.webp";
+import mayaAvatar from "../../public/images/testimonials/customer-maya-avatar.webp";
 import maya from "../../public/images/testimonials/customer-maya.webp";
 import sofia from "../../public/images/testimonials/customer-sofia.webp";
 
@@ -22,7 +25,8 @@ export const testimonialsHeading = {
 /**
  * The orange card pinned at the start of the rail. PLACEHOLDER figures:
  * replace `score` and `users` with real, current numbers (and say where the
- * rating comes from) before launch. `avatars` are a few of the faces below.
+ * rating comes from) before launch. `avatars` are a few of the faces below,
+ * as square headshots made from their photos.
  */
 export const testimonialsRating = {
   score: "4.9",
@@ -30,7 +34,7 @@ export const testimonialsRating = {
   note: "Average from customers paying with StripCard every day.",
   users: "15k+",
   usersLabel: "Trusted users",
-  avatars: [maya, daniel, aisha],
+  avatars: [mayaAvatar, danielAvatar, aishaAvatar],
 };
 
 /**

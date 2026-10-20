@@ -23,14 +23,15 @@ const topics = faqCategories.map(({ id, label }) => ({
  * short line of description at its right. The questions follow as a centred
  * accordion column, each question and its answer centred too.
  *
- * One question is open at a time, the first by default. Picking a category
- * shows only its questions and opens the first. Each question is a real
+ * The list opens on the Cards topic, its first question open. One question
+ * is open at a time; picking a category shows only its questions and opens
+ * the first. Each question is a real
  * button with `aria-expanded`, tied to its answer region. The answers open
  * by animating the grid row from 0fr to 1fr, so no height is measured.
  */
 export function Faq() {
   const { eyebrow, title, description } = faqHeading;
-  const [category, setCategory] = useState("all");
+  const [category, setCategory] = useState("cards");
   const list = category === "all" ? faqs : faqs.filter((item) => item.category === category);
   const [open, setOpen] = useState(0);
   const id = useId();

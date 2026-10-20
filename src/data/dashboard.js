@@ -1,8 +1,10 @@
 import { siAirbnb, siApple, siNetflix, siSpotify, siStarbucks, siUber } from "simple-icons";
-import aisha from "../../public/images/testimonials/customer-aisha.webp";
-import daniel from "../../public/images/testimonials/customer-daniel.webp";
+// Maya, Daniel and Aisha have square headshots made for round avatars; the
+// others' photos are cropped to their faces where they are drawn.
+import aisha from "../../public/images/testimonials/customer-aisha-avatar.webp";
+import daniel from "../../public/images/testimonials/customer-daniel-avatar.webp";
 import marcus from "../../public/images/testimonials/customer-marcus.webp";
-import maya from "../../public/images/testimonials/customer-maya.webp";
+import maya from "../../public/images/testimonials/customer-maya-avatar.webp";
 import sofia from "../../public/images/testimonials/customer-sofia.webp";
 
 /** A brand's mark (from simple-icons), drawn in the text colour wherever it is used. */

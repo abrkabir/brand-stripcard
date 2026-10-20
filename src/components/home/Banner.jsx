@@ -1,9 +1,82 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
+import { siApplepay, siGooglepay, siPaypal, siStripe, siVisa } from "simple-icons";
 import { TrustBadge } from "@/components/shared/TrustBadge";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { banner } from "@/data/banner";
+
+/**
+ * A wedge of a circle, as polygon points: from `from` to `to` degrees (SVG
+ * angles, clockwise from three o'clock), out to radius `r` around `cx, cy`.
+ */
+function wedge(cx, cy, r, from, to) {
+  const at = (deg) => {
+    const a = (deg * Math.PI) / 180;
+    return `${(cx + r * Math.cos(a)).toFixed(2)},${(cy + r * Math.sin(a)).toFixed(2)}`;
+  };
+  return `${cx},${cy} ${at(from)} ${at((from + to) / 2)} ${at(to)}`;
+}
+
+/**
+ * Google Pay's "G" in its four colours. simple-icons draws "G Pay" as one
+ * shape, the G a ring of radius 3.963 round (3.963, 11.198) with the word to
+ * its right; the coloured wedges are clipped to that shape and kept left of
+ * the "P", so only the G takes them.
+ */
+const G = { cx: 3.963, cy: 11.198, r: 9 };
+const G_COLOURS = [
+  ["#ea4335", 190, 320],
+  ["#fbbc04", 140, 190],
+  ["#34a853", 35, 140],
+  ["#4285f4", -40, 35],
+];
+
+/**
+ * The partner logos in their own colours, by the name the data uses: each
+ * simple-icons path with a viewBox cropped to its own outline (the icons sit
+ * in a 24-unit square, which would leave a wordmark tiny and a square mark
+ * huge). Mastercard is drawn as its circles, red and yellow overlapping in
+ * orange, and Google Pay's G in its four colours.
+ */
+const PARTNER_ICONS = {
+  siStripe: { box: "3.43 0 17.13 24", art: <path d={siStripe.path} fill="#635bff" /> },
+  siVisa: { box: "0 8.12 24 7.75", art: <path d={siVisa.path} fill="#1a1f71" /> },
+  siMastercard: {
+    box: "0 0 38 24",
+    art: (
+      <>
+        <circle cx="12" cy="12" r="12" fill="#eb001b" />
+        <circle cx="26" cy="12" r="12" fill="#f79e1b" />
+        <path d="M19 2.253A12 12 0 0 1 19 21.747A12 12 0 0 1 19 2.253Z" fill="#ff5f00" />
+      </>
+    ),
+  },
+  siApplepay: { box: "0 4.32 24 15.37", art: <path d={siApplepay.path} fill="#000" /> },
+  siGooglepay: {
+    box: "0 7.23 24 9.53",
+    art: (
+      <>
+        <defs>
+          <clipPath id="partner-gpay-shape">
+            <path d={siGooglepay.path} />
+          </clipPath>
+          <clipPath id="partner-gpay-g">
+            <rect x="0" y="0" width="8.3" height="24" />
+          </clipPath>
+        </defs>
+        <path d={siGooglepay.path} fill="#5f6368" />
+        <g clipPath="url(#partner-gpay-shape)">
+          <g clipPath="url(#partner-gpay-g)">
+            {G_COLOURS.map(([fill, from, to]) => (
+              <polygon key={fill} points={wedge(G.cx, G.cy, G.r, from, to)} fill={fill} />
+            ))}
+          </g>
+        </g>
+      </>
+    ),
+  },
+  siPaypal: { box: "1.82 0 20.36 24", art: <path d={siPaypal.path} fill="#003087" /> },
+};
 
 /**
  * Homepage banner.
@@ -18,7 +91,7 @@ import { banner } from "@/data/banner";
  * card, so the content pads itself clear of `--header-h` from the inside.
  */
 export function Banner() {
-  const { eyebrow, headline, description, cta, image, trust } = banner;
+  const { eyebrow, headline, description, partners, image, trust } = banner;
 
   return (
     <section className="bg-brand-50 p-2 sm:p-3 lg:p-4 dark:bg-page">
@@ -73,14 +146,27 @@ export function Banner() {
               {description}
             </p>
 
-            <Button
-              href={cta.href}
-              variant="outline"
-              arrow={false}
-              className="mt-6 [--btn-h:2.875rem] [--btn-pad:1.375rem] lg:mt-7"
-            >
-              {cta.label}
-            </Button>
+            {/* The payment partners, each logo in its own colours on a small
+                white badge, so even the dark ones (Visa, Apple Pay) read on
+                the banner's dark ground. */}
+            <div className="mt-6 lg:mt-7">
+              <p className="text-xs font-medium tracking-[0.02em] text-white/60">{partners.label}</p>
+              <ul className="mt-3.5 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                {partners.items.map((partner) => {
+                  const icon = PARTNER_ICONS[partner.icon];
+                  return (
+                    <li
+                      key={partner.name}
+                      className="grid h-8 place-items-center rounded-lg bg-white px-2 shadow-[0_6px_16px_-8px_rgb(0_0_0/0.5)] ring-1 ring-black/5 transition-transform duration-300 hover:-translate-y-0.5 sm:h-9 sm:px-3"
+                    >
+                      <svg role="img" aria-label={partner.name} viewBox={icon.box} className="h-(--h) w-auto max-sm:h-[calc(var(--h)*0.85)]" style={{ "--h": `${partner.h}px` }}>
+                        {icon.art}
+                      </svg>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
         </Container>
       </div>
