@@ -1,4 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
+import { FooterReveal } from "@/components/layout/FooterReveal";
 import { Header } from "@/components/layout/Header";
 
 /**
@@ -21,7 +22,27 @@ export default function MainLayout({ children }) {
         {children}
       </main>
 
-      <Footer />
+      {/* At the very end of the page the footer lifts away to uncover "Our
+          impact" (FooterReveal): the panel is pinned to the bottom of the
+          viewport beneath the footer, which is raised and painted the page
+          colour all round. `flow-root` keeps the footer's margins inside that
+          paint, so the panel never shows through around the card early.
+
+          From partway down the footer, a dark ground (rounded at its top
+          corners) runs behind the card and on into the panel: the card's
+          upper part sits on the page, its lower part on the dark. It is plain
+          black, the same as the panel, so the two meet without a seam. Dark
+          in both themes, like the footer. */}
+      <div className="relative">
+        <div className="relative z-10 flow-root bg-page">
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-0 top-[40%] bottom-0 rounded-t-[2rem] bg-black lg:rounded-t-[2.75rem]"
+          />
+          <Footer />
+        </div>
+        <FooterReveal />
+      </div>
     </>
   );
 }

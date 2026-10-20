@@ -25,10 +25,11 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    /* Inset from the page on three sides with the top corners rounded, so the
-       footer reads as a panel the page ends on rather than a band welded to the
-       viewport. `overflow-hidden` is what makes the corners actually clip the
-       shader band inside.
+    /* Inset from the page on all four sides with every corner rounded, so the
+       footer reads as a card that lifts away, at the end of the page, off the
+       "Our impact" panel beneath it (see FooterReveal and the main layout).
+       `overflow-hidden` is what makes the corners actually clip the shader
+       band inside.
 
        The hairline is not decoration. On the light theme the inset is obvious —
        a near-black panel on a white page is 20:1 — but on the dark theme the
@@ -36,7 +37,7 @@ export function Footer() {
        gutter simply would not exist. `white/10` sits on the panel's own dark
        fill, so it draws in the dark theme and disappears into it in the light
        one, which is exactly where each is needed. */
-    <footer className="mx-3 mt-3 overflow-hidden rounded-t-3xl border-x border-t border-white/10 bg-shader-ink text-white/70 sm:mx-4 sm:mt-4 lg:mx-6 lg:mt-6 lg:rounded-t-[2rem]">
+    <footer className="relative m-3 overflow-hidden rounded-3xl border border-white/10 bg-shader-ink text-white/70 sm:m-4 lg:m-6 lg:rounded-[2rem]">
       {/* `isolate` gives the backdrop its own stacking context, so neither the
           canvas nor the scrim can climb over the copy. `on-dark` because the
           ground is dark in both themes: anything from the UI kit dropped in
@@ -81,7 +82,7 @@ export function Footer() {
               {/* Headline, not h1 — one per page, and the page owns it. Left
                   at normal weight: at this scale the size carries it, and a
                   semibold would shout over the content above. */}
-              <h2 className="max-w-[20ch] font-heading text-[2.25rem] leading-[1.1] font-normal text-white sm:text-[3rem] lg:text-[3.5rem]">
+              <h2 className="max-w-[30ch] font-heading text-[1.875rem] leading-[1.05] font-normal text-balance text-white sm:text-[2.375rem] lg:text-[2.75rem]">
                 {footerLede.title}
               </h2>
 

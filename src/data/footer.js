@@ -1,14 +1,31 @@
 /**
  * The footer's opening statement, over the rippled backdrop.
  *
- * `title` is set at display size and wraps to two or three lines by design —
- * keep it to roughly this length or the backdrop's bloom starts fighting the
- * type.
+ * `title` is set large and wraps to two lines by design. Keep it to roughly
+ * this length or the backdrop's bloom starts fighting the type.
  */
 export const footerLede = {
   tagline: "Virtual cards for safer online payments, ready in seconds.",
-  title: "Every payment, protected from the very first tap",
+  title: "One virtual card, and the freedom to pay in any currency",
   cta: { label: "Get your card", href: "/register" },
+};
+
+/**
+ * "Our impact": the panel the footer lifts away from at the very end of the
+ * page (see FooterReveal). One ring per item: `value` in the brand colour over
+ * its `label`; leave `value` out for a ring that is words only, as the middle
+ * one is. Keep figures to the ones the About page states.
+ */
+export const footerImpact = {
+  /** One strong line over the rings, five words or so. */
+  title: "Numbers that speak for themselves",
+  items: [
+    { value: "2M+", label: "Virtual cards issued" },
+    { value: "50K+", label: "Active businesses" },
+    { label: "Freedom in any currency" },
+    { value: "180+", label: "Countries supported" },
+    { value: "$1B+", label: "Processed every year" },
+  ],
 };
 
 /**
