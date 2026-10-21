@@ -16,9 +16,13 @@ import cardSilver from "../../../public/images/assets/cards/card-silver.webp";
 /** A slow, smooth ease for everything that moves here. */
 const EASE = "duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]";
 
-/** Frosted glass, over a dark poster or a light one. */
-const GLASS_DARK = "bg-white/10 ring-1 ring-white/20 backdrop-blur-xl";
-const GLASS_LIGHT = "bg-white/40 ring-1 ring-white/70 backdrop-blur-xl dark:bg-white/10 dark:ring-white/15";
+/**
+ * Frosted glass, over a dark poster or a light one. A medium blur: the
+ * browser redoes a backdrop blur on every frame something under it moves, and
+ * its cost grows with the radius, so this keeps the frost at half the price.
+ */
+const GLASS_DARK = "bg-white/10 ring-1 ring-white/20 backdrop-blur-md";
+const GLASS_LIGHT = "bg-white/40 ring-1 ring-white/70 backdrop-blur-md dark:bg-white/10 dark:ring-white/15";
 
 /* ── What every poster shares ──────────────────────────────────────────── */
 
@@ -40,22 +44,34 @@ function Poster({ tone, className, children }) {
       )}
     >
       {children}
-      <span aria-hidden="true" className="bg-grain pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay" />
+      {/* Grain, laid on plainly rather than with a blend mode: blending it
+          over the drifting glow meant re-blending the poster every frame. */}
+      <span aria-hidden="true" className="bg-grain pointer-events-none absolute inset-0 opacity-[0.07]" />
     </article>
   );
 }
 
-/** A soft blur of brand light, drifting slowly. Place and size it with `className`. */
+/**
+ * A soft bloom of brand light, drifting slowly. Place and size it with
+ * `className`.
+ *
+ * The softness is all in the gradient, which fades out over many stops: no
+ * `blur` filter. A blurred element that is also animated gets a layer of its
+ * own, and the browser then re-runs the blur on every frame of a scroll,
+ * which is what made this section stutter. A plain gradient layer just moves.
+ */
 function Glow({ className, strong }) {
   return (
     <span
       aria-hidden="true"
       data-loop
       className={cn(
-        "pointer-events-none absolute -z-10 rounded-full blur-3xl motion-safe:animate-glow-drift",
+        // `scale` stands in for the spread a blur used to give it; it
+        // composes with the drift's own transform.
+        "pointer-events-none absolute -z-10 scale-[1.45] rounded-full motion-safe:animate-glow-drift",
         strong
-          ? "bg-[radial-gradient(circle,rgb(255_170_110)_0%,rgb(242_106_27)_38%,rgb(242_106_27/0)_70%)]"
-          : "bg-[radial-gradient(circle,rgb(255_160_100/0.9)_0%,rgb(242_106_27/0.55)_40%,rgb(242_106_27/0)_70%)]",
+          ? "bg-[radial-gradient(circle_closest-side,rgb(255_168_108/0.95)_0%,rgb(248_128_58/0.82)_18%,rgb(242_106_27/0.55)_38%,rgb(242_106_27/0.3)_56%,rgb(242_106_27/0.13)_74%,rgb(242_106_27/0.04)_88%,rgb(242_106_27/0)_100%)]"
+          : "bg-[radial-gradient(circle_closest-side,rgb(255_160_100/0.62)_0%,rgb(246_122_52/0.46)_20%,rgb(242_106_27/0.3)_40%,rgb(242_106_27/0.16)_60%,rgb(242_106_27/0.06)_80%,rgb(242_106_27/0)_100%)]",
         className,
       )}
     />
@@ -266,8 +282,8 @@ function FreezePoster({ item, n }) {
           />
         </div>
         {/* The folder's tab, then its smoked-glass front, darkest in its lower corner. */}
-        <div className="relative h-6 w-[44%] rounded-t-2xl bg-hero-ink/55 ring-1 ring-white/25 backdrop-blur-xl" />
-        <div className="relative overflow-hidden rounded-[1.5rem] rounded-tl-none bg-hero-ink/55 p-5 ring-1 ring-white/25 backdrop-blur-xl">
+        <div className="relative h-6 w-[44%] rounded-t-2xl bg-hero-ink/55 ring-1 ring-white/25 backdrop-blur-md" />
+        <div className="relative overflow-hidden rounded-[1.5rem] rounded-tl-none bg-hero-ink/55 p-5 ring-1 ring-white/25 backdrop-blur-md">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(130%_100%_at_0%_100%,rgb(12_5_3/0.85)_0%,rgb(12_5_3/0.35)_55%,rgb(255_255_255/0.08)_100%)]"
@@ -289,15 +305,17 @@ function FreezePoster({ item, n }) {
 function AlertsPoster({ item, n }) {
   return (
     <Poster tone="dark">
-      {/* The streaks: two bands of light, blurred, drifting. */}
+      {/* The streaks: two long ellipses of light, soft at every edge from
+          their gradients alone (no blur filter, see Glow), the first
+          drifting. */}
       <span
         aria-hidden="true"
         data-loop
-        className="pointer-events-none absolute top-[38%] -right-[45%] -z-10 h-[38%] w-[150%] -rotate-[32deg] rounded-full bg-[linear-gradient(90deg,rgb(242_106_27/0),rgb(242_106_27/0.9)_35%,rgb(255_190_140)_50%,rgb(242_106_27/0.85)_65%,rgb(242_106_27/0))] blur-2xl motion-safe:animate-glow-drift"
+        className="pointer-events-none absolute top-[38%] -right-[45%] -z-10 h-[38%] w-[150%] -rotate-[32deg] bg-[radial-gradient(closest-side,rgb(255_190_140)_0%,rgb(246_118_45/0.9)_30%,rgb(242_106_27/0.5)_58%,rgb(242_106_27/0.16)_82%,rgb(242_106_27/0)_100%)] motion-safe:animate-glow-drift"
       />
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute top-[62%] -right-[30%] -z-10 h-[16%] w-[120%] -rotate-[32deg] rounded-full bg-[linear-gradient(90deg,rgb(242_106_27/0),rgb(255_150_90/0.8)_50%,rgb(242_106_27/0))] blur-xl"
+        className="pointer-events-none absolute top-[62%] -right-[30%] -z-10 h-[16%] w-[120%] -rotate-[32deg] bg-[radial-gradient(closest-side,rgb(255_150_90/0.8)_0%,rgb(242_106_27/0.38)_50%,rgb(242_106_27/0.1)_80%,rgb(242_106_27/0)_100%)]"
       />
       <TopBar label={item.label} dark />
       <div className="relative z-10 mt-6">
