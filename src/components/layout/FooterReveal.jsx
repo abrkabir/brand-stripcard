@@ -12,8 +12,9 @@ import { cn } from "@/lib/cn";
  * raised and painted all round), so it stays pinned in place as the footer
  * scrolls up off it, and comes to rest at the foot of the page.
  *
- * Plain black in both themes, the same as the dark ground behind the
- * footer, so the two meet without a seam. The figures sit in dotted rings
+ * One flat colour, `footer-ground`, the same as the ground behind the footer,
+ * so the two meet without a seam: black on the light page, a warm brown on
+ * the dark one (see variables.css). The figures sit in dotted rings
  * that overlap in a row (a loose cluster on narrow screens).
  * Once the footer has lifted far enough to show them (see FooterRevealStage),
  * the heading brightens from muted to white, each ring warms from a faint grey
@@ -26,7 +27,7 @@ export function FooterReveal() {
   return (
     <FooterRevealStage
       aria-labelledby="impact-title"
-      className="sticky bottom-0 z-0 overflow-hidden bg-black px-4 py-16 text-white sm:py-20 lg:py-24"
+      className="sticky bottom-0 z-0 overflow-hidden bg-footer-ground px-4 py-16 text-white sm:py-20 lg:py-24"
     >
       <h2 id="impact-title" className="text-center font-heading text-[clamp(1.5rem,2.6vw,2.125rem)] leading-tight font-semibold tracking-[-0.01em] text-balance text-white/45 transition-colors duration-700 in-data-visible:text-white">
         {title}

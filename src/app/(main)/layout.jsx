@@ -30,14 +30,15 @@ export default function MainLayout({ children }) {
 
           From partway down the footer, a dark ground (rounded at its top
           corners) runs behind the card and on into the panel: the card's
-          upper part sits on the page, its lower part on the dark. It is plain
-          black, the same as the panel, so the two meet without a seam. Dark
-          in both themes, like the footer. */}
+          upper part sits on the page, its lower part on the dark. It is one
+          flat colour, the same as the panel, so the two meet without a seam:
+          `footer-ground` (variables.css), black on the light page and a warm
+          brown on the dark one, so the band still shows against black. */}
       <div className="relative">
         <div className="relative z-10 flow-root bg-page">
           <div
             aria-hidden="true"
-            className="absolute inset-x-0 top-[40%] bottom-0 rounded-t-[2rem] bg-black lg:rounded-t-[2.75rem]"
+            className="absolute inset-x-0 top-[40%] bottom-0 rounded-t-[2rem] bg-footer-ground lg:rounded-t-[2.75rem]"
           />
           <Footer />
         </div>

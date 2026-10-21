@@ -69,6 +69,13 @@
      the warm near-black its glow fades into — pure #000 makes the orange
      edge band, a brown-black keeps the falloff smooth.                     */
   --color-hero-ink: #0c0503;
+
+  /* ── Footer ground ──────────────────────────────────────────────────────
+     The band the footer card lifts away from, and the "Our impact" panel
+     beneath it (see the main layout and FooterReveal). Black on the light
+     page. In the dark theme the page is black already, so it turns a deep
+     warm brown there (--dark-footer-ground) and still reads as its own band. */
+  --color-footer-ground: #000000;
 }
 
 /* ── Semantic text ────────────────────────────────────────────────────────── */
@@ -139,6 +146,9 @@
   /* App surfaces: black ground, cards lifted just enough to read as cards. */
   --dark-canvas: #000000;
   --dark-card:   #121212;
+
+  /* The footer's band, lifted off the black page in a brand-warm brown. */
+  --dark-footer-ground: #1c0b05;
 }
 
 /* 1 · Explicit choice. Unlayered, so it beats the :root tokens from @theme. */
@@ -156,6 +166,7 @@
   --color-success:  var(--dark-success);
   --color-canvas:   var(--dark-canvas);
   --color-card:     var(--dark-card);
+  --color-footer-ground: var(--dark-footer-ground);
 }
 
 /* 2 · No choice yet — follow the OS until the visitor picks a side. */
@@ -174,6 +185,7 @@
     --color-success:  var(--dark-success);
     --color-canvas:   var(--dark-canvas);
     --color-card:     var(--dark-card);
+    --color-footer-ground: var(--dark-footer-ground);
   }
 }
 
