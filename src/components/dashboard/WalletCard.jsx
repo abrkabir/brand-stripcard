@@ -49,7 +49,7 @@ export function WalletCard({ className }) {
       {/* A way to add a card. */}
       <div className="mt-auto pt-6">
         <Link
-          href="/dashboard/virtual-card"
+          href="/dashboard/virtual-card#create-card"
           className="flex h-16 items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-brand/30 bg-brand-50/60 text-sm font-semibold text-headline transition-colors hover:border-brand/60 hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand dark:border-brand/40 dark:bg-brand/10 dark:hover:bg-brand/15"
         >
           <span className="grid size-8 place-items-center rounded-lg bg-brand text-white">

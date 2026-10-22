@@ -72,7 +72,54 @@ export const howItWorksSteps = [
 ];
 
 /**
- * Where a StripCard gets used: the logo grid under the title. Places people
+ * Where it works, beside the logos: a line with a pill (as the logos' caption
+ * has), then the flags of some of the markets it serves drifting past, an
+ * arrow riding over them as you scroll (square SVGs from flag-icons, MIT, in
+ * /public/images/flags; see FlagMarquee). The flags are ordered so that no
+ * two look-alike ones sit side by side.
+ */
+export const howItWorksReach = {
+  caption: { lead: "Feels local in", pill: "180+ countries" },
+  countries: [
+    { code: "us", name: "United States" },
+    { code: "de", name: "Germany" },
+    { code: "jp", name: "Japan" },
+    { code: "br", name: "Brazil" },
+    { code: "gb", name: "United Kingdom" },
+    { code: "sg", name: "Singapore" },
+    { code: "za", name: "South Africa" },
+    { code: "fr", name: "France" },
+    { code: "in", name: "India" },
+    { code: "ca", name: "Canada" },
+    { code: "ke", name: "Kenya" },
+    { code: "se", name: "Sweden" },
+    { code: "ae", name: "United Arab Emirates" },
+    { code: "kr", name: "South Korea" },
+    { code: "nl", name: "Netherlands" },
+    { code: "au", name: "Australia" },
+    { code: "ar", name: "Argentina" },
+    { code: "it", name: "Italy" },
+    { code: "ch", name: "Switzerland" },
+    { code: "ng", name: "Nigeria" },
+    { code: "hk", name: "Hong Kong" },
+    { code: "ie", name: "Ireland" },
+    { code: "dk", name: "Denmark" },
+    { code: "my", name: "Malaysia" },
+    { code: "no", name: "Norway" },
+    { code: "th", name: "Thailand" },
+    { code: "tr", name: "Türkiye" },
+    { code: "nz", name: "New Zealand" },
+    { code: "id", name: "Indonesia" },
+    { code: "fi", name: "Finland" },
+    { code: "be", name: "Belgium" },
+    { code: "pl", name: "Poland" },
+    { code: "ph", name: "Philippines" },
+    { code: "at", name: "Austria" },
+  ],
+};
+
+/**
+ * Where a StripCard gets used: the logo grid under the steps. Places people
  * pay online with a card, not partners — the caption says as much, so it
  * claims no endorsement. Marks come from simple-icons (bundled, drawn in the
  * theme's muted colour, in the brand's own colour on hover; see LogoCloud). Keep it to eight, and pick square

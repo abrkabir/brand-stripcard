@@ -68,11 +68,11 @@ function StepIcon({ glyph, className }) {
 }
 
 /**
- * "How it works": the heading and where it works (`heading` and `aside`,
- * passed in), and the steps.
+ * "How it works": the heading, the steps, and where it works under them
+ * (`heading` and `footer`, passed in).
  *
- * From `lg`: the heading top left, where it works top right (set lower),
- * and under them the steps as one grid: a single bordered block split into
+ * From `lg`: the heading top left, and under it the steps as one grid: a
+ * single bordered block split into
  * panels with no gaps between them, on one neutral ground; only the active
  * panel stands out, in a brand-tinted white or black (TONES). Each panel has its step's outlined
  * icon at the top and its title, description and link at the foot. The
@@ -85,10 +85,10 @@ function StepIcon({ glyph, className }) {
  * picture opens, its colours following a beat after one another, while the
  * one before narrows and closes.
  *
- * Below `lg`: the heading, where it works, then the steps as cards
- * (HowCard), each with its own picture.
+ * Below `lg`: the heading, the steps as cards (HowCard), each with its own
+ * picture, then where it works.
  */
-export function HowSteps({ steps, heading, aside }) {
+export function HowSteps({ steps, heading, footer }) {
   const [active, setActive] = useState(0);
   const timer = useRef(0);
 
@@ -103,7 +103,6 @@ export function HowSteps({ steps, heading, aside }) {
   return (
     <div className="grid gap-10 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-0">
       <div className="lg:col-start-1 lg:row-start-1">{heading}</div>
-      <div className="lg:col-start-2 lg:row-start-1 lg:pt-28">{aside}</div>
 
       {/* The steps, as a row of panels; the active one wide. */}
       <ol
@@ -270,6 +269,8 @@ export function HowSteps({ steps, heading, aside }) {
           </li>
         ))}
       </ul>
+
+      <div className="lg:col-span-2 lg:mt-14">{footer}</div>
     </div>
   );
 }

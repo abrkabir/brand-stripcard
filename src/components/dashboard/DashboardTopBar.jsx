@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { SearchPalette } from "@/components/dashboard/SearchPalette";
-import { BellIcon, ChevronRightIcon, LogOutIcon, LongArrowRightIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/icons";
+import { BellIcon, ChevronRightIcon, LogOutIcon, MenuIcon, SearchIcon, SidebarIcon, UserIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { dashboardNotifications, dashboardPages, dashboardTabs, dashboardUser } from "@/data/dashboard";
 import { cn } from "@/lib/cn";
@@ -174,13 +174,8 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar, animate }) {
               aria-expanded={!rail}
               className={cn(ROUND, "hidden lg:grid")}
             >
-              {/* Points the way the sidebar will go; turns as it does. */}
-              <LongArrowRightIcon
-                className={cn(
-                  "size-6 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-                  !rail && "rotate-180",
-                )}
-              />
+              {/* Its chevron points the way the sidebar will go. */}
+              <SidebarIcon open={!rail} className="size-[22px]" />
             </button>
             {/* The page's title, and a breadcrumb under it. */}
             {trail && (

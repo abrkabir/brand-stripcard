@@ -40,14 +40,16 @@ const SERIES = [
 /**
  * Money added against money withdrawn, day by day, for the month picked at
  * the top: two areas on a dollar scale, each fading down to the axis, with
- * each month's totals in the legend. The busiest day is read out in a
- * tooltip to begin with; point at the chart (or focus it and use the arrow
- * keys) to read any day, with its net. Changing month draws the lines in
- * again.
+ * each month's totals in the legend. Point at the chart (or focus it and use
+ * the arrow keys, from the busiest day) to read a day in a tooltip, with its
+ * net, a guide down to the axis and a dot on each line; they fade out when
+ * the pointer leaves (or, after a tap, when you tap elsewhere), staying on
+ * the last day read as they go. Changing month draws the lines in again.
  */
 export function MoneyFlowChart({ className }) {
   const [monthId, setMonthId] = useState(moneyFlow[0].id);
   const [active, setActive] = useState(null);
+  const [reading, setReading] = useState(false);
   const uid = useId().replace(/[^\w-]/g, "");
   const month = moneyFlow.find((m) => m.id === monthId);
   const last = month.added.length - 1;
@@ -88,14 +90,19 @@ export function MoneyFlowChart({ className }) {
     const box = event.currentTarget.getBoundingClientRect();
     const share = Math.min(Math.max((event.clientX - box.left) / box.width, 0), 1);
     setActive(Math.round(share * last));
+    setReading(true);
   };
 
   const onKeyDown = (event) => {
-    const from = active ?? peak;
-    const moves = { ArrowLeft: from - 1, ArrowRight: from + 1, Home: 0, End: last };
+    // The first key reads the busiest day; the next move from the day read.
+    const from = reading ? (active ?? peak) : peak;
+    const moves = reading
+      ? { ArrowLeft: from - 1, ArrowRight: from + 1, Home: 0, End: last }
+      : { ArrowLeft: from, ArrowRight: from, Home: 0, End: last };
     if (!(event.key in moves)) return;
     event.preventDefault();
     setActive(Math.min(Math.max(moves[event.key], 0), last));
+    setReading(true);
   };
 
   const select = (
@@ -109,6 +116,7 @@ export function MoneyFlowChart({ className }) {
         onChange={(event) => {
           setMonthId(event.target.value);
           setActive(null);
+          setReading(false);
         }}
         className="h-10 cursor-pointer appearance-none rounded-full bg-canvas pr-9 pl-4 text-sm font-medium text-headline transition-colors hover:bg-line focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
@@ -164,9 +172,13 @@ export function MoneyFlowChart({ className }) {
           aria-describedby={`${uid}-readout`}
           onPointerMove={pick}
           onPointerDown={pick}
-          onPointerLeave={() => setActive(null)}
+          onPointerLeave={(event) => {
+            // A finger lifting counts as leaving: after a tap the reading
+            // stays until focus moves on (onBlur).
+            if (event.pointerType === "mouse") setReading(false);
+          }}
           onKeyDown={onKeyDown}
-          onBlur={() => setActive(null)}
+          onBlur={() => setReading(false)}
           className="relative touch-pan-y rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-card"
         >
           {ticks.map((tick) => (
@@ -210,11 +222,13 @@ export function MoneyFlowChart({ className }) {
           </svg>
 
           {/* The day being read: a guide down to the axis, a dot on each
-              line, and the tooltip. They arrive once the lines have drawn. */}
+              line, and the tooltip, there only while a day is read. */}
           <div
-            key={`${month.id}-reading`}
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 motion-safe:animate-fade-up motion-safe:[animation-delay:0.45s]"
+            className={cn(
+              "pointer-events-none absolute inset-0 transition-opacity duration-200 ease-out motion-reduce:transition-none",
+              reading ? "opacity-100" : "opacity-0",
+            )}
           >
             <span className="absolute inset-y-0 border-l border-dashed border-headline/25" style={{ left: `${at}%` }} />
             {SERIES.map((s) => (
@@ -256,7 +270,7 @@ export function MoneyFlowChart({ className }) {
           </div>
 
           <span id={`${uid}-readout`} aria-live="polite" className="sr-only">
-            {active === null
+            {!reading || active === null
               ? ""
               : `${date(active)}: added ${formatMoney(month.added[active])}, withdrawn ${formatMoney(month.withdrawn[active])}`}
           </span>

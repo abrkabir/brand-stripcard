@@ -4,16 +4,21 @@
    ────────────────────────────────────────────────────────────────────────── */
 
 /* ── Container ────────────────────────────────────────────────────────────── */
-/* Every section wraps its content in <Container>, which uses this class.      */
+/* Every section wraps its content in <Container>, which uses this class.
+   `--to-edge` is how far its content sits in from the window's left edge,
+   for anything inside that reaches out to it (see FlagMarquee). Past the
+   max width it is measured off 100vw, which counts the scrollbar, so it may
+   reach a few pixels past the edge: harmless, as nothing scrolls that way. */
 .app-container {
   width: 100%;
   margin-inline: auto;
   padding-inline: 1.25rem;
+  --to-edge: 1.25rem;
 }
-@media (min-width: 640px)  { .app-container { padding-inline: 1.5rem; } }
-@media (min-width: 1024px) { .app-container { padding-inline: 2rem; } }
-@media (min-width: 1280px) { .app-container { max-width: 1320px; } }
-@media (min-width: 1536px) { .app-container { max-width: 1440px; } }
+@media (min-width: 640px)  { .app-container { padding-inline: 1.5rem; --to-edge: 1.5rem; } }
+@media (min-width: 1024px) { .app-container { padding-inline: 2rem; --to-edge: 2rem; } }
+@media (min-width: 1280px) { .app-container { max-width: 1320px; --to-edge: max(2rem, calc((100vw - 1320px) / 2 + 2rem)); } }
+@media (min-width: 1536px) { .app-container { max-width: 1440px; --to-edge: calc((100vw - 1440px) / 2 + 2rem); } }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
 @layer base {

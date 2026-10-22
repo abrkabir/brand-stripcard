@@ -1,6 +1,17 @@
-import { siAirbnb, siApple, siNetflix, siSpotify, siStarbucks, siUber } from "simple-icons";
+import {
+  siAirbnb,
+  siApple,
+  siNetflix,
+  siSpotify,
+  siStarbucks,
+  siUber,
+} from "simple-icons";
 // Maya, Daniel and Aisha have square headshots made for round avatars; the
 // others' photos are cropped to their faces where they are drawn.
+import cardBusiness from "../../public/images/assets/cards/card-business-plain.webp";
+import cardOrange from "../../public/images/assets/cards/card-orange-plain.webp";
+import cardPlatinum from "../../public/images/assets/cards/card-platinum-plain.webp";
+import cardSilver from "../../public/images/assets/cards/card-silver-plain.webp";
 import aisha from "../../public/images/testimonials/customer-aisha-avatar.webp";
 import daniel from "../../public/images/testimonials/customer-daniel-avatar.webp";
 import marcus from "../../public/images/testimonials/customer-marcus.webp";
@@ -16,7 +27,12 @@ const brand = (icon) => ({ title: icon.title, path: icon.path });
  * components keep the same shapes.
  */
 
-export const dashboardUser = { name: "Maya Collins", first: "Maya", email: "maya@example.com", avatar: maya };
+export const dashboardUser = {
+  name: "Maya Collins",
+  first: "Maya",
+  email: "maya@example.com",
+  avatar: maya,
+};
 
 /* ── Navigation ──────────────────────────────────────────────────────────── */
 
@@ -35,17 +51,47 @@ export const dashboardNav = [
   {
     title: "Money management",
     items: [
-      { label: "Add Money", href: "/dashboard/add-money", icon: "plusCircle", description: "Top up your balance by card or bank transfer." },
-      { label: "Transfer Money", href: "/dashboard/transfer-money", icon: "send", description: "Send money to another StripCard user or a bank account." },
-      { label: "Withdraw Money", href: "/dashboard/withdraw-money", icon: "arrowDownCircle", description: "Move money from your balance back to your bank." },
+      {
+        label: "Add Money",
+        href: "/dashboard/add-money",
+        icon: "plusCircle",
+        description: "Top up your balance by card or bank transfer.",
+      },
+      {
+        label: "Transfer Money",
+        href: "/dashboard/transfer-money",
+        icon: "send",
+        description: "Send money to another StripCard user or a bank account.",
+      },
+      {
+        label: "Withdraw Money",
+        href: "/dashboard/withdraw-money",
+        icon: "arrowDownCircle",
+        description: "Move money from your balance back to your bank.",
+      },
     ],
   },
   {
     title: "Services",
     items: [
-      { label: "Virtual Card", href: "/dashboard/virtual-card", icon: "card", description: "Create, fund and manage your virtual cards." },
-      { label: "Gift Card", href: "/dashboard/gift-card", icon: "gift", description: "Buy and send gift cards for hundreds of brands." },
-      { label: "Transactions", href: "/dashboard/transactions", icon: "dollarSquare", description: "Every payment, top up and transfer, in one place." },
+      {
+        label: "Virtual Card",
+        href: "/dashboard/virtual-card",
+        icon: "card",
+        description: "Create, fund and manage your virtual cards.",
+      },
+      {
+        label: "Gift Card",
+        href: "/dashboard/gift-card",
+        icon: "gift",
+        description: "Buy and send gift cards for hundreds of brands.",
+      },
+      {
+        label: "Transactions",
+        href: "/dashboard/transactions",
+        icon: "dollarSquare",
+        description: "Every payment, top up and transfer, in one place.",
+      },
     ],
   },
   {
@@ -53,9 +99,24 @@ export const dashboardNav = [
     icon: "settings",
     collapsible: true,
     items: [
-      { label: "My Profile", href: "/dashboard/profile", icon: "userCircle", description: "Your name, contact details and preferences." },
-      { label: "KYC Verification", href: "/dashboard/kyc-verification", icon: "shield", description: "Verify your identity to unlock higher limits." },
-      { label: "2FA Security", href: "/dashboard/2fa-security", icon: "lock", description: "Turn on two-factor sign-in to protect your account." },
+      {
+        label: "My Profile",
+        href: "/dashboard/profile",
+        icon: "userCircle",
+        description: "Your name, contact details and preferences.",
+      },
+      {
+        label: "KYC Verification",
+        href: "/dashboard/kyc-verification",
+        icon: "shield",
+        description: "Verify your identity to unlock higher limits.",
+      },
+      {
+        label: "2FA Security",
+        href: "/dashboard/2fa-security",
+        icon: "lock",
+        description: "Turn on two-factor sign-in to protect your account.",
+      },
     ],
   },
 ];
@@ -78,7 +139,9 @@ export const dashboardUpgrade = {
 
 /** Every page under /dashboard, by slug: the sidebar's pages, Help and the premium plan. */
 export const dashboardPages = [
-  ...dashboardNav.flatMap((group) => group.items).filter((item) => item.href !== "/dashboard"),
+  ...dashboardNav
+    .flatMap((group) => group.items)
+    .filter((item) => item.href !== "/dashboard"),
   dashboardHelp,
   dashboardUpgrade,
 ].map((item) => ({ ...item, slug: item.href.split("/").pop() }));
@@ -93,42 +156,128 @@ export const dashboardTabs = [
 ];
 
 export const dashboardNotifications = [
-  { id: 1, title: "Payment blocked", text: "Merchant lock stopped a $65.00 charge at the Apple Store.", when: "2 days ago" },
-  { id: 2, title: "Money received", text: "Daniel Brooks sent you $50.00.", when: "Today" },
+  {
+    id: 1,
+    title: "Payment blocked",
+    text: "Merchant lock stopped a $65.00 charge at the Apple Store.",
+    when: "2 days ago",
+  },
+  {
+    id: 2,
+    title: "Money received",
+    text: "Daniel Brooks sent you $50.00.",
+    when: "Today",
+  },
 ];
 
 /* ── Overview ────────────────────────────────────────────────────────────── */
 
 /**
  * The virtual cards: `purpose` is what each pays for, `limit` the most it may
- * spend in a month and `status` whether it can be used.
+ * spend in a month, `spent` what it has spent this month, `design` its look
+ * (see cardDesigns), `network` Visa or Mastercard, `balance` the money on it
+ * and `status` whether it can be used. `number` and `cvv` are made up, for
+ * the details a card shows when opened.
  */
 export const myCards = [
   {
     id: "subs",
     name: "Subscriptions",
     last4: "7718",
+    network: "Visa",
+    balance: 313.6,
+    number: "4532 8814 2093 7718",
+    cvv: "381",
+    expires: "08/28",
+    design: "orange",
     purpose: "Pays for Netflix, Spotify and 3 more plans",
     limit: 500,
+    spent: 186.4,
     status: "Active",
   },
   {
     id: "travel",
     name: "Travel",
     last4: "3302",
+    network: "Mastercard",
+    balance: 760,
+    number: "5412 7539 0061 3302",
+    cvv: "604",
+    expires: "11/27",
+    design: "business",
     purpose: "Flights, hotels and rides on trips abroad",
     limit: 2000,
+    spent: 1240,
     status: "Active",
   },
   {
     id: "shop",
     name: "Shopping",
     last4: "4821",
+    network: "Mastercard",
+    balance: 487.25,
+    number: "5236 1180 4471 4821",
+    cvv: "927",
+    expires: "02/28",
+    design: "silver",
     purpose: "Online shopping, kept to Amazon and eBay",
     limit: 800,
+    spent: 312.75,
     status: "Frozen",
   },
 ];
+
+/**
+ * The looks a card can take: its face (the card art with the network's mark
+ * taken off, so a card of any design can be Visa or Mastercard), the colour
+ * that reads on it (`ink`, light text on the orange and dark cards, dark on
+ * silver) and its back, a gradient in the face's colours.
+ */
+export const cardDesigns = [
+  {
+    id: "orange",
+    name: "Sunset",
+    image: cardOrange,
+    ink: "light",
+    back: "linear-gradient(135deg, #ff8a3d 0%, #ff5a36 55%, #ff4545 100%)",
+  },
+  {
+    id: "business",
+    name: "Ember",
+    image: cardBusiness,
+    ink: "light",
+    back: "radial-gradient(120% 140% at 85% 100%, #c2541a 0%, #3a1a0c 45%, #120806 100%)",
+  },
+  {
+    id: "silver",
+    name: "Silver",
+    image: cardSilver,
+    ink: "dark",
+    back: "linear-gradient(135deg, #f4f4f5 0%, #e4e4e7 55%, #d4d4d8 100%)",
+  },
+  {
+    id: "platinum",
+    name: "Platinum",
+    image: cardPlatinum,
+    ink: "light",
+    back: "radial-gradient(120% 140% at 80% 100%, #b42fd6 0%, #4a1173 42%, #07050b 100%)",
+  },
+];
+
+/**
+ * Making a card: the most cards the plan allows, the networks a card can run
+ * on, the range a monthly limit must fall in, the quick limits offered, the
+ * quick amounts offered for adding money, and what a card costs.
+ */
+export const cardRules = {
+  max: 5,
+  networks: ["Visa", "Mastercard"],
+  minLimit: 50,
+  maxLimit: 5000,
+  quick: [250, 500, 1000, 2500],
+  topUps: [25, 50, 100, 250],
+  fee: "Free",
+};
 
 /**
  * The overview's three cards, for adding money, transferring it and gift
@@ -175,10 +324,24 @@ export const moneyStats = [
     label: "Gift Cards",
     sub: "Give or spend them",
     giftCards: [
-      { brand: "Netflix", logo: brand(siNetflix), balance: 50, note: "Expires Dec 2027" },
-      { brand: "Starbucks", logo: brand(siStarbucks), balance: 18.4, note: "Expires Mar 2027" },
+      {
+        brand: "Netflix",
+        logo: brand(siNetflix),
+        balance: 50,
+        note: "Expires Dec 2027",
+      },
+      {
+        brand: "Starbucks",
+        logo: brand(siStarbucks),
+        balance: 18.4,
+        note: "Expires Mar 2027",
+      },
     ],
-    latest: { text: "Last used, Starbucks gift card", amount: 5.4, logo: brand(siStarbucks) },
+    latest: {
+      text: "Last used, Starbucks gift card",
+      amount: 5.4,
+      logo: brand(siStarbucks),
+    },
     noun: "gift card activity",
     action: "Send a gift card",
     href: "/dashboard/gift-card",
@@ -201,7 +364,10 @@ export const moneyFlow = [
     label: "October 2026",
     short: "Oct",
     year: 2026,
-    added: [290, 250, 426, 219, 344, 259, 153, 229, 121, 381, 141, 165, 283, 443, 238, 418],
+    added: [
+      290, 250, 426, 219, 344, 259, 153, 229, 121, 381, 141, 165, 283, 443, 238,
+      418,
+    ],
     withdrawn: [33, 39, 61, 45, 53, 64, 39, 63, 68, 72, 25, 32, 46, 48, 44, 18],
   },
   {
@@ -210,12 +376,12 @@ export const moneyFlow = [
     short: "Sep",
     year: 2026,
     added: [
-      88, 110, 80, 94, 95, 50, 51, 159, 99, 104, 225, 142, 185, 239, 124, 60, 98, 116, 91, 125, 135,
-      71, 180, 162, 187, 71, 175, 108, 119, 121
+      88, 110, 80, 94, 95, 50, 51, 159, 99, 104, 225, 142, 185, 239, 124, 60,
+      98, 116, 91, 125, 135, 71, 180, 162, 187, 71, 175, 108, 119, 121,
     ],
     withdrawn: [
-      22, 27, 33, 42, 40, 50, 16, 32, 47, 33, 35, 12, 19, 14, 22, 26, 12, 21, 25, 51, 95, 19, 38,
-      15, 25, 11, 8, 29, 15, 18
+      22, 27, 33, 42, 40, 50, 16, 32, 47, 33, 35, 12, 19, 14, 22, 26, 12, 21,
+      25, 51, 95, 19, 38, 15, 25, 11, 8, 29, 15, 18,
     ],
   },
   {
@@ -224,16 +390,15 @@ export const moneyFlow = [
     short: "Aug",
     year: 2026,
     added: [
-      97, 169, 176, 201, 94, 91, 127, 69, 108, 51, 90, 68, 88, 118, 189, 164, 73, 108, 82, 301, 132,
-      117, 112, 108, 139, 142, 93, 188, 144, 188, 153
+      97, 169, 176, 201, 94, 91, 127, 69, 108, 51, 90, 68, 88, 118, 189, 164,
+      73, 108, 82, 301, 132, 117, 112, 108, 139, 142, 93, 188, 144, 188, 153,
     ],
     withdrawn: [
-      25, 33, 40, 22, 44, 47, 49, 24, 19, 77, 46, 22, 27, 20, 34, 39, 26, 52, 19, 56, 61, 25, 50,
-      39, 49, 19, 26, 62, 29, 22, 17
+      25, 33, 40, 22, 44, 47, 49, 24, 19, 77, 46, 22, 27, 20, 34, 39, 26, 52,
+      19, 56, 61, 25, 50, 39, 49, 19, 26, 62, 29, 22, 17,
     ],
   },
 ];
-
 
 /**
  * Where the cards have been used: the countries paid in, most used first (by
@@ -363,12 +528,48 @@ export const history = [
 export const addMoney = {
   wallet: "USD",
   gateways: [
-    { id: "paypal", name: "PayPal", fixed: 2, percent: 0.01, arrives: "Arrives instantly" },
-    { id: "visa", name: "Visa", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
-    { id: "mastercard", name: "Mastercard", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
-    { id: "applepay", name: "Apple Pay", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
-    { id: "googlepay", name: "Google Pay", fixed: 0, percent: 0.015, arrives: "Arrives instantly" },
-    { id: "bank", name: "Bank transfer", fixed: 0, percent: 0, arrives: "Arrives in 1 to 2 days" },
+    {
+      id: "paypal",
+      name: "PayPal",
+      fixed: 2,
+      percent: 0.01,
+      arrives: "Arrives instantly",
+    },
+    {
+      id: "visa",
+      name: "Visa",
+      fixed: 0,
+      percent: 0.015,
+      arrives: "Arrives instantly",
+    },
+    {
+      id: "mastercard",
+      name: "Mastercard",
+      fixed: 0,
+      percent: 0.015,
+      arrives: "Arrives instantly",
+    },
+    {
+      id: "applepay",
+      name: "Apple Pay",
+      fixed: 0,
+      percent: 0.015,
+      arrives: "Arrives instantly",
+    },
+    {
+      id: "googlepay",
+      name: "Google Pay",
+      fixed: 0,
+      percent: 0.015,
+      arrives: "Arrives instantly",
+    },
+    {
+      id: "bank",
+      name: "Bank transfer",
+      fixed: 0,
+      percent: 0,
+      arrives: "Arrives in 1 to 2 days",
+    },
   ],
   currencies: [
     { code: "USD", rate: 1 },
@@ -387,4 +588,198 @@ export const addMoney = {
     monthlyReset: "Resets on 1 Nov",
   },
   quick: [50, 100, 250, 500],
+};
+
+/* ── Profile ─────────────────────────────────────────────────────────────── */
+
+/**
+ * The profile page (see Profile): the account holder's details, as the form
+ * opens with them. DEMO DATA, the same person as `dashboardUser`. The email
+ * is shown but not edited here; changing it is a support request.
+ *
+ * `countries` are the ones the country picker offers, each with its dialling
+ * code; every one has a flag in Flag.
+ */
+export const profile = {
+  first: "Maya",
+  last: "Collins",
+  email: dashboardUser.email,
+  country: "US",
+  phone: "415 555 0132",
+  address: "2140 Fillmore Street",
+  city: "San Francisco",
+  state: "CA",
+  zip: "94115",
+  memberSince: "March 2024",
+  plan: "Personal",
+  verified: true,
+  cards: 3,
+};
+
+/**
+ * The membership section: the plan the account is on, what it includes, and
+ * the account's own facts. DEMO DATA. `upgrade` is the premium plan's pitch,
+ * as the premium page puts it (see `dashboardUpgrade`).
+ */
+export const membership = {
+  plan: "Personal",
+  price: "Free",
+  accountId: "SC-4829-1037",
+  perks: [
+    "Up to 5 virtual cards",
+    "Spending limits on every card",
+    "Pay in 30+ currencies",
+    "Freeze any card in a tap",
+  ],
+  upgrade: {
+    title: "Premium",
+    text: "Higher limits, more cards and priority support.",
+    href: "/dashboard/upgrade",
+  },
+};
+
+export const profileCountries = [
+  { code: "US", name: "United States", dial: "+1" },
+  { code: "GB", name: "United Kingdom", dial: "+44" },
+  { code: "CA", name: "Canada", dial: "+1" },
+  { code: "AU", name: "Australia", dial: "+61" },
+  { code: "FR", name: "France", dial: "+33" },
+  { code: "AE", name: "United Arab Emirates", dial: "+971" },
+  { code: "JP", name: "Japan", dial: "+81" },
+  { code: "MX", name: "Mexico", dial: "+52" },
+  { code: "BR", name: "Brazil", dial: "+55" },
+  { code: "ZA", name: "South Africa", dial: "+27" },
+  { code: "IN", name: "India", dial: "+91" },
+  { code: "SG", name: "Singapore", dial: "+65" },
+];
+
+/* ── Identity checks (KYC) ───────────────────────────────────────────────── */
+
+/**
+ * Checking who the account holder is. DEMO DATA: the account starts at the
+ * first level, its identity not checked yet (`status` is "unverified", then
+ * "review" once the documents are in, then "verified").
+ *
+ *   levels     what an account can be, in order
+ *   limits     what each level allows, a row per limit
+ *   documents  the IDs we take, with the `sides` to photograph and the icon
+ *              (by name, see icons) each is shown with
+ *   review     how long a check usually takes
+ */
+export const kyc = {
+  status: "unverified",
+  review: "about 10 minutes",
+  levels: [
+    { id: "basic", name: "Basic", text: "Email and phone confirmed" },
+    { id: "verified", name: "Verified", text: "Photo ID and a selfie checked" },
+  ],
+  limits: [
+    { label: "Monthly card spend", basic: "$1,000", verified: "$50,000" },
+    { label: "Virtual cards", basic: "5", verified: "20" },
+    { label: "Daily withdrawals", basic: "$500", verified: "$10,000" },
+    { label: "Sending abroad", basic: "Not allowed", verified: "Allowed" },
+  ],
+  documents: [
+    {
+      id: "passport",
+      label: "Passport",
+      text: "The photo page",
+      sides: ["Photo page"],
+      icon: "passport",
+    },
+    {
+      id: "licence",
+      label: "Driving licence",
+      text: "Front and back",
+      sides: ["Front", "Back"],
+      icon: "car",
+    },
+    {
+      id: "national",
+      label: "National ID card",
+      text: "Front and back",
+      sides: ["Front", "Back"],
+      icon: "idCard",
+    },
+  ],
+};
+
+/* ── Sign-in security (2FA) ──────────────────────────────────────────────── */
+
+/**
+ * Two-factor sign-in with an authenticator app. DEMO DATA: it starts off.
+ * `secret` is the key the app is set up with (base32, shown as a QR code and
+ * in groups of four).
+ */
+export const security = {
+  issuer: "StripCard",
+  secret: "K7QX2M4PLN6RW3ZD",
+};
+
+/* ── Card holder ─────────────────────────────────────────────────────────── */
+
+/**
+ * The person the virtual cards are issued to, as the card issuer needs them.
+ * DEMO DATA: the same person as the profile. `dob` is as typed ("MM / DD /
+ * YYYY"); `idImage` is the ID photo sent before (only its name is kept, so
+ * there is no preview).
+ */
+export const cardHolder = {
+  first: profile.first,
+  last: profile.last,
+  nameOnCard: "Maya Collins",
+  dob: "04 / 12 / 1991",
+  email: profile.email,
+  idType: "national",
+  idNumber: "243456345645",
+  idImage: {
+    name: "national-id-front.jpg",
+    size: 1468006,
+    type: "image/jpeg",
+    note: "Saved document, sent March 2024",
+  },
+  purpose: "personal",
+  employment: "employed",
+  occupation: "designer",
+  address: profile.address,
+  city: profile.city,
+  state: profile.state,
+  zip: profile.zip,
+  country: profile.country,
+  phone: profile.phone,
+};
+
+/** The choices the card holder form offers, as { value, label }. */
+export const cardHolderOptions = {
+  idTypes: [
+    { value: "national", label: "National ID card" },
+    { value: "passport", label: "Passport" },
+    { value: "licence", label: "Driving licence" },
+  ],
+  purposes: [
+    { value: "personal", label: "Personal spending" },
+    { value: "business", label: "Business expenses" },
+    { value: "travel", label: "Travel" },
+    { value: "shopping", label: "Online shopping" },
+    { value: "subscriptions", label: "Subscriptions" },
+  ],
+  employment: [
+    { value: "employed", label: "Employed" },
+    { value: "self", label: "Self employed" },
+    { value: "student", label: "Student" },
+    { value: "retired", label: "Retired" },
+    { value: "none", label: "Not working" },
+  ],
+  occupations: [
+    { value: "designer", label: "Designer" },
+    { value: "engineer", label: "Engineer" },
+    { value: "developer", label: "Software developer" },
+    { value: "teacher", label: "Teacher" },
+    { value: "healthcare", label: "Healthcare worker" },
+    { value: "finance", label: "Finance professional" },
+    { value: "sales", label: "Sales and marketing" },
+    { value: "owner", label: "Business owner" },
+    { value: "student", label: "Student" },
+    { value: "other", label: "Something else" },
+  ],
 };

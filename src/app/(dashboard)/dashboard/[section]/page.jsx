@@ -8,7 +8,7 @@ import { dashboardPages } from "@/data/dashboard";
 export const dynamicParams = false;
 
 /** Pages built as routes of their own, so not here. */
-const OWN_ROUTE = new Set(["transactions", "add-money"]);
+const OWN_ROUTE = new Set(["transactions", "add-money", "profile", "kyc-verification", "2fa-security", "virtual-card"]);
 
 export function generateStaticParams() {
   return dashboardPages.filter((page) => !OWN_ROUTE.has(page.slug)).map((page) => ({ section: page.slug }));

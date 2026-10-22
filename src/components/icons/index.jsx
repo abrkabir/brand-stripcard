@@ -114,6 +114,27 @@ export const LongArrowRightIcon = (p) => (
   </Svg>
 );
 
+/**
+ * A window with its sidebar marked, and a chevron that points the way the
+ * sidebar will go: left while it is `open` (to collapse it), right while it
+ * is collapsed. The chevron turns as it changes.
+ */
+export const SidebarIcon = ({ open, ...p }) => (
+  <Svg {...p}>
+    <rect x="3" y="4" width="18" height="16" rx="3" />
+    <path d="M9 4v16" />
+    <path
+      d="m13.5 9.5 2.5 2.5-2.5 2.5"
+      style={{
+        transformBox: "fill-box",
+        transformOrigin: "center",
+        transform: open ? "rotate(180deg)" : "none",
+        transition: "transform 300ms cubic-bezier(0.16, 1, 0.3, 1)",
+      }}
+    />
+  </Svg>
+);
+
 export const MenuIcon = (p) => (
   <Svg {...p}>
     <path d="M4 7h16" />
@@ -320,6 +341,22 @@ export const UploadIcon = (p) => (
   </Svg>
 );
 
+export const CameraIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.3l1.4-2h5.6l1.4 2h2.3A1.5 1.5 0 0 1 20 8.5V18a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18Z" />
+    <circle cx="12" cy="13" r="3.4" />
+  </Svg>
+);
+
+export const TrashIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4.5 7h15" />
+    <path d="M9.5 7V5.5A1.5 1.5 0 0 1 11 4h2a1.5 1.5 0 0 1 1.5 1.5V7" />
+    <path d="m6.5 7 .8 11.6A1.5 1.5 0 0 0 8.8 20h6.4a1.5 1.5 0 0 0 1.5-1.4L17.5 7" />
+    <path d="M10.5 11v5M13.5 11v5" />
+  </Svg>
+);
+
 export const SwapIcon = (p) => (
   <Svg {...p}>
     <path d="M4 8h14M14.5 4.5 18 8l-3.5 3.5" />
@@ -401,6 +438,64 @@ export const FingerprintIcon = (p) => (
     <path d="M8.8 20.2A11.5 11.5 0 0 1 8 13.5a4 4 0 0 1 8 0c0 1.4-.1 2.8-.4 4.1" />
     <path d="M12 13.5c0 3-.6 5.6-1.6 7.5" />
     <path d="M14.4 20.4c.3-.7.5-1.4.7-2.2" />
+  </Svg>
+);
+
+export const IdCardIcon = (p) => (
+  <Svg {...p}>
+    <rect x="3" y="5" width="18" height="14" rx="2.5" />
+    <circle cx="8.5" cy="10.5" r="2" />
+    <path d="M5.8 15.5c.6-1.2 1.6-1.9 2.7-1.9s2.1.7 2.7 1.9" />
+    <path d="M14 10h4M14 13.5h3" />
+  </Svg>
+);
+
+export const PassportIcon = (p) => (
+  <Svg {...p}>
+    <rect x="5" y="3" width="14" height="18" rx="2" />
+    <circle cx="12" cy="10.5" r="3.2" />
+    <path d="M8.8 10.5h6.4" />
+    <path d="M12 7.3c-.9.9-1.4 2-1.4 3.2s.5 2.3 1.4 3.2c.9-.9 1.4-2 1.4-3.2S12.9 8.2 12 7.3Z" />
+    <path d="M9.5 17.5h5" />
+  </Svg>
+);
+
+export const SmartphoneIcon = (p) => (
+  <Svg {...p}>
+    <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+    <path d="M10.5 18.5h3" />
+  </Svg>
+);
+
+export const CopyIcon = (p) => (
+  <Svg {...p}>
+    <rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.5" />
+    <path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5" />
+  </Svg>
+);
+
+export const FileIcon = (p) => (
+  <Svg {...p}>
+    <path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8Z" />
+    <path d="M14 3.5V8h4.5" />
+    <path d="M9 13h6M9 16.5h4" />
+  </Svg>
+);
+
+export const ScanFaceIcon = (p) => (
+  <Svg {...p}>
+    <path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" />
+    <path d="M9 9.5v1M15 9.5v1" />
+    <path d="M12 9.5V13h-1" />
+    <path d="M9.5 15.5a3.5 3.5 0 0 0 5 0" />
+  </Svg>
+);
+
+export const InfoIcon = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 11v5" />
+    <path d="M12 7.8h.01" strokeWidth={2.4} />
   </Svg>
 );
 
@@ -590,6 +685,7 @@ export const icons = {
   arrowRight: ArrowRightIcon,
   plus: PlusIcon,
   menu: MenuIcon,
+  sidebar: SidebarIcon,
   close: CloseIcon,
   sun: SunIcon,
   moon: MoonIcon,
@@ -608,7 +704,16 @@ export const icons = {
   chart: ChartIcon,
   shield: ShieldIcon,
   lock: LockIcon,
+  camera: CameraIcon,
+  trash: TrashIcon,
   fingerprint: FingerprintIcon,
+  idCard: IdCardIcon,
+  passport: PassportIcon,
+  smartphone: SmartphoneIcon,
+  copy: CopyIcon,
+  file: FileIcon,
+  scanFace: ScanFaceIcon,
+  info: InfoIcon,
   sparkles: SparklesIcon,
   star: StarIcon,
   heart: HeartIcon,

@@ -1,13 +1,12 @@
 import { HowSteps } from "@/components/home/HowSteps";
 import { MorphBadge } from "@/components/home/MorphBadge";
+import { FlagMarquee } from "@/components/shared/FlagMarquee";
 import { Reveal } from "@/components/shared/Reveal";
 import { SwipePill } from "@/components/shared/SwipePill";
-import { TrustBadge } from "@/components/shared/TrustBadge";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { LogoCloud } from "@/components/ui/LogoCloud";
-import { howItWorksHeading, howItWorksLogos, howItWorksSteps } from "@/data/howItWorks";
-import { banner } from "@/data/banner";
+import { howItWorksHeading, howItWorksLogos, howItWorksReach, howItWorksSteps } from "@/data/howItWorks";
 import { cn } from "@/lib/cn";
 
 /** Shared entrance: fades up once, the first time the block is in view. */
@@ -16,11 +15,12 @@ const rise =
 
 /**
  * "How it works": the label and a statement title (small morphing badges set
- * between its words) top left; where it works top right, set lower (the
- * flags of the markets it serves with a line under them, and a grid of places to pay
- * with it, see `LogoCloud`); and the steps under them as a row of panels,
- * the active one wide with its picture, pointing at a step making it the
- * active one (see `HowSteps`, which lays it all out; cards below `lg`).
+ * between its words) top left; the steps under it as a row of panels, the
+ * active one wide with its picture, pointing at a step making it the active
+ * one (see `HowSteps`, which lays it all out; cards below `lg`); and where it
+ * works under the steps: the flags of the markets it serves drifting past on
+ * the left (see `FlagMarquee`), a grid of places to pay with it on the right
+ * (see `LogoCloud`), each under a line with a pill.
  *
  * A Server Component; the morphing badges and the steps are client islands.
  */
@@ -28,7 +28,7 @@ export function HowItWorks() {
   const { eyebrow, title } = howItWorksHeading;
 
   return (
-    <section aria-labelledby="how-title" className="bg-page py-20 lg:py-28">
+    <section aria-labelledby="how-title" className="overflow-x-clip bg-page py-20 lg:py-28">
       <Container>
         <HowSteps
           steps={howItWorksSteps}
@@ -45,16 +45,35 @@ export function HowItWorks() {
               </h2>
             </Reveal>
           }
-          aside={
-            // Where it works: the banner's flags plus a count of the rest
-            // beside a line, then the places to pay.
-            <Reveal className={cn("[transition-delay:120ms]", rise)}>
-              <TrustBadge tone="onLight" countries={banner.trust.countries} more={32} />
-              <p className="mt-3 text-sm text-muted">
+          footer={
+            // Where it works, under the steps, as two blocks side by side, of
+            // a height: on the left a line and the flags, an arrow riding
+            // over them as you scroll; on the right a line and the places to
+            // pay. On a phone, one under another.
+            <Reveal
+              className={cn(
+                "grid gap-x-16 gap-y-5 lg:grid-cols-2 [transition-delay:120ms]",
+                rise,
+              )}
+            >
+              <p className="text-sm text-muted lg:col-start-1 lg:row-start-1">
+                {howItWorksReach.caption.lead}{" "}
+                <SwipePill className="border text-headline">{howItWorksReach.caption.pill}</SwipePill>
+              </p>
+              <div className="mb-6 flex flex-col justify-center lg:col-start-1 lg:row-start-2 lg:mb-0">
+                <FlagMarquee countries={howItWorksReach.countries} />
+              </div>
+              <p className="text-sm text-muted lg:col-start-2 lg:row-start-1">
                 {howItWorksLogos.caption.lead}{" "}
                 <SwipePill className="border text-headline">{howItWorksLogos.caption.pill}</SwipePill>
               </p>
-              <LogoCloud logos={howItWorksLogos.logos} className="mt-5" />
+              {/* From lg it reaches out to the window's right edge, as the flags do to the left. */}
+              <LogoCloud
+                logos={howItWorksLogos.logos}
+                named
+                tinted
+                className="border-y-0 lg:col-start-2 lg:row-start-2 lg:mr-[calc(-1*var(--to-edge))]"
+              />
             </Reveal>
           }
         />
