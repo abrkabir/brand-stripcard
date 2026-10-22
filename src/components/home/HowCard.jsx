@@ -1,6 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MorphBadge } from "@/components/home/MorphBadge";
 import { ArrowRightIcon } from "@/components/icons";
+import { cn } from "@/lib/cn";
 
 /** The mark inside the badge, one per step, drawn in white strokes. */
 const GLYPHS = {
@@ -25,60 +27,51 @@ const GLYPHS = {
 };
 
 /**
- * One "how it works" step: a softly tinted card (the headline ink at 5%, so
- * it stays a gentle grey in either theme) holding a brand-coloured tile on
- * the left and the step on the right.
+ * A step's label, on a small white pill laid over its picture: a morphing
+ * badge (see MorphBadge) with the step's mark, and a word.
+ */
+export function StepLabel({ step, index, className }) {
+  return (
+    <span
+      className={cn(
+        "flex items-center gap-2 rounded-full bg-white/90 py-1 pr-3.5 pl-1 text-sm font-medium text-brand-800 shadow-soft",
+        className,
+      )}
+    >
+      <MorphBadge className="size-7 shrink-0" shapeClassName="fill-brand" delay={index * 0.35}>
+        <g fill="none" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" className="stroke-white">
+          {GLYPHS[step.glyph]}
+        </g>
+      </MorphBadge>
+      {step.label}
+    </span>
+  );
+}
+
+/**
+ * One "how it works" step as a card, for screens below `lg` (wider ones get
+ * the scrolling panel, see HowSteps): a softly tinted card (the headline ink
+ * at 5%, so it stays a gentle grey in either theme) holding the step's
+ * picture, with its label over it, and the step itself.
  *
- * The tile reads like a product card — a morphing badge and a label top left
- * (see MorphBadge), a switch top right that flips on when the row scrolls
- * into view, and one big word cropped by the tile's bottom edge. The word is
- * sized in container units, so it fills the tile at any width.
- *
- * On a phone the tile sits above the copy. Colours come from the brand
- * tokens, so a rebrand recolours the card.
+ * The picture fills its tile (`step.image`, cropped round `step.focus`) and
+ * eases in a touch when the card is pointed at. It sits above the copy on a
+ * phone and beside it on a tablet.
  */
 export function HowCard({ step, index }) {
 
   return (
-    <article className="relative isolate flex h-full flex-col gap-5 overflow-hidden rounded-[1.75rem] border border-line bg-headline/[0.05] p-3 text-content sm:flex-row sm:gap-6">
-      {/* The tile's glow, spilling onto the card. */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_22%_55%,color-mix(in_srgb,var(--color-brand)_10%,transparent),transparent_60%)]"
-      />
-
-      <div className="@container relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-[1.25rem] bg-linear-to-br from-brand-100 to-brand-200 p-4 sm:aspect-square sm:w-[42%]">
-        <div className="relative z-10 flex items-center justify-between gap-2">
-          <span className="flex items-center gap-2 text-sm font-medium text-brand-800">
-            <MorphBadge className="size-8 shrink-0" shapeClassName="fill-brand" delay={index * 0.35}>
-              <g
-                fill="none"
-                strokeWidth="7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="stroke-white"
-              >
-                {GLYPHS[step.glyph]}
-              </g>
-            </MorphBadge>
-            {step.label}
-          </span>
-
-          {/* A switch that turns on once the row is in view. */}
-          <span aria-hidden="true" className="relative h-5 w-9 shrink-0 rounded-full bg-brand/25">
-            <span
-              className="absolute top-0.5 left-0.5 size-4 rounded-full bg-brand shadow-soft transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] in-data-visible:translate-x-4"
-              style={{ transitionDelay: `${600 + index * 150}ms` }}
-            />
-          </span>
-        </div>
-
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[0.2em] left-[0.05em] font-heading text-[42cqw] leading-none font-bold tracking-[-0.05em] text-brand-300/70 select-none"
-        >
-          {step.word}
-        </span>
+    <article className="group relative isolate flex h-full flex-col gap-5 overflow-hidden rounded-[1.75rem] border border-line bg-headline/[0.05] p-3 text-content sm:flex-row sm:gap-6">
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-[1.25rem] bg-brand-100 sm:aspect-square sm:w-[42%]">
+        <Image
+          src={step.image}
+          alt=""
+          fill
+          sizes="(min-width: 640px) 40vw, 92vw"
+          style={{ objectPosition: step.focus }}
+          className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+        />
+        <StepLabel step={step} index={index} className="absolute top-3 left-3" />
       </div>
 
       <div className="flex flex-1 flex-col justify-center px-3 pb-4 sm:px-0 sm:py-4 sm:pr-5">

@@ -4,9 +4,11 @@
  *
  * `title` is read as one sentence: strings are plain text, `{ icon }` pieces
  * are small round badges set between the words, and `muted` pieces are dimmed
- * (the closing line). `steps` are the cards, in order: `label` and `word`
- * dress the orange tile, `glyph` picks the mark inside its morphing badge,
- * and the rest is the copy beside it (see HowCard).
+ * (the closing line). `steps` are the cards, in order: `image` fills the
+ * card's picture (made from references, rebranded; public/images/assets/
+ * how-it-works), `focus` is its object-position, `label` names it on a small
+ * pill over it, `glyph` picks the mark in that pill's morphing badge, and the
+ * rest is the copy under it (see HowCard).
  */
 import {
   siAirbnb,
@@ -18,6 +20,9 @@ import {
   siSpotify,
   siSteam,
 } from "simple-icons";
+import issueCardImage from "../../public/images/assets/cards/cards-stack-scene.webp";
+import payEverywhereImage from "../../public/images/assets/how-it-works/step-pay-everywhere.webp";
+import signUpImage from "../../public/images/assets/how-it-works/step-sign-up.webp";
 
 export const howItWorksHeading = {
   eyebrow: "How it works",
@@ -36,7 +41,9 @@ export const howItWorksSteps = [
     description:
       "Create your account with just your email, then confirm who you are in a quick, secure check.",
     label: "Account",
-    word: "Join",
+    // The StripCard app on a phone's home screen.
+    image: signUpImage,
+    focus: "40% 62%",
     glyph: "user",
     cta: { label: "Sign up", href: "/register" },
   },
@@ -45,7 +52,9 @@ export const howItWorksSteps = [
     description:
       "Choose single-use or recurring, set a spending limit and get a card number the moment you ask.",
     label: "Virtual card",
-    word: "Card",
+    // The orange StripCard floating over a second card.
+    image: issueCardImage,
+    focus: "50% 46%",
     glyph: "card",
     cta: { label: "Create card", href: "/register" },
   },
@@ -54,7 +63,9 @@ export const howItWorksSteps = [
     description:
       "Shop online in any currency and watch every payment land in your dashboard as it happens.",
     label: "Payments",
-    word: "Pay",
+    // A man on his phone as a $5,000.00 payment lands.
+    image: payEverywhereImage,
+    focus: "62% 42%",
     glyph: "globe",
     cta: { label: "Start paying", href: "/register" },
   },

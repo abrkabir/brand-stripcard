@@ -1,4 +1,4 @@
-import { HowCard } from "@/components/home/HowCard";
+import { HowSteps } from "@/components/home/HowSteps";
 import { MorphBadge } from "@/components/home/MorphBadge";
 import { Reveal } from "@/components/shared/Reveal";
 import { SwipePill } from "@/components/shared/SwipePill";
@@ -15,64 +15,49 @@ const rise =
   "translate-y-6 opacity-0 transition-[opacity,translate] duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] data-visible:translate-y-0 data-visible:opacity-100";
 
 /**
- * "How it works" in two columns. Left: the label, a statement title with
- * small morphing badges set between its words, and a grid of places to pay
- * with it (see `LogoCloud`) — a screen-tall panel that holds still (sticky)
- * while the steps scroll past, so the logos stay in view. Right: the steps, stacked
- * (see `HowCard`). On smaller screens it all stacks, heading first.
+ * "How it works": the label and a statement title (small morphing badges set
+ * between its words) top left; where it works top right, set lower (the
+ * flags of the markets it serves with a line under them, and a grid of places to pay
+ * with it, see `LogoCloud`); and the steps under them as a row of panels,
+ * the active one wide with its picture, pointing at a step making it the
+ * active one (see `HowSteps`, which lays it all out; cards below `lg`).
  *
- * A Server Component; the morphing badges are the client islands.
+ * A Server Component; the morphing badges and the steps are client islands.
  */
 export function HowItWorks() {
   const { eyebrow, title } = howItWorksHeading;
 
   return (
     <section aria-labelledby="how-title" className="bg-page py-20 lg:py-28">
-      <Container className="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:items-start lg:gap-12">
-        {/* A screen-tall panel that holds still while the steps scroll past:
-            heading at its top, logos on its bottom edge — so both stay in
-            view. Capped, so on a very tall screen it never outgrows the
-            steps beside it. */}
-        <Reveal
-          className={cn(
-            "flex flex-col lg:sticky lg:top-[calc(var(--header-h-lg)+1.5rem)] lg:h-[min(calc(100svh-var(--header-h-lg)-3.5rem),44rem)]",
-            rise,
-          )}
-        >
-          <Eyebrow>{eyebrow}</Eyebrow>
-          <h2
-            id="how-title"
-            className="mt-5 font-heading text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
-          >
-            {title.map((piece, i) => (
-              <TitlePiece key={i} piece={piece} />
-            ))}
-          </h2>
-
-          {/* The banner's flags, plus a count of the rest. */}
-          <TrustBadge
-            tone="onLight"
-            countries={banner.trust.countries}
-            more={32}
-            className="mt-8 lg:mt-auto lg:pt-10"
-          />
-
-          <div className="mt-8">
-            <p className="mb-4 text-sm text-muted">
-              {howItWorksLogos.caption.lead}{" "}
-              <SwipePill className="border text-headline">{howItWorksLogos.caption.pill}</SwipePill>
-            </p>
-            <LogoCloud logos={howItWorksLogos.logos} />
-          </div>
-        </Reveal>
-
-        <Reveal as="ul" className={cn("grid gap-5 [transition-delay:150ms] lg:gap-6", rise)}>
-          {howItWorksSteps.map((step, i) => (
-            <li key={step.title}>
-              <HowCard step={step} index={i} />
-            </li>
-          ))}
-        </Reveal>
+      <Container>
+        <HowSteps
+          steps={howItWorksSteps}
+          heading={
+            <Reveal className={rise}>
+              <Eyebrow>{eyebrow}</Eyebrow>
+              <h2
+                id="how-title"
+                className="mt-5 max-w-2xl font-heading text-[clamp(1.5rem,2.8vw,2.25rem)] leading-[1.2] font-semibold tracking-[-0.035em] text-pretty text-headline"
+              >
+                {title.map((piece, i) => (
+                  <TitlePiece key={i} piece={piece} />
+                ))}
+              </h2>
+            </Reveal>
+          }
+          aside={
+            // Where it works: the banner's flags plus a count of the rest
+            // beside a line, then the places to pay.
+            <Reveal className={cn("[transition-delay:120ms]", rise)}>
+              <TrustBadge tone="onLight" countries={banner.trust.countries} more={32} />
+              <p className="mt-3 text-sm text-muted">
+                {howItWorksLogos.caption.lead}{" "}
+                <SwipePill className="border text-headline">{howItWorksLogos.caption.pill}</SwipePill>
+              </p>
+              <LogoCloud logos={howItWorksLogos.logos} className="mt-5" />
+            </Reveal>
+          }
+        />
       </Container>
     </section>
   );
