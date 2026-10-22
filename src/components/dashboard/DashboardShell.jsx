@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardTopBar } from "@/components/dashboard/DashboardTopBar";
+import { LogoutDialog } from "@/components/dashboard/LogoutDialog";
 
 const STORAGE_KEY = "stripcard-sidebar";
 const CHANGE = "stripcard-sidebar-change";
@@ -44,6 +45,8 @@ function writeRail(rail) {
  * icon rail and the full list. Below that it is a drawer, opened from the top
  * bar's menu button; it closes on Escape, on the backdrop, or on going to
  * another page, and focus moves into it and back.
+ *
+ * Log out, in the sidebar or the account menu, asks first (see LogoutDialog).
  */
 export function DashboardShell({ children }) {
   const pathname = usePathname();
@@ -55,6 +58,9 @@ export function DashboardShell({ children }) {
   const opener = useRef(null);
 
   const toggleCollapsed = useCallback(() => writeRail(!readRail()), []);
+
+  const [loggingOut, setLoggingOut] = useState(false);
+  const askLogout = useCallback(() => setLoggingOut(true), []);
 
   // The sidebar's movement waits until the page has settled (two frames after
   // it comes alive), so it opens at the width you left it at rather than
@@ -95,7 +101,13 @@ export function DashboardShell({ children }) {
 
   return (
     <div className="flex min-h-dvh flex-1 flex-col bg-canvas">
-      <DashboardTopBar onMenu={openMenu} rail={collapsed} onToggleSidebar={toggleCollapsed} animate={settled} />
+      <DashboardTopBar
+        onMenu={openMenu}
+        rail={collapsed}
+        onToggleSidebar={toggleCollapsed}
+        onLogout={askLogout}
+        animate={settled}
+      />
 
       {/* The backdrop behind the drawer. */}
       <div
@@ -107,9 +119,17 @@ export function DashboardShell({ children }) {
       />
 
       <div className="flex flex-1 gap-4 px-3 pb-4 sm:px-4 lg:gap-5">
-        <DashboardSidebar collapsed={collapsed} drawer={drawer} onCloseDrawer={closeMenu} animate={settled} />
+        <DashboardSidebar
+          collapsed={collapsed}
+          drawer={drawer}
+          onCloseDrawer={closeMenu}
+          onLogout={askLogout}
+          animate={settled}
+        />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
+
+      {loggingOut && <LogoutDialog onClose={() => setLoggingOut(false)} />}
     </div>
   );
 }

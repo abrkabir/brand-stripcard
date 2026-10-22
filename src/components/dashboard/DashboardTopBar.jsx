@@ -48,7 +48,7 @@ const ITEM =
  * It stays at the top while the page scrolls, over a frosted strip of the
  * canvas so cards slide under it cleanly.
  */
-export function DashboardTopBar({ onMenu, rail, onToggleSidebar, animate }) {
+export function DashboardTopBar({ onMenu, rail, onToggleSidebar, onLogout, animate }) {
   const pathname = usePathname();
   // The open popover, tied to the page it was opened on, so going to another
   // page closes it without an effect.
@@ -320,10 +320,20 @@ export function DashboardTopBar({ onMenu, rail, onToggleSidebar, animate }) {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className={cn(ITEM, "text-danger hover:bg-danger/10 hover:text-danger")}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Close the menu and hand focus to its button, so it
+                      // comes back there if the log out is cancelled.
+                      setMenu({ id: null, on: null });
+                      root.current?.querySelector(`[aria-controls="${ids.account}"]`)?.focus();
+                      onLogout();
+                    }}
+                    className={cn(ITEM, "w-full cursor-pointer text-danger hover:bg-danger/10 hover:text-danger")}
+                  >
                     <LogOutIcon className="size-4" />
                     Log out
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </Popover>

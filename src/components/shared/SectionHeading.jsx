@@ -9,9 +9,11 @@ import { cn } from "@/lib/cn";
  */
 /*
  * `title` takes a node, not just a string, so a caller can tone part of it
- * down. `action` is `{ label, href }`; `align` is "left" or "center".
+ * down. `action` is `{ label, href }`; `align` is "left" or "center". `id`
+ * goes on the heading, for a section to be labelled by it.
  */
 export function SectionHeading({
+  id,
   eyebrow,
   title,
   description,
@@ -40,6 +42,7 @@ export function SectionHeading({
             scale, and the lighter cut keeps a section from shouting over the
             hero above it. */}
         <h2
+          id={id}
           className={cn(
             "font-heading text-[2rem] leading-[1.15] font-normal sm:text-[2.6rem]",
             eyebrow && "mt-4",
@@ -66,7 +69,12 @@ export function SectionHeading({
           hover with it, so a section's "view all" reads as the same control as
           every other action on the site. */}
       {action && (
-        <Button href={action.href} variant="outline" size="sm" className="shrink-0">
+        <Button
+          href={action.href}
+          variant="outline"
+          size="sm"
+          className="shrink-0"
+        >
           {action.label}
         </Button>
       )}

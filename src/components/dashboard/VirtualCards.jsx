@@ -13,6 +13,7 @@ import {
   TextField,
 } from "@/components/dashboard/FormField";
 import { PageHeader } from "@/components/dashboard/PageHeader";
+import { Modal } from "@/components/dashboard/Modal";
 import { Panel } from "@/components/dashboard/Panel";
 import { Stepper } from "@/components/dashboard/Stepper";
 import {
@@ -52,9 +53,6 @@ const HEADING =
 
 /** How long the demo pretends to talk to the server, in milliseconds. */
 const SAVE_MS = 900;
-
-/** How long the card dialog takes to transition out before it closes, in milliseconds (its duration-200). */
-const LEAVE_MS = 200;
 
 /** The longest name a card can carry. */
 const NAME_MAX = 26;
@@ -572,14 +570,9 @@ function MoveMoney({ mode, card, wallet, onMove, onCancel }) {
  * closes it, and focus goes back to the card that opened it. Mount it only
  * while it is open, so it starts face up with the details hidden.
  *
- * It rises and fades in over a fading backdrop, and sinks and fades out the
- * same way, taking LEAVE_MS before it really closes (at once under reduced
- * motion, where it simply appears and goes).
+ * It opens and closes as every dashboard modal does (see Modal).
  */
 function CardDialog({ card, holder, wallet, onClose, onFreeze, onMove }) {
-  const ref = useRef(null);
-  const leaving = useRef(false);
-  const [shown, setShown] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [flipped, setFlipped] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -589,35 +582,12 @@ function CardDialog({ card, holder, wallet, onClose, onFreeze, onMove }) {
   const name = card.nameOnCard ?? holder;
   const used = Math.min(card.spent / card.limit, 1);
 
-  // Open as a modal, then on the next frame let it transition in; keep the
-  // page behind still while it is open.
-  useEffect(() => {
-    const dialog = ref.current;
-    if (dialog && !dialog.open) dialog.showModal();
-    const frame = requestAnimationFrame(() => setShown(true));
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      cancelAnimationFrame(frame);
-      document.body.style.overflow = previous;
-    };
-  }, []);
-
   useEffect(() => {
     if (!copied) return;
     const timer = window.setTimeout(() => setCopied(false), 1800);
     return () => window.clearTimeout(timer);
   }, [copied]);
 
-  // Transition out, then close for real (which unmounts it).
-  const close = () => {
-    const dialog = ref.current;
-    if (!dialog || leaving.current) return;
-    leaving.current = true;
-    setShown(false);
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.setTimeout(() => dialog.close(), still ? 0 : LEAVE_MS);
-  };
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(card.number.replace(/\s/g, ""));
@@ -645,214 +615,198 @@ function CardDialog({ card, holder, wallet, onClose, onFreeze, onMove }) {
     "inline-flex h-9 cursor-pointer items-center gap-2 rounded-full border border-line px-3.5 text-sm font-semibold text-headline transition-colors hover:border-headline/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
   return (
-    <dialog
-      ref={ref}
-      aria-labelledby="card-dialog-title"
-      data-shown={shown}
+    <Modal
+      labelledBy="card-dialog-title"
       onClose={onClose}
-      onCancel={(event) => {
-        // Escape: transition out first, as the other ways to close do.
-        event.preventDefault();
-        close();
-      }}
-      onClick={(event) => {
-        if (event.target === event.currentTarget) close();
-      }}
-      className={cn(
-        "m-auto max-h-[calc(100dvh-2rem)] w-[min(36rem,calc(100vw-2rem))] overflow-y-auto rounded-3xl bg-card text-content shadow-lift ring-1 ring-line backdrop:bg-hero-ink/35 backdrop:backdrop-blur-[3px]",
-        // Out (and before it is in): lowered, a touch smaller, clear; going
-        // out quickly, easing in.
-        "translate-y-4 scale-[0.97] opacity-0 transition-[opacity,translate,scale] duration-200 ease-in backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-200",
-        // In: risen, full size, solid; settling in slower, easing out.
-        "data-[shown=true]:translate-y-0 data-[shown=true]:scale-100 data-[shown=true]:opacity-100 data-[shown=true]:duration-300 data-[shown=true]:ease-[cubic-bezier(0.16,1,0.3,1)] data-[shown=true]:backdrop:opacity-100 data-[shown=true]:backdrop:duration-300",
-        "motion-reduce:transition-none motion-reduce:backdrop:transition-none",
-      )}
+      className="w-[min(36rem,calc(100vw-2rem))]"
     >
-      <div className="p-5 sm:p-6">
-        <div className="flex items-start gap-3">
-          <div className="min-w-0 flex-1">
-            <h2
-              id="card-dialog-title"
-              className="truncate font-heading text-xl leading-tight font-semibold text-headline"
+      {(close) => (
+        <div className="p-5 sm:p-6">
+          <div className="flex items-start gap-3">
+            <div className="min-w-0 flex-1">
+              <h2
+                id="card-dialog-title"
+                className="truncate font-heading text-xl leading-tight font-semibold text-headline"
+              >
+                {card.name}
+              </h2>
+              <p className="mt-1 truncate text-xs text-muted">{card.purpose}</p>
+            </div>
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Close"
+              className="-mt-1 -mr-1 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover:bg-canvas hover:text-headline focus-visible:outline-2 focus-visible:outline-brand"
             >
-              {card.name}
-            </h2>
-            <p className="mt-1 truncate text-xs text-muted">{card.purpose}</p>
+              <CloseIcon className="size-5" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={close}
-            aria-label="Close"
-            className="-mt-1 -mr-1 grid size-9 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover:bg-canvas hover:text-headline focus-visible:outline-2 focus-visible:outline-brand"
-          >
-            <CloseIcon className="size-5" />
-          </button>
-        </div>
 
-        {/* The card, turning over to its back. */}
-        <FlipCard
-          card={card}
-          holder={name}
-          revealed={revealed}
-          flipped={flipped}
-          onFlip={() => setFlipped((f) => !f)}
-          front={{
-            design: card.design,
-            network: card.network,
-            name: card.name,
-            number: card.number,
-            holder: name,
-            expires: card.expires,
-            status: card.status,
-          }}
-          className="mx-auto mt-5 max-w-[24rem]"
-        />
+          {/* The card, turning over to its back. */}
+          <FlipCard
+            card={card}
+            holder={name}
+            revealed={revealed}
+            flipped={flipped}
+            onFlip={() => setFlipped((f) => !f)}
+            front={{
+              design: card.design,
+              network: card.network,
+              name: card.name,
+              number: card.number,
+              holder: name,
+              expires: card.expires,
+              status: card.status,
+            }}
+            className="mx-auto mt-5 max-w-[24rem]"
+          />
 
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
-          <button
-            type="button"
-            onClick={() => setFlipped((f) => !f)}
-            aria-pressed={flipped}
-            className={PILL}
-          >
-            <SwapIcon aria-hidden="true" className="size-4" />
-            {flipped ? "Show front" : "Flip card"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setRevealed((v) => !v)}
-            aria-pressed={revealed}
-            className={PILL}
-          >
-            <EyeIcon off={revealed} aria-hidden="true" className="size-4" />
-            {revealed ? "Hide details" : "Show details"}
-          </button>
-          <button type="button" onClick={copy} className={PILL}>
-            {copied ? (
-              <CheckIcon aria-hidden="true" className="size-4 text-success" />
-            ) : (
-              <CopyIcon aria-hidden="true" className="size-4" />
-            )}
-            {copied ? "Copied" : "Copy number"}
-          </button>
-        </div>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <button
+              type="button"
+              onClick={() => setFlipped((f) => !f)}
+              aria-pressed={flipped}
+              className={PILL}
+            >
+              <SwapIcon aria-hidden="true" className="size-4" />
+              {flipped ? "Show front" : "Flip card"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setRevealed((v) => !v)}
+              aria-pressed={revealed}
+              className={PILL}
+            >
+              <EyeIcon off={revealed} aria-hidden="true" className="size-4" />
+              {revealed ? "Hide details" : "Show details"}
+            </button>
+            <button type="button" onClick={copy} className={PILL}>
+              {copied ? (
+                <CheckIcon aria-hidden="true" className="size-4 text-success" />
+              ) : (
+                <CopyIcon aria-hidden="true" className="size-4" />
+              )}
+              {copied ? "Copied" : "Copy number"}
+            </button>
+          </div>
 
-        <dl className="mt-5 divide-y divide-dashed divide-line rounded-2xl border border-line px-4">
-          <DetailLine label="Card number">
-            <span className="font-mono tracking-wide tabular-nums">
-              {revealed ? spaced(card.number) : masked(card.number)}
-            </span>
-          </DetailLine>
-          <DetailLine label="Expires">
-            <span className="tabular-nums">{card.expires}</span>
-          </DetailLine>
-          <DetailLine label="CVV">
-            <span className="font-mono tracking-wide tabular-nums">
-              {revealed ? card.cvv : "•••"}
-            </span>
-          </DetailLine>
-          <DetailLine label="Name on card">{name}</DetailLine>
-          <DetailLine label="Network">{card.network}</DetailLine>
-        </dl>
+          <dl className="mt-5 divide-y divide-dashed divide-line rounded-2xl border border-line px-4">
+            <DetailLine label="Card number">
+              <span className="font-mono tracking-wide tabular-nums">
+                {revealed ? spaced(card.number) : masked(card.number)}
+              </span>
+            </DetailLine>
+            <DetailLine label="Expires">
+              <span className="tabular-nums">{card.expires}</span>
+            </DetailLine>
+            <DetailLine label="CVV">
+              <span className="font-mono tracking-wide tabular-nums">
+                {revealed ? card.cvv : "•••"}
+              </span>
+            </DetailLine>
+            <DetailLine label="Name on card">{name}</DetailLine>
+            <DetailLine label="Network">{card.network}</DetailLine>
+          </dl>
 
-        {/* The money on it, and this month's spending. */}
-        <div className="mt-4 rounded-2xl bg-canvas/60 p-4">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs text-muted">Balance</p>
-              <p className="mt-1 font-heading text-2xl leading-none font-semibold text-headline tabular-nums">
-                {formatMoney(card.balance)}
+          {/* The money on it, and this month's spending. */}
+          <div className="mt-4 rounded-2xl bg-canvas/60 p-4">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs text-muted">Balance</p>
+                <p className="mt-1 font-heading text-2xl leading-none font-semibold text-headline tabular-nums">
+                  {formatMoney(card.balance)}
+                </p>
+              </div>
+              <p className="text-right text-xs text-muted tabular-nums">
+                <span className="font-semibold text-headline">
+                  {formatMoney(card.spent)}
+                </span>{" "}
+                spent of {formatMoney(card.limit, { whole: true })}
+                <span className="block">this month</span>
               </p>
             </div>
-            <p className="text-right text-xs text-muted tabular-nums">
-              <span className="font-semibold text-headline">
-                {formatMoney(card.spent)}
-              </span>{" "}
-              spent of {formatMoney(card.limit, { whole: true })}
-              <span className="block">this month</span>
-            </p>
+            <div
+              role="meter"
+              aria-label="Spent this month"
+              aria-valuemin={0}
+              aria-valuemax={card.limit}
+              aria-valuenow={Math.min(card.spent, card.limit)}
+              aria-valuetext={`${formatMoney(card.spent)} of ${formatMoney(card.limit)}`}
+              className="mt-3 h-1.5 overflow-hidden rounded-full bg-line"
+            >
+              <span
+                className={cn(
+                  "block h-full rounded-full",
+                  frozen ? "bg-subtle" : "bg-brand",
+                )}
+                style={{ width: `${used * 100}%` }}
+              />
+            </div>
+            {note && (
+              <Status tone="success" className="mt-3">
+                {note}
+              </Status>
+            )}
           </div>
-          <div
-            role="meter"
-            aria-label="Spent this month"
-            aria-valuemin={0}
-            aria-valuemax={card.limit}
-            aria-valuenow={Math.min(card.spent, card.limit)}
-            aria-valuetext={`${formatMoney(card.spent)} of ${formatMoney(card.limit)}`}
-            className="mt-3 h-1.5 overflow-hidden rounded-full bg-line"
-          >
-            <span
-              className={cn(
-                "block h-full rounded-full",
-                frozen ? "bg-subtle" : "bg-brand",
-              )}
-              style={{ width: `${used * 100}%` }}
+
+          {mode && (
+            <MoveMoney
+              key={mode}
+              mode={mode}
+              card={card}
+              wallet={wallet}
+              onMove={move}
+              onCancel={() => setMode(null)}
             />
-          </div>
-          {note && (
-            <Status tone="success" className="mt-3">
-              {note}
-            </Status>
           )}
-        </div>
 
-        {mode && (
-          <MoveMoney
-            key={mode}
-            mode={mode}
-            card={card}
-            wallet={wallet}
-            onMove={move}
-            onCancel={() => setMode(null)}
-          />
-        )}
-
-        <div className="mt-6 flex flex-wrap justify-end gap-2.5">
-          <Button
-            type="button"
-            size="sm"
-            arrow={false}
-            onClick={() => open("add")}
-            aria-expanded={mode === "add"}
-          >
-            <PlusIcon aria-hidden="true" className="size-4" />
-            Add money
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            arrow={false}
-            onClick={() => open("withdraw")}
-            aria-expanded={mode === "withdraw"}
-            disabled={card.balance <= 0}
-            className="disabled:opacity-50"
-          >
-            <DownloadIcon aria-hidden="true" className="size-4 rotate-180" />
-            Withdraw
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            arrow={false}
-            onClick={() => onFreeze(card.id)}
-          >
-            <LockIcon aria-hidden="true" className="size-4" />
-            {frozen ? "Unfreeze" : "Freeze"}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            arrow={false}
-            onClick={close}
-          >
-            Done
-          </Button>
+          <div className="mt-6 flex flex-wrap justify-end gap-2.5">
+            <Button
+              type="button"
+              size="sm"
+              arrow={false}
+              onClick={() => open("add")}
+              aria-expanded={mode === "add"}
+            >
+              <PlusIcon aria-hidden="true" className="size-4" />
+              Add money
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              arrow={false}
+              onClick={() => open("withdraw")}
+              aria-expanded={mode === "withdraw"}
+              disabled={card.balance <= 0}
+              className="disabled:opacity-50"
+            >
+              <DownloadIcon aria-hidden="true" className="size-4 rotate-180" />
+              Withdraw
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              arrow={false}
+              onClick={() => onFreeze(card.id)}
+            >
+              <LockIcon aria-hidden="true" className="size-4" />
+              {frozen ? "Unfreeze" : "Freeze"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              arrow={false}
+              onClick={close}
+            >
+              Done
+            </Button>
+          </div>
         </div>
-      </div>
-    </dialog>
+      )}
+    </Modal>
   );
 }
 

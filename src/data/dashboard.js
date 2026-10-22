@@ -1,9 +1,17 @@
 import {
   siAirbnb,
   siApple,
+  siBankofamerica,
+  siChase,
+  siDoordash,
+  siIkea,
   siNetflix,
+  siNike,
+  siPlaystation,
   siSpotify,
   siStarbucks,
+  siSteam,
+  siTarget,
   siUber,
 } from "simple-icons";
 // Maya, Daniel and Aisha have square headshots made for round avatars; the
@@ -20,6 +28,13 @@ import sofia from "../../public/images/testimonials/customer-sofia.webp";
 
 /** A brand's mark (from simple-icons), drawn in the text colour wherever it is used. */
 const brand = (icon) => ({ title: icon.title, path: icon.path });
+
+/** A brand's mark with its own colour, for a mark drawn on the brand's colour (a gift card, a bank). */
+const mark = (icon) => ({
+  title: icon.title,
+  path: icon.path,
+  hex: `#${icon.hex}`,
+});
 
 /**
  * Everything the dashboard shows. DEMO DATA: there is no account behind it
@@ -40,9 +55,9 @@ export const dashboardUser = {
  * The sidebar, in groups. A group without a `title` sits above the first
  * heading; a `collapsible` group shows as one item, its `title` and `icon`,
  * that opens out to its pages. `icon` names an icon in SectionIcon. Every item
- * but the first opens its own page under /dashboard, built from this list (see
- * app/(dashboard)/dashboard/[section]); `description` is the line that page
- * opens with.
+ * but the first opens its own page under /dashboard (each its own route in
+ * app/(dashboard)/dashboard); `description` is that page's description, and
+ * the line search shows for it.
  */
 export const dashboardNav = [
   {
@@ -781,5 +796,526 @@ export const cardHolderOptions = {
     { value: "owner", label: "Business owner" },
     { value: "student", label: "Student" },
     { value: "other", label: "Something else" },
+  ],
+};
+
+/* ── Transfer money ──────────────────────────────────────────────────────── */
+
+/**
+ * Sending money: to another StripCard user (free, and there at once) or to a
+ * bank account (a flat `bankFee`, a day or two). DEMO DATA.
+ *
+ *   contacts  the people paid most, to pick in a tap, each with a username
+ *   banks     the banks a transfer can go to, as select options
+ *   limits    the least and most one transfer can be, and the daily limit
+ *   quick     the quick amounts offered
+ *   recent    the latest transfers, newest first; `amount` below 0 was sent
+ */
+export const transfer = {
+  contacts: [
+    { id: "daniel", name: "Daniel Brooks", handle: "@danielb", avatar: daniel },
+    { id: "aisha", name: "Aisha Bello", handle: "@aishab", avatar: aisha },
+    { id: "sofia", name: "Sofia Lindqvist", handle: "@sofial", avatar: sofia },
+    { id: "marcus", name: "Marcus Reid", handle: "@marcusr", avatar: marcus },
+  ],
+  banks: [
+    { value: "chase", label: "Chase" },
+    { value: "boa", label: "Bank of America" },
+    { value: "wells", label: "Wells Fargo" },
+    { value: "citi", label: "Citibank" },
+    { value: "capitalone", label: "Capital One" },
+    { value: "other", label: "Another bank" },
+  ],
+  bankFee: 1.5,
+  limits: {
+    min: 1,
+    max: 5000,
+    daily: 10000,
+    dailyUsed: 35,
+    dailyReset: "Resets at midnight",
+  },
+  quick: [25, 50, 100, 250],
+  recent: [
+    {
+      id: "r1",
+      name: "Daniel Brooks",
+      avatar: daniel,
+      amount: 50,
+      when: "Today",
+    },
+    {
+      id: "r2",
+      name: "Aisha Bello",
+      avatar: aisha,
+      amount: -35,
+      when: "15 Oct",
+    },
+    {
+      id: "r3",
+      name: "Sofia Lindqvist",
+      avatar: sofia,
+      amount: 120,
+      when: "12 Oct",
+    },
+    {
+      id: "r4",
+      name: "Marcus Reid",
+      avatar: marcus,
+      amount: -80,
+      when: "9 Oct",
+    },
+  ],
+};
+
+/* ── Withdraw money ──────────────────────────────────────────────────────── */
+
+/**
+ * Taking money out of the wallet to a bank account. DEMO DATA.
+ *
+ *   accounts  the bank accounts linked to the wallet, each with its bank's
+ *             mark (simple-icons, with the bank's colour)
+ *   speeds    how soon it arrives, and what that costs, as a share of the
+ *             amount, taken from it
+ *   limits    the least and most one withdrawal can be, and the daily and
+ *             monthly limits
+ *   quick     the quick amounts offered
+ */
+export const withdraw = {
+  accounts: [
+    {
+      id: "chase",
+      bank: "Chase",
+      type: "Checking",
+      last4: "6604",
+      logo: mark(siChase),
+    },
+    {
+      id: "boa",
+      bank: "Bank of America",
+      type: "Savings",
+      last4: "0937",
+      logo: mark(siBankofamerica),
+    },
+  ],
+  speeds: [
+    {
+      id: "standard",
+      label: "Standard",
+      text: "1 to 2 business days",
+      percent: 0,
+    },
+    {
+      id: "instant",
+      label: "Instant",
+      text: "In about 30 minutes",
+      percent: 0.015,
+    },
+  ],
+  limits: {
+    min: 10,
+    max: 5000,
+    daily: 5000,
+    dailyUsed: 0,
+    dailyReset: "Resets at midnight",
+    monthly: 20000,
+    monthlyUsed: 750,
+    monthlyReset: "Resets on 1 Nov",
+  },
+  quick: [100, 250, 500, 1000],
+};
+
+/* ── Gift cards ──────────────────────────────────────────────────────────── */
+
+/**
+ * The gift card shop and the cards held. DEMO DATA.
+ *
+ *   categories  what the shop can be narrowed to
+ *   brands      the gift cards on sale: each brand's mark (simple-icons, with
+ *               its colour, the card's ground), its category, the amounts
+ *               offered, and where it is used
+ *   min, max    the least and most a card of another amount can hold
+ *   held        the cards bought, by brand id: what is left on each of what
+ *               it held, its code and when it expires
+ */
+export const giftCards = {
+  categories: ["Entertainment", "Gaming", "Shopping", "Food", "Travel"],
+  brands: [
+    {
+      id: "netflix",
+      name: "Netflix",
+      category: "Entertainment",
+      logo: mark(siNetflix),
+      amounts: [25, 50, 100],
+      use: "netflix.com/redeem",
+    },
+    {
+      id: "spotify",
+      name: "Spotify",
+      category: "Entertainment",
+      logo: mark(siSpotify),
+      amounts: [10, 30, 60],
+      use: "spotify.com/redeem",
+    },
+    {
+      id: "steam",
+      name: "Steam",
+      category: "Gaming",
+      logo: mark(siSteam),
+      amounts: [20, 50, 100],
+      use: "the Steam app",
+    },
+    {
+      id: "playstation",
+      name: "PlayStation",
+      category: "Gaming",
+      logo: mark(siPlaystation),
+      amounts: [25, 50, 100],
+      use: "the PlayStation Store",
+    },
+    {
+      id: "apple",
+      name: "Apple",
+      category: "Shopping",
+      logo: mark(siApple),
+      amounts: [25, 50, 100, 200],
+      use: "the App Store or apple.com",
+    },
+    {
+      id: "nike",
+      name: "Nike",
+      category: "Shopping",
+      logo: mark(siNike),
+      amounts: [50, 100, 200],
+      use: "nike.com",
+    },
+    {
+      id: "target",
+      name: "Target",
+      category: "Shopping",
+      logo: mark(siTarget),
+      amounts: [25, 50, 100],
+      use: "target.com",
+    },
+    {
+      id: "ikea",
+      name: "IKEA",
+      category: "Shopping",
+      logo: mark(siIkea),
+      amounts: [50, 100, 250],
+      use: "ikea.com",
+    },
+    {
+      id: "starbucks",
+      name: "Starbucks",
+      category: "Food",
+      logo: mark(siStarbucks),
+      amounts: [10, 25, 50],
+      use: "the Starbucks app",
+    },
+    {
+      id: "doordash",
+      name: "DoorDash",
+      category: "Food",
+      logo: mark(siDoordash),
+      amounts: [25, 50, 100],
+      use: "the DoorDash app",
+    },
+    {
+      id: "uber",
+      name: "Uber",
+      category: "Travel",
+      logo: mark(siUber),
+      amounts: [25, 50, 100],
+      use: "the Uber app",
+    },
+    {
+      id: "airbnb",
+      name: "Airbnb",
+      category: "Travel",
+      logo: mark(siAirbnb),
+      amounts: [50, 100, 250],
+      use: "airbnb.com",
+    },
+  ],
+  min: 10,
+  max: 500,
+  held: [
+    {
+      id: "g1",
+      brand: "netflix",
+      balance: 50,
+      value: 50,
+      code: "NFLX8H2KQW715PZD",
+      expires: "Dec 2027",
+    },
+    {
+      id: "g2",
+      brand: "starbucks",
+      balance: 18.4,
+      value: 25,
+      code: "SBUX4M9TJ2XR7LQA",
+      expires: "Mar 2027",
+    },
+  ],
+};
+
+/* ── Help ────────────────────────────────────────────────────────────────── */
+
+/**
+ * The Help page: the account's support tickets, and the ways to reach the
+ * support team. DEMO DATA.
+ *
+ *   contact     the support email and phone, and when the phone is answered
+ *   socials     support on social media: each with its icon (by name, see
+ *               icons) and the handle shown
+ *   categories  what a ticket can be about, as select options, each with
+ *               the icon its row shows
+ *   priorities  how urgent a ticket is
+ *   statuses    where a ticket stands: open (with the team), answered
+ *               ("Replied": the team has replied, over to you) or closed
+ *   tickets     the account's tickets, newest first: the thread of messages
+ *               on each, `unread` when the latest reply is still to be read
+ */
+export const help = {
+  contact: {
+    email: "support@stripcard.com",
+    emailHref: "mailto:support@stripcard.com",
+    phone: "+1 415 555 0142",
+    phoneHref: "tel:+14155550142",
+    hours: "Every day, 8 AM to 10 PM",
+  },
+  socials: [
+    {
+      id: "whatsapp",
+      label: "WhatsApp",
+      handle: "+1 415 555 0142",
+      icon: "whatsapp",
+      href: "https://wa.me/14155550142",
+    },
+    {
+      id: "x",
+      label: "X",
+      handle: "@StripCardHelp",
+      icon: "x",
+      href: "https://x.com",
+    },
+    {
+      id: "facebook",
+      label: "Messenger",
+      handle: "StripCard Support",
+      icon: "facebook",
+      href: "https://facebook.com",
+    },
+    {
+      id: "instagram",
+      label: "Instagram",
+      handle: "@stripcard",
+      icon: "instagram",
+      href: "https://instagram.com",
+    },
+  ],
+  categories: [
+    { value: "cards", label: "A card or a payment", icon: "card" },
+    { value: "money", label: "Adding or sending money", icon: "dollarSquare" },
+    { value: "account", label: "My account", icon: "userCircle" },
+    { value: "security", label: "Something looks wrong", icon: "shield" },
+    { value: "other", label: "Something else", icon: "help" },
+  ],
+  priorities: [
+    { value: "low", label: "Low" },
+    { value: "normal", label: "Normal" },
+    { value: "urgent", label: "Urgent" },
+  ],
+  statuses: [
+    { value: "open", label: "Open" },
+    { value: "answered", label: "Replied" },
+    { value: "closed", label: "Closed" },
+  ],
+  tickets: [
+    {
+      id: "SC-1048",
+      subject: "Travel card declined at a hotel",
+      category: "cards",
+      priority: "urgent",
+      status: "answered",
+      unread: true,
+      opened: "22 Oct",
+      updated: "2 hours ago",
+      messages: [
+        {
+          from: "me",
+          text: "My Travel card ending 3302 was declined when I checked in at a hotel in Lisbon last night. It has money on it and is not frozen.",
+          when: "22 Oct, 11:40 PM",
+        },
+        {
+          from: "support",
+          name: "Ava",
+          text: "Sorry about that, Maya. The hotel asked for a $1,200 hold, which is more than this card's $2,000 monthly limit has left this month. You can raise the limit from Virtual Card, or pay with your Subscriptions card for now.",
+          when: "Today, 8:15 AM",
+        },
+      ],
+    },
+    {
+      id: "SC-1045",
+      subject: "Bank transfer has not arrived",
+      category: "money",
+      priority: "normal",
+      status: "open",
+      opened: "20 Oct",
+      updated: "Yesterday",
+      messages: [
+        {
+          from: "me",
+          text: "I added $500 by bank transfer on Monday and it is still not in my wallet.",
+          when: "20 Oct, 3:12 PM",
+        },
+        {
+          from: "support",
+          name: "Daniel",
+          text: "Thanks, I have found the transfer. Your bank sent it late on Monday, so it should land today. I will keep this ticket open until it does.",
+          when: "Yesterday, 10:02 AM",
+        },
+      ],
+    },
+    {
+      id: "SC-1041",
+      subject: "Change the email on my account",
+      category: "account",
+      priority: "low",
+      status: "open",
+      opened: "17 Oct",
+      updated: "17 Oct",
+      messages: [
+        {
+          from: "me",
+          text: "Please change my email to my work address. I can confirm it from both inboxes.",
+          when: "17 Oct, 9:30 AM",
+        },
+      ],
+    },
+    {
+      id: "SC-1037",
+      subject: "Refund for a double Spotify charge",
+      category: "cards",
+      priority: "normal",
+      status: "closed",
+      opened: "12 Oct",
+      updated: "14 Oct",
+      messages: [
+        {
+          from: "me",
+          text: "Spotify charged my Subscriptions card twice this month, $10.99 each time.",
+          when: "12 Oct, 6:05 PM",
+        },
+        {
+          from: "support",
+          name: "Ava",
+          text: "You are right, the second charge was a duplicate. We have refunded $10.99 to the card; you will see it within a day.",
+          when: "13 Oct, 9:20 AM",
+        },
+        { from: "me", text: "Got it, thank you!", when: "14 Oct, 8:00 AM" },
+      ],
+    },
+    {
+      id: "SC-1032",
+      subject: "How do instant withdrawals work?",
+      category: "money",
+      priority: "low",
+      status: "closed",
+      opened: "3 Oct",
+      updated: "3 Oct",
+      messages: [
+        {
+          from: "me",
+          text: "What does an instant withdrawal cost, and how fast is it really?",
+          when: "3 Oct, 11:11 AM",
+        },
+        {
+          from: "support",
+          name: "Marcus",
+          text: "It costs 1.5% of the amount and usually reaches your bank in about 30 minutes. Standard withdrawals are free and take 1 to 2 business days.",
+          when: "3 Oct, 11:24 AM",
+        },
+      ],
+    },
+  ],
+};
+
+/* ── Plans ───────────────────────────────────────────────────────────────── */
+
+/**
+ * The plans, and what each includes. DEMO DATA: the account is on
+ * `current`. `monthly` is the price a month, billed monthly; billed yearly it
+ * is `yearlyDiscount` less. `compare` sets the plans side by side, a row per
+ * feature: a value per plan, `true` for included, `false` for not.
+ */
+export const plans = {
+  current: "personal",
+  yearlyDiscount: 0.2,
+  list: [
+    {
+      id: "personal",
+      name: "Personal",
+      tagline: "For everyday spending online",
+      monthly: 0,
+      features: [
+        "Up to 5 virtual cards",
+        "Pay in 30+ currencies",
+        "Freeze any card in a tap",
+        "Free standard withdrawals",
+        "Help by email",
+      ],
+    },
+    {
+      id: "premium",
+      name: "Premium",
+      tagline: "Higher limits, more cards and priority support",
+      monthly: 9.99,
+      popular: true,
+      features: [
+        "Up to 20 virtual cards",
+        "No foreign exchange fee",
+        "Free instant withdrawals",
+        "1% cashback on subscriptions",
+        "Priority support, day and night",
+      ],
+    },
+    {
+      id: "business",
+      name: "Business",
+      tagline: "For teams and growing companies",
+      monthly: 24.99,
+      features: [
+        "Unlimited virtual cards",
+        "Everything in Premium",
+        "Up to 25 team members",
+        "Spend reports and exports",
+        "A dedicated account manager",
+      ],
+    },
+  ],
+  compare: [
+    { label: "Virtual cards", values: ["5", "20", "Unlimited"] },
+    { label: "Foreign exchange fee", values: ["1%", "None", "None"] },
+    { label: "Instant withdrawals", values: ["1.5%", "Free", "Free"] },
+    { label: "Cashback on subscriptions", values: [false, "1%", "2%"] },
+    { label: "Card designs", values: ["3", "All 4", "All 4"] },
+    { label: "Spend reports", values: [false, true, true] },
+    { label: "Team members", values: [false, false, "Up to 25"] },
+    { label: "Support", values: ["Email", "Priority", "Dedicated manager"] },
+  ],
+  questions: [
+    {
+      q: "When am I charged?",
+      a: "Today, from your wallet, for the first month or year. After that it renews on the same date, and we email you a few days before.",
+    },
+    {
+      q: "Can I switch back?",
+      a: "Yes, at any time. Your plan's perks stay until the end of the period you have paid for, then the account moves to the plan you chose.",
+    },
+    {
+      q: "What happens to my extra cards?",
+      a: "Nothing is deleted. If you move to a plan with fewer cards, the newest ones are frozen until you are back within its limit.",
+    },
   ],
 };

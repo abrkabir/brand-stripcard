@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { AuthField, AuthSubmit } from "@/components/auth/AuthField";
+
+/** Where signing in or up lands. */
+const HOME = "/dashboard";
 
 /**
  * The sign-in and sign-up form.
@@ -13,17 +17,30 @@ import { AuthField, AuthSubmit } from "@/components/auth/AuthField";
  * that matters more than it looks: a browser needs `current-password` to offer
  * a saved credential and `new-password` to offer a generated one.
  *
- * TODO: Backend — POST /api/auth/{login,register}. Right now submitting shows
- * the pending state and stops; there is nothing to authenticate against, so it
- * deliberately does not pretend to have signed anyone in.
+ * The browser checks the fields before it lets the form submit: a name when
+ * registering, an email address, and a password of 8 characters or more.
+ *
+ * DEMO: there is no account behind it yet. Any details that pass those checks
+ * sign in: submitting shows the pending state and goes to the dashboard
+ * (replacing this page in the history, so Back does not return to the form).
+ * The dashboard is fetched ahead while the form is open, so it opens at once.
+ *
+ * TODO: Backend — POST /api/auth/{login,register}, and go to the dashboard
+ * only once it answers.
  */
 export function AuthForm({ mode, submitLabel }) {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
   const registering = mode === "register";
+
+  useEffect(() => {
+    router.prefetch(HOME);
+  }, [router]);
 
   const submit = (event) => {
     event.preventDefault();
     setPending(true);
+    router.replace(HOME);
   };
 
   return (

@@ -18,7 +18,8 @@ const EASE = "duration-[450ms] ease-in-out";
 
 /**
  * The dashboard's sidebar: a floating card under the top bar with the links in
- * groups, and at its foot Help, Log out and a nudge to add a card.
+ * groups, and at its foot Help, Log out (which asks first, `onLogout`) and a
+ * nudge to add a card.
  * The page you are on sits on a soft brand tint, in deep orange. Group titles
  * are for screen readers only; on screen the links run as one even list, but
  * for Settings: one item that opens out to its pages on a tree.
@@ -41,7 +42,7 @@ const EASE = "duration-[450ms] ease-in-out";
  * with the logo and a close button; while shut it is inert, so focus cannot
  * wander into it.
  */
-export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, animate }) {
+export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, animate }) {
   const pathname = usePathname();
   const desktop = useDesktop();
   const closeButton = useRef(null);
@@ -213,10 +214,14 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, animate }) 
             {rail && <Tooltip>{dashboardHelp.label}</Tooltip>}
           </li>
           <li className="group relative">
-            <Link href="/login" className={cn(row(false), "text-danger hover:bg-danger/10 hover:text-danger")}>
+            <button
+              type="button"
+              onClick={onLogout}
+              className={cn(row(false), "w-full cursor-pointer text-danger hover:bg-danger/10 hover:text-danger")}
+            >
               <LogOutIcon className="size-6 shrink-0" />
               <span className={label}>Log out</span>
-            </Link>
+            </button>
             {rail && <Tooltip>Log out</Tooltip>}
           </li>
         </ul>

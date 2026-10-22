@@ -211,6 +211,13 @@ export const KeyIcon = (p) => (
   </Svg>
 );
 
+export const TicketIcon = (p) => (
+  <Svg {...p}>
+    <path d="M3.5 8a1.5 1.5 0 0 1 1.5-1.5h14A1.5 1.5 0 0 1 20.5 8v2a2 2 0 0 0 0 4v2a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 16v-2a2 2 0 0 0 0-4Z" />
+    <path d="M14.5 6.5v2M14.5 11v2M14.5 15.5v2" />
+  </Svg>
+);
+
 export const TagIcon = (p) => (
   <Svg {...p}>
     <path d="M3.5 11.6V5a1.5 1.5 0 0 1 1.5-1.5h6.6a2 2 0 0 1 1.4.6l7 7a2 2 0 0 1 0 2.8l-6.6 6.6a2 2 0 0 1-2.8 0l-7-7a2 2 0 0 1-.6-1.4Z" />
@@ -696,6 +703,7 @@ export const icons = {
   home: HomeIcon,
   key: KeyIcon,
   tag: TagIcon,
+  ticket: TicketIcon,
   users: UsersIcon,
   card: CreditCardIcon,
   globe: GlobeIcon,

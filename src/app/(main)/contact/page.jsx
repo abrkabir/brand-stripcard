@@ -1,3 +1,4 @@
+import { ContactChannels } from "@/components/contact/ContactChannels";
 import { ContactSection } from "@/components/contact/ContactSection";
 import { PageHero } from "@/components/shared/PageHero";
 import { contactHero } from "@/data/contact";
@@ -9,7 +10,7 @@ export const metadata = {
 
 /**
  * Contact page: the page banner with its breadcrumb, then the ways to reach
- * the team beside the enquiry form.
+ * the team beside the enquiry form, and the channels to join for news.
  */
 export default function ContactPage() {
   return (
@@ -21,6 +22,7 @@ export default function ContactPage() {
         crumbs={[{ label: "Contact", href: "/contact" }]}
       />
       <ContactSection />
+      <ContactChannels />
     </>
   );
 }

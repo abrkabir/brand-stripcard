@@ -171,7 +171,7 @@ function ProfileSidebar({ section }) {
                   "grid size-9 shrink-0 place-items-center rounded-xl transition-colors duration-300",
                   item.danger
                     ? on
-                      ? "bg-danger text-white"
+                      ? "bg-danger-solid text-white"
                       : "bg-danger/10 text-danger"
                     : on
                       ? "bg-brand text-white"
@@ -986,7 +986,7 @@ function DangerPanel() {
           <button
             type="submit"
             disabled={typed !== CONFIRM_WORD || busy}
-            className="mt-3 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-danger px-5 text-sm font-semibold text-white transition-[background-color,opacity] hover:bg-danger/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger disabled:cursor-not-allowed disabled:opacity-40"
+            className="mt-3 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-danger-solid px-5 text-sm font-semibold text-white transition-[background-color,opacity] hover:bg-danger-solid/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger disabled:cursor-not-allowed disabled:opacity-40"
           >
             <TrashIcon aria-hidden="true" className="size-4" />
             {busy ? "Deleting" : "Delete my account"}

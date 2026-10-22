@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { AddMoneyInfo } from "@/components/dashboard/AddMoneyInfo";
 import { GatewayMark } from "@/components/dashboard/GatewayMark";
+import { cleanAmount as clean, Line, StepPill } from "@/components/dashboard/MoneyParts";
 import { Panel } from "@/components/dashboard/Panel";
 import { CheckIcon } from "@/components/icons";
 import { CurrencyMark, currencyName } from "@/components/shared/CurrencyMark";
@@ -24,12 +25,6 @@ function feeLabel(gateway) {
   if (gateway.fixed) parts.push(formatMoney(gateway.fixed));
   if (gateway.percent) parts.push(`${Number((gateway.percent * 100).toFixed(2))}%`);
   return parts.length ? parts.join(" + ") : null;
-}
-
-/** What was typed, kept to a number with at most two decimal places. */
-function clean(text) {
-  const [whole, ...rest] = text.replace(/[^\d.]/g, "").split(".");
-  return rest.length ? `${whole}.${rest.join("").slice(0, 2)}` : whole;
 }
 
 /**
@@ -143,26 +138,6 @@ function RateLock({ left, total, fresh, className }) {
       </svg>
       Locked for 0:{String(left).padStart(2, "0")}
     </span>
-  );
-}
-
-/** A line of the review: what it is (with a note under it, maybe) and the figure. */
-function Line({ label, hint, strong, children }) {
-  return (
-    <div className="flex items-start justify-between gap-4 py-3 first:pt-0">
-      <dt className="text-sm text-muted">
-        {label}
-        {hint && <span className="mt-0.5 block text-xs text-subtle">{hint}</span>}
-      </dt>
-      <dd className={cn("text-right text-sm text-headline tabular-nums", strong && "font-semibold")}>{children}</dd>
-    </div>
-  );
-}
-
-/** Where a step of the flow stands: "Step 1 of 2". */
-function StepPill({ n }) {
-  return (
-    <span className="rounded-full bg-canvas px-3 py-1.5 text-xs font-semibold text-content tabular-nums">Step {n} of 2</span>
   );
 }
 

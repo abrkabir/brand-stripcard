@@ -90,6 +90,63 @@ export function TextField({
   );
 }
 
+/**
+ * A labelled multi-line field, drawn like the text fields, with a count of
+ * the characters left under it when it has a `maxLength`.
+ */
+export function TextAreaField({
+  label,
+  required,
+  hint,
+  error,
+  className,
+  rows = 4,
+  ...rest
+}) {
+  const id = useId();
+  const left =
+    rest.maxLength && typeof rest.value === "string"
+      ? rest.maxLength - rest.value.length
+      : null;
+  const note = error || hint;
+
+  return (
+    <div className={className}>
+      <label htmlFor={id} className={FIELD_LABEL}>
+        {label}
+        {required && <Required />}
+      </label>
+      <textarea
+        id={id}
+        rows={rows}
+        required={required}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={note ? `${id}-note` : undefined}
+        className={cn(
+          "mt-1.5 block w-full resize-y rounded-xl border border-line bg-canvas/60 px-3.5 py-3 text-[0.9375rem] leading-relaxed text-headline transition-[border-color,background-color,box-shadow] outline-none placeholder:text-subtle hover:border-headline/25 focus:border-brand focus:bg-card focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-brand)_14%,transparent)]",
+          error && "border-danger hover:border-danger focus:border-danger",
+        )}
+        {...rest}
+      />
+      {(note || left !== null) && (
+        <p className="mt-1.5 flex justify-between gap-3 text-xs">
+          <span
+            id={`${id}-note`}
+            className={error ? "font-medium text-danger" : "text-muted"}
+          >
+            {note}
+          </span>
+          {left !== null && (
+            <span className="shrink-0 text-subtle tabular-nums">
+              {left} left
+            </span>
+          )}
+        </p>
+      )}
+    </div>
+  );
+}
+
 /** A password field with a show/hide toggle. */
 export function PasswordField(props) {
   const [visible, setVisible] = useState(false);
