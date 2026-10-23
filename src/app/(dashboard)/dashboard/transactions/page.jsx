@@ -9,14 +9,18 @@ export const metadata = {
 };
 
 /**
- * Every transaction on the account, with a filter for money in or out. The
- * overview only charts the totals; this is where the transactions themselves
- * live. DEMO DATA (see data/dashboard.js).
+ * Every transaction on the account, as a boxed table with a search and a
+ * filter (money in or out, pending, blocked); a row opens its details. The overview only charts
+ * the totals; this is where the transactions themselves live. DEMO DATA (see
+ * data/dashboard.js).
  */
 export default function TransactionsPage() {
   return (
     <>
-      <PageHeader title="Transactions" back={{ href: "/dashboard", label: "Back to dashboard" }} />
+      <PageHeader
+        title="Transactions"
+        back={{ href: "/dashboard", label: "Back to dashboard" }}
+      />
       <TransactionHistory />
     </>
   );

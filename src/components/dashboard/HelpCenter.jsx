@@ -10,6 +10,7 @@ import {
 import { Modal, ModalHead } from "@/components/dashboard/Modal";
 import { Segmented } from "@/components/dashboard/MoneyParts";
 import { Panel } from "@/components/dashboard/Panel";
+import { StatusBadge } from "@/components/dashboard/StatusBadge";
 import {
   ArrowUpRightIcon,
   ChevronRightIcon,
@@ -51,13 +52,6 @@ const SOCIAL_ICONS = {
   instagram: InstagramIcon,
 };
 
-/** How each status looks: its pill. */
-const STATUS_LOOK = {
-  open: "bg-brand-50 text-brand-700 dark:bg-brand/15 dark:text-brand-300",
-  answered: "bg-success/12 text-success",
-  closed: "bg-canvas text-muted",
-};
-
 /** How each priority's dot looks. */
 const PRIORITY_DOT = {
   low: "bg-subtle",
@@ -80,21 +74,6 @@ const sinceText = (updated) =>
 /** The time now, as a thread shows it: "Today, 3:05 PM". */
 const now = () =>
   `Today, ${new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
-
-/** A ticket's status, as a pill. */
-function StatusPill({ status, className }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex h-6 shrink-0 items-center rounded-full px-2.5 text-xs font-semibold",
-        STATUS_LOOK[status],
-        className,
-      )}
-    >
-      {labelOf(statuses, status)}
-    </span>
-  );
-}
 
 /** A support agent's round mark: their initial on the brand colour. */
 function AgentMark({ name, className }) {
@@ -165,7 +144,7 @@ function TicketDialog({ ticket, onReply, onSetStatus, onClose }) {
             id={`${id}-title`}
             title={ticket.subject}
             subtitle={`#${ticket.id}, ${category.label.toLowerCase()}, opened ${ticket.opened}`}
-            end={<StatusPill status={ticket.status} />}
+            end={<StatusBadge status={ticket.status} />}
             onClose={close}
           />
           <p className="mt-3 flex items-center gap-2 text-xs text-muted">
@@ -698,7 +677,7 @@ export function HelpCenter() {
                         {/* In a narrow list: the status (and a new reply)
                             on a line of their own, under the subject. */}
                         <span className="mt-2 flex items-center gap-2 @min-[30rem]:hidden">
-                          <StatusPill status={ticket.status} />
+                          <StatusBadge status={ticket.status} />
                           {ticket.unread && (
                             <span className="inline-flex h-5 shrink-0 items-center rounded-full bg-brand px-2 text-[0.6875rem] font-semibold text-white">
                               New reply
@@ -728,7 +707,7 @@ export function HelpCenter() {
                         {labelOf(priorities, ticket.priority)}
                         <span className="sr-only"> priority</span>
                       </span>
-                      <StatusPill
+                      <StatusBadge
                         status={ticket.status}
                         className="hidden @min-[30rem]:inline-flex"
                       />

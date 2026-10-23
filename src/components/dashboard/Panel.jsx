@@ -10,6 +10,8 @@ import { cn } from "@/lib/cn";
  *   id        the title's id, so the section is labelled by it
  *   link      { href, label } for the arrow; `label` is its accessible name
  *   actions   controls set before the arrow (a toggle, a filter)
+ *   wideActions  the controls need room (a search and a filter): they sit
+ *             beside the title only where the card is 44rem or wider
  *
  * In a narrow card the controls drop to a row of their own under the title
  * and the arrow stays top right. The card measures itself (a container
@@ -18,7 +20,7 @@ import { cn } from "@/lib/cn";
  * The body grows to fill the card, so cards sharing a grid row keep their
  * content anchored however tall the row is.
  */
-export function Panel({ id, title, subtitle, icon, link, actions, className, children }) {
+export function Panel({ id, title, subtitle, icon, link, actions, wideActions, className, children }) {
   return (
     <section
       aria-labelledby={id}
@@ -37,7 +39,16 @@ export function Panel({ id, title, subtitle, icon, link, actions, className, chi
           </div>
         </div>
         {actions && (
-          <div className="order-last flex basis-full items-center gap-2 @min-[21rem]:order-none @min-[21rem]:basis-auto">{actions}</div>
+          <div
+            className={cn(
+              "order-last flex basis-full items-center gap-2",
+              wideActions
+                ? "@min-[44rem]:order-none @min-[44rem]:basis-auto"
+                : "@min-[21rem]:order-none @min-[21rem]:basis-auto",
+            )}
+          >
+            {actions}
+          </div>
         )}
         {link && (
           <Link

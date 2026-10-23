@@ -67,10 +67,11 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
   // Every row has the same shape on the rail and on the full list: the icon at
   // a fixed spot (the middle of the rail) with the label beside it. The row
   // clips the label as the sidebar narrows and the label fades, so nothing
-  // jumps. On the rail a row is exactly as wide as it is tall: a circle.
+  // jumps. On the rail a row is exactly as wide as it is tall: a circle (44px,
+  // in the 80px rail less its 18px padding either side).
   const row = (current) =>
     cn(
-      "flex h-12 w-full items-center gap-3 overflow-hidden rounded-full px-3 text-base font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
+      "flex h-11 w-full items-center gap-3 overflow-hidden rounded-full px-[11px] text-base font-medium whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand",
       current ? "bg-brand-50 text-brand-700 dark:bg-brand/15 dark:text-brand-300" : "text-muted hover:bg-canvas hover:text-headline",
     );
   const label = cn("transition-opacity", rail ? "opacity-0 duration-150" : "opacity-100 delay-150 duration-300");
@@ -113,12 +114,12 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
       <nav
         aria-label="Dashboard pages"
         className={cn(
-          "flex-1 px-4 pt-2 pb-3 lg:pt-5",
+          "flex-1 px-[18px] pt-2 pb-3 lg:pt-5",
           rail ? "overflow-visible" : "min-h-0 overflow-y-auto [scrollbar-width:thin]",
         )}
       >
         {dashboardNav.map((group, g) => (
-          <div key={group.title ?? g} className={cn(g > 0 && ["transition-[margin]", EASE, rail ? "mt-3" : "mt-1"])}>
+          <div key={group.title ?? g} className={cn(g > 0 && ["transition-[margin]", EASE, rail ? "mt-2.5" : "mt-0.5"])}>
             {/* Between groups: a short rule on the rail, shrinking away on the full list. */}
             {g > 0 && (
               <span
@@ -126,7 +127,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
                 className={cn(
                   "mx-auto block h-px bg-line transition-[width,margin,opacity]",
                   EASE,
-                  rail ? "mb-3 w-8 opacity-100" : "mb-0 w-0 opacity-0",
+                  rail ? "mb-2.5 w-8 opacity-100" : "mb-0 w-0 opacity-0",
                 )}
               />
             )}
@@ -139,7 +140,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
                   aria-controls={treeId}
                   className={cn(row(false), "cursor-pointer font-body")}
                 >
-                  <SectionIcon name={group.icon} className="size-6 shrink-0" />
+                  <SectionIcon name={group.icon} className="size-[22px] shrink-0" />
                   <span className={label}>{group.title}</span>
                   <ChevronDownIcon
                     aria-hidden="true"
@@ -162,12 +163,12 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
               id={group.collapsible ? treeId : undefined}
               hidden={group.collapsible && !treeOpen}
               className={cn(
-                "space-y-1",
+                "space-y-0.5",
                 group.collapsible && [
-                  "relative mt-1 transition-[margin]",
+                  "relative mt-0.5 transition-[margin]",
                   EASE,
-                  "before:absolute before:-top-1 before:bottom-6 before:left-0 before:w-px before:bg-line before:transition-opacity before:duration-300",
-                  rail ? "ml-0 before:opacity-0" : "ml-[1.375rem] before:opacity-100",
+                  "before:absolute before:-top-0.5 before:bottom-[22px] before:left-0 before:w-px before:bg-line before:transition-opacity before:duration-300",
+                  rail ? "ml-0 before:opacity-0" : "ml-5 before:opacity-100",
                 ],
               )}
             >
@@ -187,7 +188,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
                     )}
                   >
                     <Link href={entry.href} aria-current={current ? "page" : undefined} className={row(current)}>
-                      <SectionIcon name={entry.icon} className="size-6 shrink-0" />
+                      <SectionIcon name={entry.icon} className="size-[22px] shrink-0" />
                       <span className={label}>{entry.label}</span>
                     </Link>
                     {rail && <Tooltip>{entry.label}</Tooltip>}
@@ -200,15 +201,15 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
       </nav>
 
       {/* ── Help, log out, then the add-card nudge ───────────────────── */}
-      <div className="shrink-0 space-y-3 px-4 pb-4">
-        <ul className="space-y-1">
+      <div className="shrink-0 space-y-3 px-[18px] pb-5">
+        <ul className="space-y-0.5">
           <li className="group relative">
             <Link
               href={dashboardHelp.href}
               aria-current={isCurrent(dashboardHelp.href) ? "page" : undefined}
               className={row(isCurrent(dashboardHelp.href))}
             >
-              <SectionIcon name={dashboardHelp.icon} className="size-6 shrink-0" />
+              <SectionIcon name={dashboardHelp.icon} className="size-[22px] shrink-0" />
               <span className={label}>{dashboardHelp.label}</span>
             </Link>
             {rail && <Tooltip>{dashboardHelp.label}</Tooltip>}
@@ -219,7 +220,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
               onClick={onLogout}
               className={cn(row(false), "w-full cursor-pointer text-danger hover:bg-danger/10 hover:text-danger")}
             >
-              <LogOutIcon className="size-6 shrink-0" />
+              <LogOutIcon className="size-[22px] shrink-0" />
               <span className={label}>Log out</span>
             </button>
             {rail && <Tooltip>Log out</Tooltip>}
@@ -263,9 +264,9 @@ function AddCardPromo({ rail }) {
           <Link
             href={href}
             aria-label="Add a new card"
-            className="grid size-12 place-items-center rounded-full bg-brand text-hero-ink transition-colors hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+            className="grid size-11 place-items-center rounded-full bg-brand text-hero-ink transition-colors hover:bg-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
-            <PlusIcon className="size-6" />
+            <PlusIcon className="size-[22px]" />
           </Link>
           {rail && <Tooltip>Add a new card</Tooltip>}
         </div>
@@ -274,7 +275,7 @@ function AddCardPromo({ rail }) {
       {/* On the full list: the card. */}
       <div className={fold(!rail)} inert={rail}>
         <div className="min-h-0 overflow-hidden">
-          <div className="w-full rounded-[1.5rem] bg-brand px-4 pt-5 pb-4 text-center text-hero-ink lg:w-56">
+          <div className="w-full rounded-[1.5rem] bg-brand px-4 pt-5 pb-4 text-center text-hero-ink lg:w-[13.75rem]">
             {/* A little stack of cards. */}
             <div aria-hidden="true" className="relative mx-auto h-12 w-[4.5rem]">
               <span className="absolute inset-0 -rotate-12 rounded-lg bg-white/70" />

@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import { CheckIcon, EyeIcon } from "@/components/icons";
+import { CheckIcon, CloseIcon, EyeIcon, SearchIcon } from "@/components/icons";
 import { Flag } from "@/components/shared/Flag";
 import { Listbox } from "@/components/ui/Listbox";
 import { profileCountries } from "@/data/dashboard";
@@ -262,6 +262,84 @@ export function PhoneField({ country, ...rest }) {
         </span>
       }
       {...rest}
+    />
+  );
+}
+
+/**
+ * A search box for a list, as a pill: a magnifier, the field, and a way to
+ * clear it once something is typed. Its name (`label`) is for screen
+ * readers; the placeholder says what it searches.
+ */
+export function SearchInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  className,
+}) {
+  const id = useId();
+  return (
+    <div className={className}>
+      <label htmlFor={id} className="sr-only">
+        {label}
+      </label>
+      <div className="flex h-10 items-center rounded-full border border-line bg-canvas/60 transition-[border-color,background-color,box-shadow] hover:border-headline/25 focus-within:border-brand focus-within:bg-card focus-within:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-brand)_14%,transparent)]">
+        <SearchIcon
+          aria-hidden="true"
+          className="ml-3.5 size-[18px] shrink-0 text-muted"
+        />
+        <input
+          id={id}
+          type="search"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          autoComplete="off"
+          className="h-full min-w-0 flex-1 bg-transparent px-3 text-[0.9375rem] text-headline outline-none placeholder:text-subtle [&::-webkit-search-cancel-button]:hidden"
+        />
+        {value && (
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            aria-label={`Clear ${label.toLowerCase()}`}
+            className="mr-1.5 grid size-7 shrink-0 cursor-pointer place-items-center rounded-full text-muted transition-colors hover:bg-canvas hover:text-headline focus-visible:outline-2 focus-visible:outline-brand"
+          >
+            <CloseIcon className="size-4" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * A filter for a list, as a pill: a select whose options are { value,
+ * label }, drawn like SearchInput beside it. `label` names it for screen
+ * readers.
+ */
+export function FilterSelect({ label, value, onChange, options, className }) {
+  return (
+    <Listbox
+      label={label}
+      labelClassName="sr-only"
+      value={value}
+      onChange={onChange}
+      options={options}
+      align="right"
+      className={className}
+      buttonClassName="h-10 rounded-full border border-line bg-canvas/60 pr-3.5 pl-4 transition-colors hover:border-headline/25 aria-expanded:border-brand aria-expanded:bg-card"
+      listClassName="w-full min-w-48"
+      renderValue={(option) => (
+        <span className="truncate text-[0.9375rem] text-headline">
+          {option.label}
+        </span>
+      )}
+      renderOption={(option) => (
+        <span className="min-w-0 flex-1 truncate text-sm text-headline">
+          {option.label}
+        </span>
+      )}
     />
   );
 }

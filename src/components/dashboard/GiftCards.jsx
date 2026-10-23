@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Status, TextField } from "@/components/dashboard/FormField";
+import {
+  FilterSelect,
+  SearchInput,
+  Status,
+  TextField,
+} from "@/components/dashboard/FormField";
 import { Modal, ModalHead } from "@/components/dashboard/Modal";
 import {
   BrandMark,
@@ -17,12 +22,10 @@ import {
   CopyIcon,
   EyeIcon,
   GiftIcon,
-  SearchIcon,
   SparklesIcon,
   UserIcon,
 } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
-import { Listbox } from "@/components/ui/Listbox";
 import { giftCards, wallet } from "@/data/dashboard";
 import { cn } from "@/lib/cn";
 import { formatMoney } from "@/lib/format";
@@ -527,7 +530,7 @@ function BuyDialog({ brand, balance, onBuy, onClose }) {
 /**
  * The Gift Card page: the gift cards held, each opening its code and balance;
  * then the shop, every brand's card in a grid, narrowed by a search and a
- * category, each opening a way to buy it, for you or as a gift, paid from
+ * category in its head, each opening a way to buy it, for you or as a gift, paid from
  * the wallet.
  *
  * DEMO: nothing is bought or sent. Buying waits a moment, then takes the
@@ -540,7 +543,6 @@ export function GiftCards() {
   const [category, setCategory] = useState("all");
   const [buying, setBuying] = useState(null);
   const [openId, setOpenId] = useState(null);
-  const searchId = useId();
 
   const total = held.reduce((sum, card) => sum + card.balance, 0);
   const q = query.trim().toLowerCase();
@@ -634,52 +636,27 @@ export function GiftCards() {
         title="Buy a gift card"
         subtitle={`Paid from your wallet, ${formatMoney(balance)} available`}
         icon={<SparklesIcon className="size-[18px]" />}
-      >
-        <div className="mt-1 flex flex-col gap-3 @min-[40rem]:flex-row">
-          <div className="min-w-0 flex-1">
-            <label htmlFor={searchId} className="sr-only">
-              Search brands
-            </label>
-            <div className="flex h-11 items-center rounded-xl border border-line bg-canvas/60 transition-[border-color,background-color,box-shadow] hover:border-headline/25 focus-within:border-brand focus-within:bg-card focus-within:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-brand)_14%,transparent)]">
-              <SearchIcon
-                aria-hidden="true"
-                className="ml-3.5 size-[18px] shrink-0 text-muted"
-              />
-              <input
-                id={searchId}
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search brands"
-                autoComplete="off"
-                className="h-full min-w-0 flex-1 bg-transparent px-3 text-[0.9375rem] text-headline outline-none placeholder:text-subtle"
-              />
-            </div>
+        wideActions
+        actions={
+          <div className="flex w-full flex-col gap-2 @min-[30rem]:flex-row @min-[44rem]:w-auto">
+            <SearchInput
+              label="Search brands"
+              placeholder="Search brands"
+              value={query}
+              onChange={setQuery}
+              className="min-w-0 flex-1 @min-[44rem]:w-64 @min-[44rem]:flex-none"
+            />
+            <FilterSelect
+              label="Category"
+              value={category}
+              onChange={setCategory}
+              options={CATEGORY_OPTIONS}
+              className="@min-[30rem]:w-48"
+            />
           </div>
-          <Listbox
-            label="Category"
-            labelClassName="sr-only"
-            value={category}
-            onChange={setCategory}
-            options={CATEGORY_OPTIONS}
-            align="right"
-            className="@min-[40rem]:w-56"
-            buttonClassName="h-11 rounded-xl border border-line bg-canvas/60 pr-3.5 pl-3.5 transition-colors hover:border-headline/25 aria-expanded:border-brand aria-expanded:bg-card"
-            listClassName="w-full"
-            renderValue={(option) => (
-              <span className="truncate text-[0.9375rem] text-headline">
-                {option.label}
-              </span>
-            )}
-            renderOption={(option) => (
-              <span className="min-w-0 flex-1 truncate text-sm text-headline">
-                {option.label}
-              </span>
-            )}
-          />
-        </div>
-
-        <p className={cn(SMALL_HEADING, "mt-6")} aria-live="polite">
+        }
+      >
+        <p className={SMALL_HEADING} aria-live="polite">
           {shown.length} {shown.length === 1 ? "brand" : "brands"}
           {category !== "all" ? `, ${category.toLowerCase()}` : ""}
         </p>
