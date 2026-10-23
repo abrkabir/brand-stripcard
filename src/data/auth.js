@@ -53,7 +53,8 @@ export const authCopy = {
  * a grid of rounded tiles, with a few tiles given over to content.
  *
  * `steps` are the chips on the dark tile, read top to bottom as the steps of
- * issuing a card; the last one shows as in progress.
+ * issuing a card; the last one shows as in progress. `guards` are the
+ * safeguards along the foot of the orange tile, as icon names (see icons).
  */
 export const authShowcase = {
   image: showcaseImage,
@@ -65,5 +66,6 @@ export const authShowcase = {
   control: {
     title: "Full control",
     text: "Set limits, freeze or delete any card in a tap.",
+    guards: ["shield", "lock", "fingerprint"],
   },
 };

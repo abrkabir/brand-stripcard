@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CheckIcon, SlidersIcon } from "@/components/icons";
+import { CheckIcon, icons } from "@/components/icons";
 import { authShowcase } from "@/data/auth";
 import { cn } from "@/lib/cn";
 import mark from "../../../public/images/logo/favicon_brand.png";
@@ -121,18 +121,32 @@ function StatusPane() {
   );
 }
 
-/** A line on control, on the brand orange. */
+/**
+ * A line on control, on the brand orange, and along its foot the safeguards
+ * on every card: dark chips in a row, each tucked a little under the next.
+ * In a narrow pane the chips are a touch smaller.
+ */
 function ControlPane() {
-  const { title, text } = authShowcase.control;
+  const { title, text, guards } = authShowcase.control;
   return (
-    <div className="flex h-full flex-col justify-between bg-[linear-gradient(150deg,#fd8645_0%,#f26a1b_55%,#d2520f_100%)] p-5 text-white">
+    <div className="@container flex h-full flex-col justify-between bg-[linear-gradient(150deg,#fd8645_0%,#f26a1b_55%,#d2520f_100%)] p-5 text-white">
       <div>
         <p className="font-heading text-xl font-semibold">{title}</p>
         <p className="mt-1.5 max-w-[14rem] text-xs leading-relaxed text-white/85">{text}</p>
       </div>
-      <span className="grid size-11 place-items-center self-end rounded-xl bg-[#151110] text-white">
-        <SlidersIcon className="size-5" />
-      </span>
+      <ul className="flex items-center self-end -space-x-1.5">
+        {guards.map((name) => {
+          const Icon = icons[name];
+          return (
+            <li
+              key={name}
+              className="grid size-9 place-items-center rounded-full bg-[#151110] text-white ring-1 ring-white/15 @min-[11rem]:size-10"
+            >
+              <Icon className="size-[18px]" />
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

@@ -731,6 +731,99 @@
     color: #fff;
   }
 
+  /* The eyebrow's sign, at its left: four coloured dots on a slant, two bars
+     stretching through them and folding back, over and over. All of it is
+     the shadows of two pseudo-elements, so in the markup it is one empty
+     span (see Eyebrow). It sizes off the eyebrow's type. Its resting shadows
+     are its first frame, so with reduced motion it holds still on that; it
+     pauses while the page scrolls, like every loop (see ScrollCalm). */
+  .eyebrow-sign {
+    --sign-1: rgb(225 20 98 / 0.75);
+    --sign-2: rgb(111 202 220 / 0.75);
+    --sign-3: rgb(61 184 143 / 0.75);
+    --sign-4: rgb(233 169 32 / 0.75);
+    position: relative;
+    flex-shrink: 0;
+    width: 2.5em;
+    height: 2.5em;
+    font-size: 0.5em;
+    transform: rotate(165deg);
+  }
+
+  /* On the brand fill the colours would sink into the orange: white dots. */
+  .eyebrow--brand .eyebrow-sign {
+    --sign-1: rgb(255 255 255 / 0.95);
+    --sign-2: rgb(255 255 255 / 0.6);
+    --sign-3: rgb(255 255 255 / 0.95);
+    --sign-4: rgb(255 255 255 / 0.6);
+  }
+
+  .eyebrow-sign::before,
+  .eyebrow-sign::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 0.25em;
+    transform: translate(-50%, -50%);
+  }
+
+  .eyebrow-sign::before {
+    box-shadow: 1em -0.5em var(--sign-1), -1em 0.5em var(--sign-2);
+    animation: eyebrow-sign-before 2s infinite;
+  }
+
+  .eyebrow-sign::after {
+    box-shadow: 0.5em 1em var(--sign-3), -0.5em -1em var(--sign-4);
+    animation: eyebrow-sign-after 2s infinite;
+  }
+
+  :root[data-scrolling] .eyebrow-sign::before,
+  :root[data-scrolling] .eyebrow-sign::after {
+    animation-play-state: paused;
+  }
+
+  /* The bar across: two dots slide in, stretch into a bar, and part again on
+     the other side. */
+  @keyframes eyebrow-sign-before {
+    0% {
+      width: 0.5em;
+      box-shadow: 1em -0.5em var(--sign-1), -1em 0.5em var(--sign-2);
+    }
+    35% {
+      width: 2.5em;
+      box-shadow: 0 -0.5em var(--sign-1), 0 0.5em var(--sign-2);
+    }
+    70% {
+      width: 0.5em;
+      box-shadow: -1em -0.5em var(--sign-1), 1em 0.5em var(--sign-2);
+    }
+    100% {
+      box-shadow: 1em -0.5em var(--sign-1), -1em 0.5em var(--sign-2);
+    }
+  }
+
+  /* The bar down: the same, crosswise. */
+  @keyframes eyebrow-sign-after {
+    0% {
+      height: 0.5em;
+      box-shadow: 0.5em 1em var(--sign-3), -0.5em -1em var(--sign-4);
+    }
+    35% {
+      height: 2.5em;
+      box-shadow: 0.5em 0 var(--sign-3), -0.5em 0 var(--sign-4);
+    }
+    70% {
+      height: 0.5em;
+      box-shadow: 0.5em -1em var(--sign-3), -0.5em 1em var(--sign-4);
+    }
+    100% {
+      box-shadow: 0.5em 1em var(--sign-3), -0.5em -1em var(--sign-4);
+    }
+  }
+
   /* ══ Step grid ════════════════════════════════════════════════════════════
      A row of items whose content descends like a staircase, each one behind a
      full-height rule. Everything animates in when the surrounding `Reveal`
