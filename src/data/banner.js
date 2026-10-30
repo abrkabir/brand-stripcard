@@ -30,18 +30,17 @@ export const banner = {
   },
 
   /**
-   * `hero_img1.webp`, rebranded: the receipt on the phone reads "$4,200.00,
-   * Payment approved, StripCard", the button "Continue", and the card is the
-   * orange StripCard with its name along the bottom
-   * (public/images/assets/cards/card-orange-naming-reverse.webp), set into
-   * the photo under the thumb so the name reads clear of it. The original
-   * stays beside it.
+   * An orange StripCard handed against a phone whose screen reads "Payment
+   * Successful, $4,200.00, paid to John's Hardware" with a "Done" button.
+   * The background is transparent, so the banner's own glow shows round the
+   * hands. The earlier artwork (`hero-stripcard.webp`, and the original
+   * `hero_img1.webp`) stays beside it.
    */
   image: {
-    src: "/images/assets/banner/hero-stripcard.webp",
-    alt: "An orange StripCard tapped against a phone, approving a $4,200.00 payment",
-    width: 2400,
-    height: 1340,
+    src: "/images/assets/banner/banner-bg.webp",
+    alt: "An orange StripCard tapped against a phone showing a successful $4,200.00 payment",
+    width: 1678,
+    height: 937,
   },
 
   /**
