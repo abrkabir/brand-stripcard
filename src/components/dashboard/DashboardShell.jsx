@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardTopBar } from "@/components/dashboard/DashboardTopBar";
 import { LogoutDialog } from "@/components/dashboard/LogoutDialog";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 
 const STORAGE_KEY = "stripcard-sidebar";
 const CHANGE = "stripcard-sidebar-change";
@@ -87,20 +88,16 @@ export function DashboardShell({ children }) {
   }, []);
 
   // While the drawer is open: Escape closes it, and the page behind stays put.
+  useLockBodyScroll(drawer);
   useEffect(() => {
     if (!drawer) return;
     const onKey = (event) => event.key === "Escape" && closeMenu();
-    const { overflow } = document.body.style;
-    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
-    return () => {
-      document.body.style.overflow = overflow;
-      window.removeEventListener("keydown", onKey);
-    };
+    return () => window.removeEventListener("keydown", onKey);
   }, [drawer, closeMenu]);
 
   return (
-    <div className="flex min-h-dvh flex-1 flex-col bg-canvas">
+    <div data-app-shell className="flex min-h-dvh flex-1 flex-col bg-canvas">
       <DashboardTopBar
         onMenu={openMenu}
         rail={collapsed}

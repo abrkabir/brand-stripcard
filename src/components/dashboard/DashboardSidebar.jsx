@@ -115,7 +115,7 @@ export function DashboardSidebar({ collapsed, drawer, onCloseDrawer, onLogout, a
         aria-label="Dashboard pages"
         className={cn(
           "flex-1 px-[18px] pt-2 pb-3 lg:pt-5",
-          rail ? "overflow-visible" : "min-h-0 overflow-y-auto [scrollbar-width:thin]",
+          rail ? "overflow-visible" : "min-h-0 overflow-y-auto scrollbar-slim",
         )}
       >
         {dashboardNav.map((group, g) => (

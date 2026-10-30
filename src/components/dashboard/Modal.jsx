@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CloseIcon } from "@/components/icons";
+import { useLockBodyScroll } from "@/hooks/useLockBodyScroll";
 import { cn } from "@/lib/cn";
 
 /** How long a modal takes to transition out before it closes, in milliseconds (its duration-200). */
@@ -37,13 +38,11 @@ export function Modal({ labelledBy, onClose, className, children }) {
     // data-autofocus takes it instead.
     dialog.querySelector("[data-autofocus]")?.focus();
     const frame = requestAnimationFrame(() => setShown(true));
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      cancelAnimationFrame(frame);
-      document.body.style.overflow = previous;
-    };
+    return () => cancelAnimationFrame(frame);
   }, [dialog]);
+
+  // The page behind stays put, without shifting, while it is open.
+  useLockBodyScroll();
 
   // Transition out, then close for real (which unmounts it).
   const close = () => {

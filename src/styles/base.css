@@ -36,6 +36,13 @@
     font-family: var(--font-body);
   }
 
+  /* The dashboard sits on its canvas, so the body takes it too: the strip it
+     is padded by while an overlay holds the page still (see
+     useLockBodyScroll), and any overscroll, then match the page. */
+  body:has([data-app-shell]) {
+    background-color: var(--color-canvas);
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
     color: var(--color-headline);
